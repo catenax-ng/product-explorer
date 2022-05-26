@@ -21,7 +21,7 @@ jobs:
         distribution: 'adopt'
         cache: maven
     - name: Build
-      run: mvn -B package --file pom.xml -DskipTests
+      run: mvn -B package --file explorer/pom.xml -DskipTests
 
     - name: Run Tests
-      run: mvn test
+      run: mvn --file explorer/pom.xml test
