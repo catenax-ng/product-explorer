@@ -13,6 +13,7 @@ import net.catenax.explorer.core.retriever.AssetResponse.SemanticId;
 public class MockAssetRetriever implements AssetRetriever {
 
   @Override
+  //rename to something with DTR
   public AssetResponse retrieve(final String edcEndpoint) {
     log.info("Retrieving asset from {}", edcEndpoint);
     return AssetResponse.builder()
@@ -28,7 +29,7 @@ public class MockAssetRetriever implements AssetRetriever {
                     .interfaceType("EDC")
                     .protocolInformation(
                         ProtocolInformation.builder()
-                            .endpointAddress("http://connector.example:8080/id")
+                            .endpointAddress("localhost:4243")
                             .endpointProtocol("IDS/ECLIPSE DATASPACE CONNECTOR")
                             .endpointProtocolVersion("0.0.1-SNAPSHOT")
                             .build())
