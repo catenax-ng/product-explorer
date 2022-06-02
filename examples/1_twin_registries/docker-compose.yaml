@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  twin-registry-1:
+    image: "ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1"
+    container_name: twin-registry-1
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:h2:file:./semantics/persistence;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+      IDP_ISSUER_URI: ""
+    ports:
+      - "4243:4243"
