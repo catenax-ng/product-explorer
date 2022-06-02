@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class ResourceNotFoundException extends RuntimeException {
 
-  public ResourceNotFoundException(final UUID id) {
+  public ResourceNotFoundException(final String id) {
     super("Resource not found for id %s".formatted(id));
   }
 }

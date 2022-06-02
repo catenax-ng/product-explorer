@@ -1,4 +1,4 @@
-package net.catenax.explorer.core.provider;
+package net.catenax.explorer.core.retriever;
 
 import java.time.Instant;
 import java.util.List;
@@ -7,7 +7,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class DataAssetRegistryResponse {
+public class AssetResponse {
 
   String identification;
   String idShort;
