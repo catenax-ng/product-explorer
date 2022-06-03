@@ -15,12 +15,11 @@ public class ExplorerService {
   private final SubmodelProvider submodelProvider;
 
   public AssetData search(final String query) {
-
     edcLocationProvider.getKnownEdcLocations().stream()
         .map(edcLocation -> assetRetriever.retrieve(edcLocation.getUrl()))
-        .map(AssetResponse::getEndpoints) //TODO DTR will hol a list of endpoints or one endpoint ?
+        .map(AssetResponse::getEndpoints) //TODO DTR will hold a list of endpoints or one endpoint ?
         .flatMap(Collection::stream)
-        .forEach(endpointAddress -> submodelProvider.searchSubModels(query, endpointAddress.getProtocolInformation().getEndpointAddress()));
+        .forEach(endpointAddress -> submodelProvider.searchSubmodels(query, endpointAddress.getProtocolInformation().getEndpointAddress()));
     return null;
   }
 }

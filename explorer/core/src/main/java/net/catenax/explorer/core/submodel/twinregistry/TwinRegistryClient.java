@@ -17,18 +17,19 @@ import org.springframework.web.client.RestTemplate;
 public class TwinRegistryClient {
 
 public static final String LOOKUP_SHELLS_URL = "/lookup/shells?assetIds={assetIds}";
-  private static final ParameterizedTypeReference<List<String>> TYPE_REFERENCE = new ParameterizedTypeReference<>() {
-  };
+  private static final ParameterizedTypeReference<List<String>> TYPE_REFERENCE = new ParameterizedTypeReference<>() {};
   private final RestTemplate restTemplate;
   private final ObjectMapper mapper;
 
   @SneakyThrows
-  void lookup(String query, String endpointAddress) {
-
-    final List<Wrapper> lookupQuery = List.of(new Wrapper("PartNumber", query));
-    final Map<String, String> params = Map.of("assetIds", mapper.writeValueAsString(lookupQuery));
-    final ResponseEntity<List<String>> result = restTemplate.exchange("http://" + endpointAddress + LOOKUP_SHELLS_URL, GET, null, TYPE_REFERENCE, params);
-    log.info(result.getBody().toString());
+  List<String> lookup(String query, String endpointAddress) {
+    final ResponseEntity<List<String>> result = restTemplate.exchange(
+        endpointAddress + LOOKUP_SHELLS_URL, GET,
+        null,
+        TYPE_REFERENCE,
+        Map.of("assetIds", mapper.writeValueAsString(List.of(new Wrapper("PartNumber", query)))));
+    log.info("Got response from aas: " + result.getBody().toString());
+    return result.getBody();
   }
 
   record Wrapper(String key, String value) {}

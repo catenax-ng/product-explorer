@@ -9,7 +9,7 @@ public class TwinRegistryAssetProvider implements SubmodelProvider {
   private final TwinRegistryClient client;
 
   @Override
-  public void searchSubModels(String query, String endpointAddress) {
-    client.lookup("31BK", endpointAddress);
+  public void searchSubmodels(String query, String endpointAddress) {
+    client.lookup(query, endpointAddress);
   }
 }
