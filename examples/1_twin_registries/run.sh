@@ -7,10 +7,9 @@ set -o nounset
 
 docker-compose -f docker-compose.yaml up -d
 
-sleep 30;
+sleep 50;
 
-until [ "$(sh setup/init-digital-twin.sh)" != "201" ]; do
-    echo 'waiting for containers to start'
-done;
+sh setup/init-digital-twin-1.sh
+sh setup/init-digital-twin-2.sh
 
-echo 'created aas with globalId: urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002'
+echo 'created two digial twins'
