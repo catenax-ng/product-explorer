@@ -20,3 +20,12 @@ public class ExplorerController {
     return ResponseEntity.ok(explorerService.search(query));
   }
 }
+
+
+//var userInput
+//csv - edc response - DTR
+//DTR - url do registry
+//GET lookup z {key: PartNumber, value: userInput}
+//respons: [id1, id2]
+//In loop POST fetch
+//response aggrate of submodels
