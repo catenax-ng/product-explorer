@@ -3,64 +3,80 @@ package net.catenax.explorer.core.submodel.twinregistry;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Locale;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Value;
-import net.catenax.explorer.core.submodel.twinregistry.SubmodelResponse.Items.GlobalAssetId;
-import net.catenax.explorer.core.submodel.twinregistry.SubmodelResponse.Items.SpecificAssetIds;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SubmodelResponse {
 
   List<Items> items;
-  GlobalAssetId globalAssetId;
-  String idShort;
-  String identification;
-  List<SpecificAssetIds> specificAssetIds;
-//  {
-//    "idShort": "future concept x",
-//      "identification": "459842bf-3466-4eb6-8d95-ef0557e64883"
-//  } todo missing
 
-  @Value
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
   static class Items {
     List<Description> description;
+    GlobalAssetId globalAssetId;
+    String idShort;
+    String identification;
+    List<SpecificAssetIds> specificAssetIds;
+    List<SubmodelDescriptor> submodelDescriptors;
 
-    @Value
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     static class Description {
       Locale language;
       String text;
     }
 
-    @Value
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     static class GlobalAssetId {
       List<String> value;
     }
 
-    @Value
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     static class SpecificAssetIds {
       String key;
       String value;
     }
 
-    @Value
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     static class SubmodelDescriptor {
-      private List<Description> description;
-      private String idShort;
-      private String identification;
-      private SemanticId semanticId;
+      List<Description> description;
+      String idShort;
+      String identification;
+      SemanticId semanticId;
+      List<Endpoint> endpoints;
 
-      @Value
+      @Data
+      @NoArgsConstructor
+      @AllArgsConstructor
       static class SemanticId {
         List<String> value;
       }
 
-      @Value
+      @Data
+      @NoArgsConstructor
+      @AllArgsConstructor
       static class Endpoint {
 
         @JsonProperty("interface")
-        private String interfaceName;
+        String interfaceName;
+        ProtocolInformation protocolInformation;
 
-        @Value
+        @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
         static class ProtocolInformation {
           String endpointAddress;
           String endpointProtocol;

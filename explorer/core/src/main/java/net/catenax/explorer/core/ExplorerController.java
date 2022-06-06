@@ -1,5 +1,6 @@
 package net.catenax.explorer.core;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.submodel.twinregistry.SubmodelResponse;
@@ -16,7 +17,7 @@ public class ExplorerController {
   final ExplorerService explorerService;
 
   @GetMapping("{query}")
-  public ResponseEntity<SubmodelResponse> retrieve(@PathVariable final String query) {
+  public ResponseEntity<List<SubmodelResponse>> retrieve(@PathVariable final String query) {
     log.info("Querying for Asset by PartNumber: " + query);
     return ResponseEntity.ok(explorerService.search(query));
   }

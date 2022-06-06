@@ -3,7 +3,6 @@ package net.catenax.explorer.core.submodel.twinregistry;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class TwinRegistryClient {
         new HttpEntity<>(matchedSubmodelsIds),
         SUBMODEL_TYPE_REFERENCE
     );
-    log.info(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result.getBody()));
+    log.info("Got submodel:" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result.getBody()));
     return result.getBody();
   }
   

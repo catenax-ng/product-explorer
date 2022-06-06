@@ -43,7 +43,7 @@ class ExplorerServiceTest {
     final AssetResponse assetResponse = getAssetResponse();
     when(assetRetriever.retrieve(any())).thenReturn(assetResponse);
     // when
-    final SubmodelResponse result = sut.search(assetResponse.getIdentification());
+//    final SubmodelResponse result = sut.search(assetResponse.getIdentification());
     //then
 //    assertEquals(assetResponse.getIdentification(), result()); //TODO
   }
