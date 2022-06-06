@@ -3,9 +3,11 @@ package net.catenax.explorer.core;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
+import net.catenax.explorer.core.exception.ResourceNotFoundException;
 import net.catenax.explorer.core.retriever.AssetResponse;
 import net.catenax.explorer.core.retriever.AssetRetriever;
 import net.catenax.explorer.core.submodel.SubmodelProvider;
+import net.catenax.explorer.core.submodel.twinregistry.SubmodelResponse;
 
 @RequiredArgsConstructor
 public class ExplorerService {
@@ -14,12 +16,13 @@ public class ExplorerService {
   private final AssetRetriever assetRetriever;
   private final SubmodelProvider submodelProvider;
 
-  public AssetData search(final String query) {
-    edcLocationProvider.getKnownEdcLocations().stream()
+  public SubmodelResponse search(final String query) {
+    return edcLocationProvider.getKnownEdcLocations().stream()
         .map(edcLocation -> assetRetriever.retrieve(edcLocation.getUrl()))
         .map(AssetResponse::getEndpoints) //TODO DTR will hold a list of endpoints or one endpoint ?
         .flatMap(Collection::stream)
-        .forEach(endpointAddress -> submodelProvider.searchSubmodels(query, endpointAddress.getProtocolInformation().getEndpointAddress()));
-    return null;
+        .map(endpointAddress -> submodelProvider.searchSubmodels(query, endpointAddress.getProtocolInformation().getEndpointAddress()))
+        .findAny()
+        .orElseThrow(() -> new ResourceNotFoundException(query));
   }
 }

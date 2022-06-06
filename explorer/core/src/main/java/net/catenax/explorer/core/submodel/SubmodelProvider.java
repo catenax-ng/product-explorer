@@ -1,7 +1,9 @@
 package net.catenax.explorer.core.submodel;
 
+import net.catenax.explorer.core.submodel.twinregistry.SubmodelResponse;
+
 public interface SubmodelProvider {
 
-    void searchSubmodels(String query, String endPointAddress);
+    SubmodelResponse searchSubmodels(String query, String endPointAddress);
 
 }

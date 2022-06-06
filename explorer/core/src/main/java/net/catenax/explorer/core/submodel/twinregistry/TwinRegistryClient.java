@@ -22,7 +22,7 @@ public class TwinRegistryClient {
   private static final String LOOKUP_SHELLS_URL = "/lookup/shells?assetIds={assetIds}";
   private static final String FETCH_SUBMODEL_URL = "/registry/shell-descriptors/fetch";
   private static final ParameterizedTypeReference<List<String>> LIST_STRING_TYPE_REFERENCE = new ParameterizedTypeReference<>() {};
-  private static final ParameterizedTypeReference<String> STRING_TYPE_REFERENCE = new ParameterizedTypeReference<>() {};
+  private static final ParameterizedTypeReference<SubmodelResponse> SUBMODEL_TYPE_REFERENCE = new ParameterizedTypeReference<>() {};
   private final RestTemplate restTemplate;
   private final ObjectMapper mapper;
 
@@ -39,18 +39,16 @@ public class TwinRegistryClient {
   }
 
   @SneakyThrows
-  String fetchSubmodels(final String endpointAddress, final List<String> matchedSubmodelsIds) {
-    final ResponseEntity<String> result = restTemplate.exchange(
+  SubmodelResponse fetchSubmodels(final String endpointAddress, final List<String> matchedSubmodelsIds) {
+    final ResponseEntity<SubmodelResponse> result = restTemplate.exchange(
         endpointAddress + FETCH_SUBMODEL_URL,
         POST,
         new HttpEntity<>(matchedSubmodelsIds),
-        STRING_TYPE_REFERENCE
+        SUBMODEL_TYPE_REFERENCE
     );
     log.info(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result.getBody()));
     return result.getBody();
   }
-
-
-
+  
   record Wrapper(String key, String value) {}
 }
