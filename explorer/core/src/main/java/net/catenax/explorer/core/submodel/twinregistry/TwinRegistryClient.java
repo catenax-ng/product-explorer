@@ -33,7 +33,7 @@ public class TwinRegistryClient {
         null,
         LIST_STRING_TYPE_REFERENCE,
         Map.of("assetIds", mapper.writeValueAsString(List.of(new Wrapper("PartNumber", query)))));
-    log.info("Got response from aas: " + result.getBody().toString());
+    log.info("Got response from aas: " + result.getBody());
     return result.getBody();
   }
 

@@ -2,6 +2,7 @@ package net.catenax.explorer.core;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
@@ -24,6 +25,7 @@ public class ExplorerService {
         .map(AssetResponse::getEndpoints) //TODO DTR will hold a list of endpoints or one endpoint ?
         .flatMap(Collection::stream)
         .map(endpointAddress -> submodelProvider.searchSubmodels(query, endpointAddress.getProtocolInformation().getEndpointAddress()))
-        .collect(Collectors.toList());
+        .filter(Objects::nonNull)
+        .toList();
   }
 }

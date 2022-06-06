@@ -4,6 +4,7 @@ import static net.catenax.explorer.core.retriever.AssetDataMother.getAssetRespon
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import net.catenax.explorer.core.edclocation.EdcLocationProvider;
 import net.catenax.explorer.core.exception.ResourceNotFoundException;
 import net.catenax.explorer.core.retriever.AssetResponse;
 import net.catenax.explorer.core.retriever.AssetRetriever;
+import net.catenax.explorer.core.submodel.SubmodelProvider;
 import net.catenax.explorer.core.submodel.twinregistry.SubmodelResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -21,7 +23,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-@Disabled
 class ExplorerServiceTest {
 
   private ExplorerService sut;
@@ -30,9 +31,11 @@ class ExplorerServiceTest {
 
   @Mock private AssetRetriever assetRetriever;
 
+  @Mock private SubmodelProvider submodelProvider;
+
   @BeforeEach
   void init() {
-//    sut = new ExplorerService(provider, assetRetriever);
+    sut = new ExplorerService(provider, assetRetriever, submodelProvider);
   }
 
   @Test
@@ -42,10 +45,11 @@ class ExplorerServiceTest {
     when(provider.getKnownEdcLocations()).thenReturn(List.of(edcLocation));
     final AssetResponse assetResponse = getAssetResponse();
     when(assetRetriever.retrieve(any())).thenReturn(assetResponse);
+    when(submodelProvider.searchSubmodels(any(), any())).thenReturn(mock(SubmodelResponse.class));
     // when
-//    final SubmodelResponse result = sut.search(assetResponse.getIdentification());
+    final List<SubmodelResponse> result = sut.search(assetResponse.getIdentification());
     //then
-//    assertEquals(assetResponse.getIdentification(), result()); //TODO
+    assertEquals(1, result.size()); //TODO
   }
 
   @Test
@@ -55,7 +59,9 @@ class ExplorerServiceTest {
     when(provider.getKnownEdcLocations()).thenReturn(List.of(edcLocation));
     final AssetResponse assetResponse = getAssetResponse();
     when(assetRetriever.retrieve(any())).thenReturn(assetResponse);
+    // when
+    final List<SubmodelResponse> result = sut.search("some id");
     // then
-    assertThrows(ResourceNotFoundException.class, () -> sut.search("some id"));
+    assertEquals(0, result.size());
   }
 }
