@@ -13,7 +13,6 @@ import net.catenax.explorer.core.retriever.AssetResponse.SemanticId;
 public class MockAssetRetriever implements AssetRetriever {
 
   @Override
-  //rename to something with DTR
   public AssetResponse retrieve(final String edcEndpoint) {
     log.info("Retrieving asset from {}", edcEndpoint);
     return AssetResponse.builder()
