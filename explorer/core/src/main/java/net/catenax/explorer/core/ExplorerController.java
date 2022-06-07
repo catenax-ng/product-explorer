@@ -18,7 +18,7 @@ public class ExplorerController {
 
   @GetMapping("{query}")
   public ResponseEntity<List<ShellDescriptorResponse>> retrieve(@PathVariable final String query) {
-    log.info("Querying for Asset by PartNumber: " + query);
+    log.info("Querying for Asset by: " + query);
     return ResponseEntity.ok(explorerService.search(query));
   }
 }
