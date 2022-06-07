@@ -5,15 +5,15 @@ import net.catenax.explorer.core.submodel.twinregistry.TwinRegistryAssetProvider
 import net.catenax.explorer.core.submodel.twinregistry.TwinRegistryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class SubmodelConfiguration {
 
   @Bean
-  SubmodelProvider submodelProvider(RestTemplate restTemplate, ObjectMapper mapper) {
+  ShellDescriptorProvider submodelProvider(WebClient webClient, ObjectMapper mapper) {
     return new TwinRegistryAssetProvider(
-        new TwinRegistryClient(restTemplate, mapper)
+        new TwinRegistryClient(webClient, mapper)
     );
   }
 }

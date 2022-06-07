@@ -1,53 +1,59 @@
 package net.catenax.explorer.core.submodel.twinregistry;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static java.time.Duration.ofSeconds;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Slf4j
 public class TwinRegistryClient {
 
-  private static final String LOOKUP_SHELLS_URL = "/lookup/shells?assetIds={assetIds}";
-  private static final String FETCH_SUBMODEL_URL = "/registry/shell-descriptors/fetch";
-  private static final ParameterizedTypeReference<List<String>> LIST_STRING_TYPE_REFERENCE = new ParameterizedTypeReference<>() {};
-  private static final ParameterizedTypeReference<SubmodelResponse> SUBMODEL_TYPE_REFERENCE = new ParameterizedTypeReference<>() {};
-  private final RestTemplate restTemplate;
+  private static final String LOOKUP_SHELLS_URL = "/lookup/shells/";
+  private static final String FETCH_SHELL_DESCRIPTOR_URL = "/registry/shell-descriptors/fetch";
+  private static final ParameterizedTypeReference<List<String>> LIST_STRING_TYPE_REFERENCE = new ParameterizedTypeReference<>() {
+  };
+  private static final ParameterizedTypeReference<ShellDescriptorResponse> SHELL_DESCRIPTOR_TYPE_REFERENCE = new ParameterizedTypeReference<>() {
+  };
+  private final WebClient webClient;
   private final ObjectMapper mapper;
 
   @SneakyThrows
   List<String> lookup(String query, String endpointAddress) {
-    final ResponseEntity<List<String>> result = restTemplate.exchange(
-        endpointAddress + LOOKUP_SHELLS_URL,
-        GET,
-        null,
-        LIST_STRING_TYPE_REFERENCE,
-        Map.of("assetIds", mapper.writeValueAsString(List.of(new Wrapper("PartNumber", query)))));
-    log.info("Got response from aas: " + result.getBody());
-    return result.getBody();
+
+    final String param = mapper.writeValueAsString(List.of(new Wrapper("PartNumber", query)));
+    final List<String> result = webClient.get()
+        .uri(uriBuilder -> uriBuilder
+            .path(endpointAddress + LOOKUP_SHELLS_URL)
+            .queryParam("assetIds", param)
+            .build())
+        .retrieve()
+        .bodyToMono(LIST_STRING_TYPE_REFERENCE)
+        .block(ofSeconds(5));
+    log.info("Got response from aas: " + result);
+    return result;
   }
 
   @SneakyThrows
-  SubmodelResponse fetchSubmodels(final String endpointAddress, final List<String> matchedSubmodelsIds) {
-    final ResponseEntity<SubmodelResponse> result = restTemplate.exchange(
-        endpointAddress + FETCH_SUBMODEL_URL,
-        POST,
-        new HttpEntity<>(matchedSubmodelsIds),
-        SUBMODEL_TYPE_REFERENCE
-    );
-    log.info("Got submodel:" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result.getBody()));
-    return result.getBody();
+  ShellDescriptorResponse fetchShelDescriptor(final String endpointAddress, final List<String> matchedSubmodelsIds) {
+
+    final ShellDescriptorResponse result = webClient.post()
+        .uri(endpointAddress + FETCH_SHELL_DESCRIPTOR_URL)
+        .body(Mono.just(matchedSubmodelsIds), LIST_STRING_TYPE_REFERENCE)
+        .retrieve()
+        .bodyToMono(SHELL_DESCRIPTOR_TYPE_REFERENCE)
+        .block(ofSeconds(5));
+    log.info("Got shell descriptor:" + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+    return result;
   }
-  
-  record Wrapper(String key, String value) {}
+
+  record Wrapper(String key, String value) {
+
+  }
 }

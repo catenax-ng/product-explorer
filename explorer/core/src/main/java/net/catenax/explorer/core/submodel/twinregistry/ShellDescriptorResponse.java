@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubmodelResponse {
+public class ShellDescriptorResponse {
 
-  List<Items> items;
+  List<ShellDescriptor> items;
 
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
-  static class Items {
+  static class ShellDescriptor {
     List<Description> description;
     GlobalAssetId globalAssetId;
     String idShort;

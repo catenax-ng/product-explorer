@@ -2,16 +2,20 @@ package net.catenax.explorer.core.submodel.twinregistry;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import net.catenax.explorer.core.submodel.SubmodelProvider;
+import net.catenax.explorer.core.exception.ResourceNotFoundException;
+import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
 
 @RequiredArgsConstructor
-public class TwinRegistryAssetProvider implements SubmodelProvider {
+public class TwinRegistryAssetProvider implements ShellDescriptorProvider {
 
   private final TwinRegistryClient client;
 
   @Override
-  public SubmodelResponse searchSubmodels(String query, String endpointAddress) {
+  public ShellDescriptorResponse search(String query, String endpointAddress) {
     final List<String> matchedSubmodelsIds = client.lookup(query, endpointAddress);
-    return client.fetchSubmodels(endpointAddress, matchedSubmodelsIds);
+    if (matchedSubmodelsIds.isEmpty()) {
+      throw new ResourceNotFoundException(query);
+    }
+    return client.fetchShelDescriptor(endpointAddress, matchedSubmodelsIds);
   }
 }

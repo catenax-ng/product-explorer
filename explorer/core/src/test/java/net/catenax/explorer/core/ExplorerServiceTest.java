@@ -10,13 +10,11 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import net.catenax.explorer.core.edclocation.EdcLocation;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
-import net.catenax.explorer.core.exception.ResourceNotFoundException;
 import net.catenax.explorer.core.retriever.AssetResponse;
 import net.catenax.explorer.core.retriever.AssetRetriever;
-import net.catenax.explorer.core.submodel.SubmodelProvider;
-import net.catenax.explorer.core.submodel.twinregistry.SubmodelResponse;
+import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
+import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -31,11 +29,11 @@ class ExplorerServiceTest {
 
   @Mock private AssetRetriever assetRetriever;
 
-  @Mock private SubmodelProvider submodelProvider;
+  @Mock private ShellDescriptorProvider shellDescriptorProvider;
 
   @BeforeEach
   void init() {
-    sut = new ExplorerService(provider, assetRetriever, submodelProvider);
+    sut = new ExplorerService(provider, assetRetriever, shellDescriptorProvider);
   }
 
   @Test
@@ -45,9 +43,9 @@ class ExplorerServiceTest {
     when(provider.getKnownEdcLocations()).thenReturn(List.of(edcLocation));
     final AssetResponse assetResponse = getAssetResponse();
     when(assetRetriever.retrieve(any())).thenReturn(assetResponse);
-    when(submodelProvider.searchSubmodels(any(), any())).thenReturn(mock(SubmodelResponse.class));
+    when(shellDescriptorProvider.search(any(), any())).thenReturn(mock(ShellDescriptorResponse.class));
     // when
-    final List<SubmodelResponse> result = sut.search(assetResponse.getIdentification());
+    final List<ShellDescriptorResponse> result = sut.search(assetResponse.getIdentification());
     //then
     assertEquals(1, result.size()); //TODO
   }
@@ -60,7 +58,7 @@ class ExplorerServiceTest {
     final AssetResponse assetResponse = getAssetResponse();
     when(assetRetriever.retrieve(any())).thenReturn(assetResponse);
     // when
-    final List<SubmodelResponse> result = sut.search("some id");
+    final List<ShellDescriptorResponse> result = sut.search("some id");
     // then
     assertEquals(0, result.size());
   }
