@@ -1,5 +1,7 @@
 package net.catenax.explorer.core.submodel.twinregistry;
 
+import static java.net.URLEncoder.encode;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.time.Duration.ofSeconds;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,12 +17,10 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class TwinRegistryClient {
 
-  private static final String LOOKUP_SHELLS_URL = "/lookup/shells/";
+  private static final String LOOKUP_SHELLS_URL = "/lookup/shells";
   private static final String FETCH_SHELL_DESCRIPTOR_URL = "/registry/shell-descriptors/fetch";
-  private static final ParameterizedTypeReference<List<String>> LIST_STRING_TYPE_REFERENCE = new ParameterizedTypeReference<>() {
-  };
-  private static final ParameterizedTypeReference<ShellDescriptorResponse> SHELL_DESCRIPTOR_TYPE_REFERENCE = new ParameterizedTypeReference<>() {
-  };
+  private static final ParameterizedTypeReference<List<String>> LIST_STRING_TYPE_REFERENCE = new ParameterizedTypeReference<>() {};
+  private static final ParameterizedTypeReference<ShellDescriptorResponse> SHELL_DESCRIPTOR_TYPE_REFERENCE = new ParameterizedTypeReference<>() {};
   private final WebClient webClient;
   private final ObjectMapper mapper;
 
@@ -31,7 +31,7 @@ public class TwinRegistryClient {
     final List<String> result = webClient.get()
         .uri(uriBuilder -> uriBuilder
             .path(endpointAddress + LOOKUP_SHELLS_URL)
-            .queryParam("assetIds", param)
+            .queryParam("assetIds", encode(param, UTF_8))
             .build())
         .retrieve()
         .bodyToMono(LIST_STRING_TYPE_REFERENCE)

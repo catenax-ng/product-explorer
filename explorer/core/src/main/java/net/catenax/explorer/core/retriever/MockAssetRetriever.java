@@ -38,7 +38,7 @@ public class MockAssetRetriever implements AssetRetriever {
 
   private ProtocolInformation buildProtocolInformation() {
     return ProtocolInformation.builder()
-        .endpointAddress("http://localhost:4243")
+        .endpointAddress("localhost:4243")
         .endpointProtocol("IDS/ECLIPSE DATASPACE CONNECTOR")
         .endpointProtocolVersion("0.0.1-SNAPSHOT")
         .build();
