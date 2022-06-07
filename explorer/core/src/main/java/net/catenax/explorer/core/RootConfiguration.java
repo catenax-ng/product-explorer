@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.util.DefaultUriBuilderFactory.EncodingMode;
 
 @Configuration
 public class RootConfiguration {
@@ -18,7 +20,12 @@ public class RootConfiguration {
 
   @Bean
   public WebClient webClient() {
-    return WebClient.create();
+    DefaultUriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory();
+    uriBuilderFactory.setEncodingMode(EncodingMode.URI_COMPONENT);
+    return WebClient.create()
+        .mutate()
+        .uriBuilderFactory(uriBuilderFactory)
+        .build();
   }
 
   @Bean
