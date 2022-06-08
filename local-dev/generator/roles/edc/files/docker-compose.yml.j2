@@ -74,6 +74,21 @@ services:
       - ./edc-config/api-wrapper.properties:/app/configuration.properties
   {%- endif %}
 
+  {%+ if type == 'provider' -%}
+  aas_registry:
+    image: "{{ aas_registry_image }}"
+    restart : "always"
+    networks: 
+    - local
+    ports:
+      - "424{{ index }}:4243"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: "jdbc:h2:file:./semantics/persistence;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
+      IDP_ISSUER_URI: ""
+  {%- endif %}
+
+
 volumes:
     pgdata-db:
       driver: local
