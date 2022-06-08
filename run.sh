@@ -9,7 +9,7 @@ docker-compose -f docker-compose.yaml up -d
 
 sleep 50;
 
-sh setup/init-digital-twin-1.sh
-sh setup/init-digital-twin-2.sh
+sh examples/1_twin_registries/setup/init-digital-twin-1.sh
+sh examples/1_twin_registries/setup/init-digital-twin-2.sh
 
 echo 'created two digial twins'

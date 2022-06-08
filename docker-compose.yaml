@@ -21,4 +21,13 @@ services:
     ports:
       - "4244:4243"
 
+  self-description-hub:
+    container_name: self-description-hub
+    build:
+      context: self-description-hub-integration
+    ports:
+      - "8090:8090"
+    
+      
+
 

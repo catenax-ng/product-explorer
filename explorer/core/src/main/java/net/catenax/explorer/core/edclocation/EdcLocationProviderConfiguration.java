@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 @Slf4j
@@ -28,5 +29,11 @@ class EdcLocationProviderConfiguration {
   @ConditionalOnProperty(value = "registry.edc-location.provider", havingValue = "csv", matchIfMissing = true)
   EdcLocationProvider edcLocationProvider() {
     return new CsvEdcLocationProvider(edcLocationFilePath);
+  }
+
+  @Bean
+  @ConditionalOnProperty(value = "registry.edc-location.provider", havingValue = "rest")
+  RestEdcLocationProvider restEdcLocationProvider(WebClient webClient) {
+    return new RestEdcLocationProvider(webClient);
   }
 }
