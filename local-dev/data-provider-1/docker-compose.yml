@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   edc_controlplane:
-    image: "edc-controlplane-postgresql:0.0.3"
+    image: "ghcr.io/catenax-ng/product-explorer/edc-controlplane-postgresql:0.0.3-local-dev"
     restart : "always"
     networks: 
       - local
@@ -30,7 +30,7 @@ services:
       - ./edc-config/certs/:/app/certs/
   
   edc_dataplane:
-    image: "edc-dataplane:0.0.3"
+    image: "ghcr.io/catenax-ng/product-explorer/edc-dataplane:0.0.3-local-dev"
     restart : "always"
     networks: 
       - local

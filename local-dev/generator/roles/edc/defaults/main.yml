@@ -18,7 +18,7 @@ database_schema: public
 database_user: postgres
 database_password: database_password
 
-# based on https://github.com/catenax-ng/product-edc/releases/tag/0.0.3
-edc_controlplane_image: edc-controlplane-postgresql:0.0.3
-edc_dataplane_image: edc-dataplane:0.0.3
+# based on https://github.com/bci-oss/product-edc/tree/feature/images-for-local-dev
+edc_controlplane_image: ghcr.io/catenax-ng/product-explorer/edc-controlplane-postgresql:0.0.3-local-dev
+edc_dataplane_image: ghcr.io/catenax-ng/product-explorer/edc-dataplane:0.0.3-local-dev
 api_wrapper_image: ghcr.io/catenax-ng/catenax-at-home/consumer-api-wrapper:0.0.3

@@ -14,7 +14,6 @@
         type: "{{ edc_role_config.type }}"
       with_items:
         - { deployment_directory_path: '../data-consumer-0', index: 0, type: "consumer" }
-        - { deployment_directory_path: '../data-provider-1', index: 1, type: "provider"}
-
+        - { deployment_directory_path: '../data-provider-1', index: 1, type: "provider" }
       loop_control:
         loop_var: edc_role_config
