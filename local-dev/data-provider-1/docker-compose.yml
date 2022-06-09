@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+
+  edc_controlplane:
+    image: "ghcr.io/catenax-ng/product-explorer/edc-controlplane-postgresql:0.0.3-local-dev"
+    restart : "always"
+    networks: 
+      - local
+    environment:
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8090"
+      EDC_KEYSTORE: /app/certs/cert.pfx
+      EDC_KEYSTORE_PASSWORD: 123456
+      EDC_FS_CONFIG: /app/configuration.properties
+    ports:
+      - "8101:8080"
+      - "8111:8181"
+      - "8121:8182"
+      - "8131:8282"
+      - "8141:9090"
+      - "8151:9999"
+      - "8161:8090"
+    depends_on:
+      - "postgres_db"
+    volumes:
+      - ./edc-config/controlplane-configuration.properties:/app/configuration.properties
+      - ./edc-config/logging.properties:/app/logging.properties
+      - ./edc-config/opentelemetry.properties:/app/opentelemetry.properties
+      - ./edc-config/dataspaceconnector-vault.properties:/app/dataspaceconnector-vault.properties
+      - ./edc-config/certs/:/app/certs/
+  
+  edc_dataplane:
+    image: "ghcr.io/catenax-ng/product-explorer/edc-dataplane:0.0.3-local-dev"
+    restart : "always"
+    networks: 
+      - local
+    ports:
+      - "8201:8080"
+      - "8211:8185"
+      - "8221:9999"
+    volumes:
+      - ./edc-config/dataplane-configuration.properties:/app/configuration.properties
+      - ./edc-config/logging.properties:/app/logging.properties
+      - ./edc-config/opentelemetry.properties:/app/opentelemetry.properties
+    
+  postgres_db:
+    image: "postgres:12.3-alpine"
+    restart : "always"
+    networks: 
+    - local
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "database_password"
+      POSTGRES_DB: "public"
+    expose:
+      - "5432"
+    volumes:
+      - pgdata-db:/var/lib/postgresql/data
+      - ./postgres-config/create-databases.sql:/docker-entrypoint-initdb.d/create-databases.sql
+  
+  
+volumes:
+    pgdata-db:
+      driver: local
+
+networks:
+    local:
+      name: network_1
+      driver: bridge
