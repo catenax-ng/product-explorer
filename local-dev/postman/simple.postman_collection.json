@@ -1,0 +1,301 @@
+{
+	"info": {
+		"_postman_id": "822a25f2-1b9d-4d4c-9fe2-c8d91cf6545e",
+		"name": "Product Explorer @ EDC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Data Provider",
+			"item": [
+				{
+					"name": "2. /api/v1/data/assets - Create an EDC Asset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Api-Key",
+								"value": "apipassword",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"asset\": {\n    \"properties\": {\n      \"asset:prop:id\": \"{{digitalTwinId}}-{{digitalTwinSubmodelId}}\",\n      \"asset:prop:name\": \"product description\",\n      \"asset:prop:contenttype\": \"application/json\",\n      \"asset:prop:policy-id\": \"use-eu\"\n    }\n  },\n  \"dataAddress\": {\n    \"properties\": {\n      \"endpoint\": \"https://catenaxintakssrv.germanywestcentral.cloudapp.azure.com/semantics/twin-registry/actuator/info\",\n      \"type\": \"HttpData\"\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{providerControlPlaneDataEndpoint}}/data/assets",
+							"host": [
+								"{{providerControlPlaneDataEndpoint}}"
+							],
+							"path": [
+								"data",
+								"assets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. /api/v1/data/policies - Create an EDC Policy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Api-Key",
+								"value": "apipassword",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"uid\": \"{{edcPolicyId}}\",\n  \"permissions\": [\n    {\n      \"target\": \"{{digitalTwinId}}-{{digitalTwinSubmodelId}}\",\n      \"action\": {\n        \"type\": \"USE\"\n      },\n      \"edctype\": \"dataspaceconnector:permission\"\n    }\n  ],\n  \"@type\": {\n    \"@policytype\": \"set\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{providerControlPlaneDataEndpoint}}/data/policies",
+							"host": [
+								"{{providerControlPlaneDataEndpoint}}"
+							],
+							"path": [
+								"data",
+								"policies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. /api/v1/data/contractdefinitions - Create an EDC contract definition",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Api-Key",
+								"value": "apipassword",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"1\",\n  \"accessPolicyId\": \"{{edcPolicyId}}\",\n  \"contractPolicyId\": \"{{edcPolicyId}}\",\n  \"criteria\": []\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{providerControlPlaneDataEndpoint}}/data/contractdefinitions",
+							"host": [
+								"{{providerControlPlaneDataEndpoint}}"
+							],
+							"path": [
+								"data",
+								"contractdefinitions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Data Consumer",
+			"item": [
+				{
+					"name": "2 /submodel - WITHOUT-AAS-PROXY",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "somepassword",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "someuser",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8300/api/service/urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002-urn:uuid:61125dc3-5e6f-4f4b-838d-447432b97918/submodel?provider-connector-url=http://host.docker.internal:8131",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8300",
+							"path": [
+								"api",
+								"service",
+								"urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002-urn:uuid:61125dc3-5e6f-4f4b-838d-447432b97918",
+								"submodel"
+							],
+							"query": [
+								{
+									"key": "provider-connector-url",
+									"value": "http://host.docker.internal:8131"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3 /data/catalog",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true,
+							"accept-encoding": true,
+							"accept": true,
+							"user-agent": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "default"
+							},
+							{
+								"key": "X-Api-Key",
+								"value": "apipassword",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8110/data/catalog?providerUrl=http://host.docker.internal:8131/api/v1/ids/data",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8110",
+							"path": [
+								"data",
+								"catalog"
+							],
+							"query": [
+								{
+									"key": "providerUrl",
+									"value": "http://host.docker.internal:8131/api/v1/ids/data"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "edcApiWrapperUrl",
+			"value": "http://localhost:8310/service",
+			"type": "string"
+		},
+		{
+			"key": "providerControlPlaneDataEndpoint",
+			"value": "http://localhost:8111",
+			"type": "string"
+		},
+		{
+			"key": "providerControlPlaneDockerInternal",
+			"value": "host.docker.internal:8121",
+			"type": "string"
+		},
+		{
+			"key": "submodelServerUrl",
+			"value": "http://localhost:8194",
+			"type": "string"
+		},
+		{
+			"key": "providerBpn",
+			"value": "some-bpn",
+			"type": "default"
+		},
+		{
+			"key": "digitalTwinId",
+			"value": "urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002",
+			"type": "string"
+		},
+		{
+			"key": "digitalTwinSubmodelId",
+			"value": "urn:uuid:61125dc3-5e6f-4f4b-838d-447432b97918",
+			"type": "string"
+		},
+		{
+			"key": "edcPolicyId",
+			"value": "231802-bb34-11ec-8422-0242ac120002",
+			"type": "string"
+		}
+	]
+}

@@ -59,6 +59,18 @@ services:
       - ./postgres-config/create-databases.sql:/docker-entrypoint-initdb.d/create-databases.sql
   
   
+  aas_registry:
+    image: "ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1"
+    restart : "always"
+    networks: 
+    - local
+    ports:
+      - "4241:4243"
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: "jdbc:h2:file:./semantics/persistence;CASE_INSENSITIVE_IDENTIFIERS=TRUE"
+      IDP_ISSUER_URI: ""
+
 volumes:
     pgdata-db:
       driver: local
