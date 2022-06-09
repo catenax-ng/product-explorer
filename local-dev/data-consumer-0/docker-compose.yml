@@ -71,6 +71,8 @@ services:
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8090"
     volumes:
       - ./edc-config/api-wrapper.properties:/app/configuration.properties
+  
+
 volumes:
     pgdata-db:
       driver: local
