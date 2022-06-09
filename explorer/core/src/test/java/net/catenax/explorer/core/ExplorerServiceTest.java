@@ -4,14 +4,16 @@ import static net.catenax.explorer.core.retriever.AssetDataMother.getAssetRespon
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 import net.catenax.explorer.core.edclocation.EdcLocation;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
-import net.catenax.explorer.core.exception.ResourceNotFoundException;
 import net.catenax.explorer.core.retriever.AssetResponse;
 import net.catenax.explorer.core.retriever.AssetRetriever;
+import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
+import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,9 +29,11 @@ class ExplorerServiceTest {
 
   @Mock private AssetRetriever assetRetriever;
 
+  @Mock private ShellDescriptorProvider shellDescriptorProvider;
+
   @BeforeEach
   void init() {
-    sut = new ExplorerService(provider, assetRetriever);
+    sut = new ExplorerService(provider, assetRetriever, shellDescriptorProvider);
   }
 
   @Test
@@ -39,10 +43,11 @@ class ExplorerServiceTest {
     when(provider.getKnownEdcLocations()).thenReturn(List.of(edcLocation));
     final AssetResponse assetResponse = getAssetResponse();
     when(assetRetriever.retrieve(any())).thenReturn(assetResponse);
+    when(shellDescriptorProvider.search(any(), any())).thenReturn(mock(ShellDescriptorResponse.class));
     // when
-    final AssetData result = sut.fetchAssetById(assetResponse.getIdentification());
+    final List<ShellDescriptorResponse> result = sut.search(assetResponse.getIdentification());
     //then
-    assertEquals(assetResponse.getIdentification(), result.getIdentification());
+    assertEquals(1, result.size()); //TODO
   }
 
   @Test
@@ -52,7 +57,9 @@ class ExplorerServiceTest {
     when(provider.getKnownEdcLocations()).thenReturn(List.of(edcLocation));
     final AssetResponse assetResponse = getAssetResponse();
     when(assetRetriever.retrieve(any())).thenReturn(assetResponse);
+    // when
+    final List<ShellDescriptorResponse> result = sut.search("some id");
     // then
-    assertThrows(ResourceNotFoundException.class, () -> sut.fetchAssetById("some id"));
+    assertEquals(0, result.size());
   }
 }
