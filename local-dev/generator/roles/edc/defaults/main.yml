@@ -4,9 +4,6 @@ deployment_directory_path:       "/opt/catena-x"
 
 postgres_url: "jdbc:postgresql://postgres_db:5432"
 
-edc_controlplane_url: http://edc_controlplane:8182
-edc_dataplane_url: http://edc_dataplane:8185
-
 
 edc_dataplane_private_key_alias: dp-private-key-pub
 edc_dataplane_public_key_alias: dp-public-key-pub
