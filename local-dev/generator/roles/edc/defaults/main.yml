@@ -1,0 +1,22 @@
+---
+deployment_directory_source:     "{{ playbook_dir }}/../"
+deployment_directory_path:       "/opt/catena-x"
+
+postgres_url: "jdbc:postgresql://postgres_db:5432"
+
+
+edc_dataplane_private_key_alias: dp-private-key-pub
+edc_dataplane_public_key_alias: dp-public-key-pub
+edc_public_endpoint: edc_public_endpoint
+edc_api_key: edc_api_key
+
+postgres_version: 12.3-alpine
+database_schema: public
+database_user: postgres
+database_password: database_password
+
+# based on https://github.com/bci-oss/product-edc/tree/feature/images-for-local-dev
+edc_controlplane_image: ghcr.io/catenax-ng/product-explorer/edc-controlplane-postgresql:0.0.3-local-dev
+edc_dataplane_image: ghcr.io/catenax-ng/product-explorer/edc-dataplane:0.0.3-local-dev
+api_wrapper_image: ghcr.io/catenax-ng/catenax-at-home/consumer-api-wrapper:0.0.3
+aas_registry_image: ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1

@@ -36,6 +36,10 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
       <optional>true</optional>
     </dependency>
@@ -67,6 +71,9 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
+          <mainClass>
+            net.catenax.explorer.core.ExplorerApplication
+          </mainClass>
           <excludes>
             <exclude>
               <groupId>org.projectlombok</groupId>

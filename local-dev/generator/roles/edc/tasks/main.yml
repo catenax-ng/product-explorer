@@ -1,0 +1,33 @@
+- name: Create deployment directory
+  file:
+    path: "{{ deployment_directory_path }}"
+    state: directory
+  
+- name: Create edc config directory
+  file:
+    path: "{{ deployment_directory_path}}/edc-config"
+    state: directory
+  loop:
+    - "{{ deployment_directory_path}}/edc-config"
+
+- name: Copy certs directory
+  copy:
+    src: "{{ role_path }}/files/edc-config/certs/"
+    dest: "{{ deployment_directory_path}}/edc-config/certs/"
+
+- name: Replace variables in edc configs
+  template:
+    src: "{{ item }}"
+    dest: "{{ deployment_directory_path}}/edc-config/{{ item | basename | regex_replace('\\.j2$', '') }}"
+  with_fileglob:
+  - "{{ role_path }}/files/edc-config/*.j2"
+
+- name: Copy postgres-config
+  copy:
+    src: "{{ role_path }}/files/postgres-config"
+    dest: "{{ deployment_directory_path }}"
+
+- name: Replace variables in env file
+  template:
+    src: "{{ role_path }}/files/docker-compose.yml.j2"
+    dest: "{{ deployment_directory_path }}/docker-compose.yml"

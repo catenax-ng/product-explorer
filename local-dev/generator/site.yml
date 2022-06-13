@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  gather_facts: False
+  connection: local
+
+  
+  tasks:
+    - name: "Deploy the edc connectors"
+      include_role:
+        name: edc
+      vars:
+        index: "{{ edc_role_config.index }}"
+        deployment_directory_path: "{{ edc_role_config.deployment_directory_path }}"
+        type: "{{ edc_role_config.type }}"
+      with_items:
+        - { deployment_directory_path: '../data-consumer-0', index: 0, type: "consumer" }
+        - { deployment_directory_path: '../data-provider-1', index: 1, type: "provider" }
+      loop_control:
+        loop_var: edc_role_config

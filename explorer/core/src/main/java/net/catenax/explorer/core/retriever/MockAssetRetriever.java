@@ -15,25 +15,38 @@ public class MockAssetRetriever implements AssetRetriever {
   @Override
   public AssetResponse retrieve(final String edcEndpoint) {
     log.info("Retrieving asset from {}", edcEndpoint);
+    return buildAssetResponseMock();
+  }
+
+  private AssetResponse buildAssetResponseMock() {
     return AssetResponse.builder()
         .identification("urn:uuid:2229e7c4-940a-498f-8501-6bd216e09eb7")
         .idShort("serialPartTypization")
-        .semanticId(
-            SemanticId.builder()
-                .value(List.of("urn:example.catenax.serial_part_typization:1.0.0"))
-                .build())
-        .endpoints(
-            List.of(
-                Endpoint.builder()
-                    .interfaceType("EDC")
-                    .protocolInformation(
-                        ProtocolInformation.builder()
-                            .endpointAddress("http://connector.example:8080/id")
-                            .endpointProtocol("IDS/ECLIPSE DATASPACE CONNECTOR")
-                            .endpointProtocolVersion("0.0.1-SNAPSHOT")
-                            .build())
-                    .build()))
+        .semanticId(buildSemanticId())
+        .endpoints(List.of(buildEndpoint()))
         .validUntil(now().plus(ofMinutes(10)))
+        .build();
+  }
+
+  private Endpoint buildEndpoint() {
+    return Endpoint.builder()
+        .interfaceType("EDC")
+        .protocolInformation(
+            buildProtocolInformation())
+        .build();
+  }
+
+  private ProtocolInformation buildProtocolInformation() {
+    return ProtocolInformation.builder()
+        .endpointAddress("localhost:4243")
+        .endpointProtocol("IDS/ECLIPSE DATASPACE CONNECTOR")
+        .endpointProtocolVersion("0.0.1-SNAPSHOT")
+        .build();
+  }
+
+  private SemanticId buildSemanticId() {
+    return SemanticId.builder()
+        .value(List.of("urn:example.catenax.serial_part_typization:1.0.0"))
         .build();
   }
 }
