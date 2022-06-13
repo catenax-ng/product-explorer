@@ -16,6 +16,6 @@ public class TwinRegistryAssetProvider implements ShellDescriptorProvider {
     if (matchedSubmodelsIds.isEmpty()) {
       throw new ResourceNotFoundException(query);
     }
-    return client.fetchShelDescriptor(endpointAddress, matchedSubmodelsIds);
+    return client.fetchShellDescriptor(endpointAddress, matchedSubmodelsIds);
   }
 }

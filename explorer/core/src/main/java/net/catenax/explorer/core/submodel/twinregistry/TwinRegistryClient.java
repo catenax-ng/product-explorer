@@ -41,7 +41,7 @@ public class TwinRegistryClient {
   }
 
   @SneakyThrows
-  ShellDescriptorResponse fetchShelDescriptor(final String endpointAddress, final List<String> matchedSubmodelsIds) {
+  ShellDescriptorResponse fetchShellDescriptor(final String endpointAddress, final List<String> matchedSubmodelsIds) {
 
     final ShellDescriptorResponse result = webClient.post()
         .uri(endpointAddress + FETCH_SHELL_DESCRIPTOR_URL)

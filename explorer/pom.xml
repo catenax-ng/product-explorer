@@ -62,6 +62,16 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.dataspaceconnector</groupId>
+      <artifactId>contract-spi</artifactId>
+      <version>0.0.1-milestone-4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.dataspaceconnector</groupId>
+      <artifactId>catalog-spi</artifactId>
+      <version>0.0.1-milestone-4</version>
+    </dependency>
   </dependencies>
 
   <build>
