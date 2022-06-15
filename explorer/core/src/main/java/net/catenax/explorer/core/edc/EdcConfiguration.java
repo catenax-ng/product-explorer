@@ -13,8 +13,18 @@ public class EdcConfiguration {
   }
 
   @Bean
+  EdcTransferService edcTransferService(EdcClient edcClient) {
+    return new EdcTransferService(edcClient);
+  }
+
+  @Bean
   EdcContractService edcContractService(EdcClient edcClient) {
     return new EdcContractService(edcClient);
+  }
+
+  @Bean
+  CallbackController callbackController() {
+    return new CallbackController();
   }
 
 }

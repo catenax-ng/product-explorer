@@ -72,6 +72,11 @@
       <artifactId>catalog-spi</artifactId>
       <version>0.0.1-milestone-4</version>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.dataspaceconnector</groupId>
+      <artifactId>transfer-spi</artifactId>
+      <version>0.0.1-milestone-4</version>
+    </dependency>
   </dependencies>
 
   <build>

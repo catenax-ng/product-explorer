@@ -19,9 +19,9 @@ public class EdcContractService {
   private final EdcClient edcClient;
 
   @SneakyThrows
-  public ContractOffer findContractOfferForAssetId(String assetId, String endpointAddress, String providerUrl) {
+  public ContractAgreementWrapper findContractOfferForAssetId(String assetId, String endpointAddress, String providerUrl) {
     ContractOffer contractOffer = edcClient.findContractOfferForAssetId(assetId,
-        endpointAddress + "/data/catalog?providerUrl=" + providerUrl);
+        endpointAddress + "/api/v1/data/catalog?providerUrl=" + providerUrl);
 
     String contractNegotiationId = initializeContractNegotiation(contractOffer,
         endpointAddress);
@@ -36,7 +36,7 @@ public class EdcContractService {
 
     log.info("Contract negotiated: " + response);
 
-    return null;
+    return response;
   }
 
   private String initializeContractNegotiation(ContractOffer contractOffer, String endpointAddress) {
@@ -56,16 +56,14 @@ public class EdcContractService {
         .build();
 
     ContractNegotiationRequestDto request = ContractNegotiationRequestDto.builder()
-        .connectorAddress("http://localhost:8282/api/v1/ids/data")
+        .connectorAddress("http://provider-controlplane:8282/api/v1/ids/data")
         .connectorId("provider")
         .offer(contractOfferDescription)
         .protocol("ids-multipart")
         .build();
 
-    String contractNegotiation = edcClient.initializeContractNegotiation(request,
+    return edcClient.initializeContractNegotiation(request,
         endpointAddress);
-
-    return contractNegotiation;
   }
 
 }

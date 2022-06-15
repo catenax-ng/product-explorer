@@ -4,10 +4,11 @@ import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edc.model.ContractNegotiationRequestDto;
+import net.catenax.explorer.core.edc.model.TransferRequestDto;
 import net.catenax.explorer.core.exception.ResourceNotFoundException;
 import org.eclipse.dataspaceconnector.spi.types.domain.catalog.Catalog;
-import org.eclipse.dataspaceconnector.spi.types.domain.contract.negotiation.ContractNegotiation;
 import org.eclipse.dataspaceconnector.spi.types.domain.contract.offer.ContractOffer;
+import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferProcess;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,11 +19,9 @@ public class EdcClient {
 
   private static final String IDS_PATH = "/api/v1/ids/data";
 
-  private static final String CONTRACT_NEGOTIATION_PATH = "/data/contractnegotiations";
+  private static final String CONTRACT_NEGOTIATION_PATH = "api/v1/data/contractnegotiations"; // move from here to the Service
 
   private static final ParameterizedTypeReference<Catalog> OFFER_REFERENCE = new ParameterizedTypeReference<>() {};
-
-  private static final ParameterizedTypeReference<ContractNegotiation> CONTRACT_NEGOTIATION_REFERENCE = new ParameterizedTypeReference<>() {};
 
   private final WebClient webClient;
 
@@ -71,6 +70,21 @@ public class EdcClient {
 
     return result;
   }
+
+  public TransferProcess initializeHttpTransferProcess(TransferRequestDto request, String endpointAddress) {
+    TransferProcess result = webClient.post()
+        .uri(endpointAddress)
+        .header("X-Api-Key", "apipassword")
+        .header("Content-Type", "application/json")
+        .body(BodyInserters.fromValue(request))
+        .retrieve()
+        .bodyToMono(TransferProcess.class)
+        .block(Duration.ofSeconds(5));
+
+    return result;
+  }
+
+  public
 
   record ContractIdWrapper (String id) {}
 

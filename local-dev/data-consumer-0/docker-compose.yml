@@ -58,19 +58,19 @@ services:
       - pgdata-db:/var/lib/postgresql/data
       - ./postgres-config/create-databases.sql:/docker-entrypoint-initdb.d/create-databases.sql
   
-  api_wrapper:
-    image: "ghcr.io/catenax-ng/catenax-at-home/consumer-api-wrapper:0.0.3"
-    restart : "always"
-    networks: 
-    - local
-    ports:
-      - "8300:9191"
-      - "8310:8090"
-    environment:
-      EDC_FS_CONFIG: /app/configuration.properties
-      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8090"
-    volumes:
-      - ./edc-config/api-wrapper.properties:/app/configuration.properties
+#  api_wrapper:
+#    image: "ghcr.io/catenax-ng/catenax-at-home/consumer-api-wrapper:0.0.3"
+#    restart : "always"
+#    networks: 
+#    - local
+#    ports:
+#      - "8300:9191"
+#      - "8310:8090"
+#    environment:
+#      EDC_FS_CONFIG: /app/configuration.properties
+#      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8090"
+#    volumes:
+#      - ./edc-config/api-wrapper.properties:/app/configuration.properties
   
 
 volumes:
