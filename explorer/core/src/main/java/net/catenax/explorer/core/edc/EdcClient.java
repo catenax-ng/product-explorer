@@ -8,8 +8,12 @@ import net.catenax.explorer.core.edc.model.TransferRequestDto;
 import net.catenax.explorer.core.exception.ResourceNotFoundException;
 import org.eclipse.dataspaceconnector.spi.types.domain.catalog.Catalog;
 import org.eclipse.dataspaceconnector.spi.types.domain.contract.offer.ContractOffer;
+import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferProcess;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -73,18 +77,38 @@ public class EdcClient {
 
   public TransferProcess initializeHttpTransferProcess(TransferRequestDto request, String endpointAddress) {
     TransferProcess result = webClient.post()
-        .uri(endpointAddress)
-        .header("X-Api-Key", "apipassword")
-        .header("Content-Type", "application/json")
-        .body(BodyInserters.fromValue(request))
-        .retrieve()
-        .bodyToMono(TransferProcess.class)
-        .block(Duration.ofSeconds(5));
+            .uri(endpointAddress)
+            .header("X-Api-Key", "apipassword")
+            .header("Content-Type", "application/json")
+            .body(BodyInserters.fromValue(request))
+            .retrieve()
+            .bodyToMono(TransferProcess.class)
+            .block(Duration.ofSeconds(5));
 
     return result;
   }
 
-  public
+  public String getData(EndpointDataReference endpointDataReference) {
+      RestTemplate restTemplate = new RestTemplate();
+      HttpHeaders headers = new HttpHeaders();
+      headers.set(endpointDataReference.getAuthKey(), endpointDataReference.getAuthCode());
+
+      HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+
+      ResponseEntity<String> response1 = restTemplate.exchange(
+              endpointDataReference.getEndpoint(), HttpMethod.GET, requestEntity, String.class);
+      return response1.getBody();
+
+      /** nie wiem jak dziala ten webClient, zwraca body=null **/
+//    String response = webClient.get()
+//            .uri(endpointDataReference.getEndpoint())
+//            .header(endpointDataReference.getAuthKey(), endpointDataReference.getAuthCode())
+//            .retrieve()
+//            .bodyToMono(String.class)
+//            .block();
+//
+//    return response;
+  }
 
   record ContractIdWrapper (String id) {}
 

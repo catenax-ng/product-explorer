@@ -37,9 +37,7 @@ public class EdcAssetProvider implements ShellDescriptorProvider {
     log.info("Found contract agreement:" + contractAgreement);
 
     TransferProcess transferProcess = edcTransferService.initializeHttpTransferProcess(
-        contractAgreement.id(), query, endpointAddress, providerUrl);
-
-
+        contractAgreement.contractAgreementId(), query, endpointAddress, providerUrl);
 
     return null;
   }

@@ -23,8 +23,7 @@ public class EdcConfiguration {
   }
 
   @Bean
-  CallbackController callbackController() {
-    return new CallbackController();
+  CallbackController callbackController(EdcClient edcClient) {
+    return new CallbackController(edcClient);
   }
-
 }
