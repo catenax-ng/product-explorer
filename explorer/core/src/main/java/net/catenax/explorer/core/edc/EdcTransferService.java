@@ -1,19 +1,21 @@
 package net.catenax.explorer.core.edc;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edc.model.TransferRequestDto;
 import org.eclipse.dataspaceconnector.spi.types.domain.DataAddress;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferProcess;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferType;
 
-@RequiredArgsConstructor
 @Slf4j
 public class EdcTransferService {
 
   private static final String TRANSFER_PATH = "/api/v1/data/transferprocess";
 
   private final EdcClient edcClient;
+
+  public EdcTransferService(EdcClient edcClient) {
+    this.edcClient = edcClient;
+  }
 
   public TransferProcess initializeHttpTransferProcess(String contractAgreementId, String query, String endpointAddress, String providerUrl) {
 

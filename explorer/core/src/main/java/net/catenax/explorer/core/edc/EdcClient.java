@@ -10,10 +10,6 @@ import org.eclipse.dataspaceconnector.spi.types.domain.catalog.Catalog;
 import org.eclipse.dataspaceconnector.spi.types.domain.contract.offer.ContractOffer;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferProcess;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -25,8 +21,6 @@ public class EdcClient {
 
   private static final String CONTRACT_NEGOTIATION_PATH = "api/v1/data/contractnegotiations"; // move from here to the Service
 
-  private static final ParameterizedTypeReference<Catalog> OFFER_REFERENCE = new ParameterizedTypeReference<>() {};
-
   private final WebClient webClient;
 
   public ContractOffer findContractOfferForAssetId(String assetId, String endpointAddress) {
@@ -34,7 +28,7 @@ public class EdcClient {
         .uri(endpointAddress + IDS_PATH)
         .header("X-Api-Key", "apipassword")
         .retrieve()
-        .bodyToMono(OFFER_REFERENCE)
+        .bodyToMono(Catalog.class)
         .block(Duration.ofSeconds(5));
 
     log.info("Got Catalog from provider:" + catalog);
@@ -65,18 +59,16 @@ public class EdcClient {
   }
 
   public ContractAgreementWrapper getContractNegotiation(String contractNegotiationId, String endpointAddress) {
-    ContractAgreementWrapper result = webClient.get()
+    return webClient.get()
         .uri(endpointAddress + CONTRACT_NEGOTIATION_PATH + "/" + contractNegotiationId)
         .header("X-Api-Key", "apipassword")
         .retrieve()
         .bodyToMono(ContractAgreementWrapper.class)
         .block(Duration.ofSeconds(5));
-
-    return result;
   }
 
   public TransferProcess initializeHttpTransferProcess(TransferRequestDto request, String endpointAddress) {
-    TransferProcess result = webClient.post()
+    return webClient.post()
             .uri(endpointAddress)
             .header("X-Api-Key", "apipassword")
             .header("Content-Type", "application/json")
@@ -84,33 +76,19 @@ public class EdcClient {
             .retrieve()
             .bodyToMono(TransferProcess.class)
             .block(Duration.ofSeconds(5));
-
-    return result;
   }
 
   public String getData(EndpointDataReference endpointDataReference) {
-      RestTemplate restTemplate = new RestTemplate();
-      HttpHeaders headers = new HttpHeaders();
-      headers.set(endpointDataReference.getAuthKey(), endpointDataReference.getAuthCode());
-
-      HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
-
-      ResponseEntity<String> response1 = restTemplate.exchange(
-              endpointDataReference.getEndpoint(), HttpMethod.GET, requestEntity, String.class);
-      return response1.getBody();
-
-      /** nie wiem jak dziala ten webClient, zwraca body=null **/
-//    String response = webClient.get()
-//            .uri(endpointDataReference.getEndpoint())
-//            .header(endpointDataReference.getAuthKey(), endpointDataReference.getAuthCode())
-//            .retrieve()
-//            .bodyToMono(String.class)
-//            .block();
-//
-//    return response;
+    return webClient.get()
+        .uri(endpointDataReference.getEndpoint())
+        .header(endpointDataReference.getAuthKey(), endpointDataReference.getAuthCode())
+        .retrieve()
+        .bodyToMono(String.class)
+        .block(Duration.ofSeconds(10));
   }
 
   record ContractIdWrapper (String id) {}
 
   record ContractAgreementWrapper(String id, String contractAgreementId, String state) {}
+
 }

@@ -1,25 +1,107 @@
-version: '3.8'
+version: "3.9"
 
 services:
-  twin-registry-1:
-    image: "ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1"
-    container_name: twin-registry-1
-    environment:
-      SPRING_PROFILES_ACTIVE: local
-      SPRING_DATASOURCE_URL: jdbc:h2:file:./semantics/persistence;CASE_INSENSITIVE_IDENTIFIERS=TRUE
-      IDP_ISSUER_URI: ""
+  provider-controlplane:
+    container_name: provider-controlplane
+    build:
+      context: explorer/edc-integration/edc-controlplane-memory
+      args:
+        JAR: build/libs/edc.jar
     ports:
-      - "4243:4243"
-    
-  twin-registry-2:
-    image: "ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1"
-    container_name: twin-registry-2
+      - "8081:9191" # default/control (8181:9191)
+      - "8084:9192" # validation (8184:9192)
+      - "8087:9193" # data (8187:9193)
+      - "5005:8090" # debugging
+      - "8181:8282" # ids
     environment:
-      SPRING_PROFILES_ACTIVE: local
-      SPRING_DATASOURCE_URL: jdbc:h2:file:./semantics/persistence;CASE_INSENSITIVE_IDENTIFIERS=TRUE
-      IDP_ISSUER_URI: ""
+      EDC_VAULT: /app/vault.properties
+      EDC_KEYSTORE: /app/cert.pfx
+      EDC_KEYSTORE_PASSWORD: 123456
+      CONFIGURATION_PROPERTIES_FILE: /app/configuration.properties
+      LOGGING_PROPERTIES_FILE: /app/logging.properties
+      OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
+    volumes:
+      - ./explorer/edc-integration/certs/cert.pfx:/app/cert.pfx
+      - ./explorer/edc-integration/config/vault.properties:/app/vault.properties
+      - ./explorer/edc-integration/config/provider_cp_configuration.properties:/app/configuration.properties
+      - ./explorer/edc-integration/config/opentelemetry.properties:/app/opentelemetry.properties
+      - ./explorer/edc-integration/config/logging.properties:/app/logging.properties
+
+  provider-dataplane:
+    container_name: provider-dataplane
+    build:
+      context: explorer/edc-integration/edc-dataplane
+      args:
+        JAR: build/libs/edc.jar
     ports:
-      - "4244:4243"
+      - "9082:9191" # default (8182:9191)
+      - "9083:9192" # public (8283:9192)
+      - "5006:8090" # debugging
+    environment:
+      EDC_VAULT: /app/vault.properties
+      EDC_KEYSTORE: /app/cert.pfx
+      EDC_KEYSTORE_PASSWORD: 123456
+      CONFIGURATION_PROPERTIES_FILE: /app/configuration.properties
+      LOGGING_PROPERTIES_FILE: /app/logging.properties
+      OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
+    volumes:
+      - ./explorer/edc-integration/certs/cert.pfx:/app/cert.pfx
+      - ./explorer/edc-integration/config/vault.properties:/app/vault.properties
+      - ./explorer/edc-integration/config/provider_dp_configuration.properties:/app/configuration.properties
+      - ./explorer/edc-integration/config/opentelemetry.properties:/app/opentelemetry.properties
+      - ./explorer/edc-integration/config/logging.properties:/app/logging.properties
+
+  consumer-controlplane:
+    container_name: consumer-controlplane
+    build:
+      context: explorer/edc-integration/edc-controlplane-memory
+      args:
+        JAR: build/libs/edc.jar
+    ports:
+      - "8182:8282" # ids
+      - "8185:8185" # public
+      - "8191:9191" # default
+      - "8192:9192" # validation
+      - "8195:9193" # data
+      - "8199:9999" # control
+      - "5007:8090" # debugging
+    environment:
+      EDC_VAULT: /app/vault.properties
+      EDC_KEYSTORE: /app/cert.pfx
+      EDC_KEYSTORE_PASSWORD: 123456
+      CONFIGURATION_PROPERTIES_FILE: /app/configuration.properties
+      LOGGING_PROPERTIES_FILE: /app/logging.properties
+      OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
+    volumes:
+      - ./explorer/edc-integration/certs/cert.pfx:/app/cert.pfx
+      - ./explorer/edc-integration/config/vault.properties:/app/vault.properties
+      - ./explorer/edc-integration/config/consumer_cp_configuration.properties:/app/configuration.properties
+      - ./explorer/edc-integration/config/opentelemetry.properties:/app/opentelemetry.properties
+      - ./explorer/edc-integration/config/logging.properties:/app/logging.properties
+
+  consumer-dataplane:
+    container_name: consumer-dataplane
+    build:
+      context: explorer/edc-integration/edc-dataplane
+      args:
+        JAR: build/libs/edc.jar
+    ports:
+      - "9192:9191" # default (8192:9191)
+      - "9183:9192" # public (8183:9192)
+      - "5008:8090" # debugging
+    environment:
+      EDC_VAULT: /app/vault.properties
+      EDC_KEYSTORE: /app/cert.pfx
+      EDC_KEYSTORE_PASSWORD: 123456
+      CONFIGURATION_PROPERTIES_FILE: /app/configuration.properties
+      LOGGING_PROPERTIES_FILE: /app/logging.properties
+      OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
+    volumes:
+      - ./explorer/edc-integration/certs/cert.pfx:/app/cert.pfx
+      - ./explorer/edc-integration/config/vault.properties:/app/vault.properties
+      - ./explorer/edc-integration/config/consumer_dp_configuration.properties:/app/configuration.properties
+      - ./explorer/edc-integration/config/opentelemetry.properties:/app/opentelemetry.properties
+      - ./explorer/edc-integration/config/logging.properties:/app/logging.properties
 
   self-description-hub:
     container_name: self-description-hub
@@ -27,7 +109,8 @@ services:
       context: self-description-hub-integration
     ports:
       - "8090:8090"
-    
-      
-
-
+  
+  edc-configuration:
+    container_name: edc-configuration
+    build:
+      context: explorer/edc-integration/config/init

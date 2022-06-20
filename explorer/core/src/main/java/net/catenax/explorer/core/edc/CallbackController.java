@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -17,11 +16,9 @@ public class CallbackController {
     private final EdcClient edcClient;
 
     @PostMapping("/endpoint-data-reference")
-    public ResponseEntity<Object> callback(@RequestBody EndpointDataReference dataReference) throws InterruptedException {
+    public ResponseEntity<Object> callback(@RequestBody EndpointDataReference dataReference) {
         log.info("CALLBACK HIT: " + toString(dataReference));
-
-        String data = edcClient.getData(dataReference);
-        log.info("DATA: " + data);
+        log.info("DATA: " + edcClient.getData(dataReference));
 
         return ResponseEntity.ok().build();
     }
