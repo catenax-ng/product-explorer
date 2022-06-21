@@ -1,6 +1,8 @@
 package net.catenax.explorer.selfdescriptionhub.web;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +16,13 @@ public class MockController {
   private List<String> knownEdcs;
 
   @GetMapping
-  public List<String> retrieve() {
-    return knownEdcs;
+  public List<SelfDescription> retrieve() {
+    return knownEdcs.stream()
+        .map(knownEdc -> SelfDescription.builder()
+        .companyNumber(RandomStringUtils.randomNumeric(10))
+        .serviceProvider(knownEdc)
+        .bpn(RandomStringUtils.randomAlphabetic(8))
+        .build())
+        .collect(Collectors.toList());
   }
-
 }
