@@ -19,7 +19,7 @@ public class ExplorerService {
 
   public List<ShellDescriptorResponse> search(final String query) {
     return edcLocationProvider.getKnownEdcLocations().stream()
-        .map(edcLocation -> assetRetriever.retrieve(edcLocation.getUrl()))
+        .map(selfDescription -> assetRetriever.retrieve(selfDescription.getServiceProvider()))
         .map(AssetResponse::getEndpoints) //TODO DTR will hold a list of endpoints or one endpoint ?
         .flatMap(Collection::stream)
         .map(endpointAddress -> shellDescriptorProvider.search(query, endpointAddress.getProtocolInformation().getEndpointAddress()))
