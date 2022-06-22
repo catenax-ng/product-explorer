@@ -7,7 +7,6 @@ import net.catenax.explorer.core.exception.ResourceNotFoundException;
 import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
 import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferProcess;
-import org.springframework.beans.factory.annotation.Value;
 
 @RequiredArgsConstructor
 @Slf4j

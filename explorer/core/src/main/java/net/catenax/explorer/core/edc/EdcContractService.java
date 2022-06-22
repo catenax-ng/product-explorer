@@ -1,9 +1,7 @@
 package net.catenax.explorer.core.edc;
 
-import static java.util.Objects.*;
+import static java.util.Objects.isNull;
 
-import java.util.Objects;
-import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +13,6 @@ import org.eclipse.dataspaceconnector.policy.model.Action;
 import org.eclipse.dataspaceconnector.policy.model.Permission;
 import org.eclipse.dataspaceconnector.policy.model.Policy;
 import org.eclipse.dataspaceconnector.policy.model.PolicyType;
-import org.eclipse.dataspaceconnector.spi.types.domain.contract.agreement.ContractAgreement;
 import org.eclipse.dataspaceconnector.spi.types.domain.contract.offer.ContractOffer;
 
 @RequiredArgsConstructor
@@ -35,15 +32,13 @@ public class EdcContractService {
 
     String contractNegotiationId = initializeContractNegotiation(contractOffer, consumerControlPlaneUrl, providerControlPlaneUrl);
 
-    ContractAgreementWrapper response;
+    ContractAgreementWrapper response = null;
 
-//    int retries = 10;
-    do {
+    while (response == null || !STATUS_CONFIRMED.equals(response.state())) {
+      Thread.sleep(1000);
       response = edcClient.getContractAgrement(contractNegotiationId,
           consumerControlPlaneUrl + CONTRACT_NEGOTIATION_PATH);
-      Thread.sleep(1000);
-//      retries--;
-    } while (STATUS_CONFIRMED.equals(response.state()));
+    }
 
     if (isNull(response)) {//TODO should be ContractRejection?
       throw new ContractNegotiationException("Failed to negotiate contract for Asset: " + assetId);
