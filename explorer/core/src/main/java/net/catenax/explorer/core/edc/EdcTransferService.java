@@ -1,16 +1,19 @@
 package net.catenax.explorer.core.edc;
 
+import static org.springframework.http.MediaType.*;
+
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edc.model.TransferRequestDto;
 import org.eclipse.dataspaceconnector.spi.types.domain.DataAddress;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferProcess;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferType;
+import org.springframework.http.MediaType;
 
 @Slf4j
 public class EdcTransferService {
 
+  private static final String IDS_DATA_PATH = "/api/v1/ids/data";
   private static final String TRANSFER_PATH = "/api/v1/data/transferprocess";
-
   private final EdcClient edcClient;
 
   public EdcTransferService(EdcClient edcClient) {
@@ -25,7 +28,7 @@ public class EdcTransferService {
 
     TransferType transferType = TransferType.Builder.
         transferType()
-        .contentType("application/octet-stream")
+        .contentType(APPLICATION_OCTET_STREAM_VALUE)
         .isFinite(true)
         .build();
 
@@ -33,7 +36,7 @@ public class EdcTransferService {
         .assetId(query)
         .contractId(contractAgreementId)
         .connectorId("provider")
-        .connectorAddress("http://provider-controlplane:8282/api/v1/ids/data") //TODO(mkizlich): extract
+        .connectorAddress(providerUrl + IDS_DATA_PATH)
         .protocol("ids-multipart")
         .dataDestination(dataDestination)
         .managedResources(false)
@@ -46,6 +49,5 @@ public class EdcTransferService {
     log.info("TRANSFER PROCESS ID: " + process.getId());
 
     return process;
-
   }
 }

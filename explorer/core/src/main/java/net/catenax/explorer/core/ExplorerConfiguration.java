@@ -17,7 +17,7 @@ public class ExplorerConfiguration {
   }
 
   @Bean
-  ExplorerService explorerService(EdcLocationProvider provider, AssetRetriever assetRetriever, ShellDescriptorProvider shellDescriptorProvider) {
-    return new ExplorerService(provider, assetRetriever, shellDescriptorProvider);
+  ExplorerService explorerService(EdcLocationProvider provider, ShellDescriptorProvider shellDescriptorProvider) {
+    return new ExplorerService(provider, shellDescriptorProvider);
   }
 }
