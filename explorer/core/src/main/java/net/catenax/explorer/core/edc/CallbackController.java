@@ -2,6 +2,7 @@ package net.catenax.explorer.core.edc;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,13 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @RequestMapping("/callback")
 public class CallbackController {
-    private final EdcClient edcClient;
+    private final ShellDescriptorProvider provider;
 
     @PostMapping("/endpoint-data-reference")
     public ResponseEntity<Object> callback(@RequestBody EndpointDataReference dataReference) {
-        log.info("CALLBACK HIT: " + toString(dataReference));
-        log.info("DATA: " + edcClient.getData(dataReference));
-
+        log.info("Receive callback from provider control plane: " + toString(dataReference));
+        provider.persistCallback(dataReference);
         return ResponseEntity.ok().build();
     }
 

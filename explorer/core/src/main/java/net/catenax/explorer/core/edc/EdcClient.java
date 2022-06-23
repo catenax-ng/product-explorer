@@ -36,7 +36,7 @@ public class EdcClient {
         .bodyToMono(Catalog.class)
         .block(ofSeconds(5));
 
-    log.info("Got Catalog from provider:" + catalog);
+    log.info("Got Catalog with number of offers: " + catalog.getContractOffers().size());
 
     if (isNull(catalog) || catalog.getContractOffers().isEmpty()) {
       throw new ResourceNotFoundException("Provider's Contract Offers Catalog is empty.");

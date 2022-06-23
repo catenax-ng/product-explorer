@@ -1,5 +1,6 @@
 package net.catenax.explorer.core.edc;
 
+import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -23,7 +24,7 @@ public class EdcConfiguration {
   }
 
   @Bean
-  CallbackController callbackController(EdcClient edcClient) {
-    return new CallbackController(edcClient);
+  CallbackController callbackController(ShellDescriptorProvider shellDescriptorProvider) {
+    return new CallbackController(shellDescriptorProvider);
   }
 }

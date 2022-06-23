@@ -1,13 +1,13 @@
 package net.catenax.explorer.core.edc;
 
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edc.model.TransferRequestDto;
 import org.eclipse.dataspaceconnector.spi.types.domain.DataAddress;
+import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferProcess;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferType;
-import org.springframework.http.MediaType;
 
 @Slf4j
 public class EdcTransferService {
@@ -46,8 +46,12 @@ public class EdcTransferService {
     TransferProcess process = edcClient
         .initializeHttpTransferProcess(transferRequest, endpointAddress + TRANSFER_PATH);
 
-    log.info("TRANSFER PROCESS ID: " + process.getId());
+    log.info("Received transfer id process: " + process.getId());
 
     return process;
+  }
+
+  public String getData(EndpointDataReference endpointDataReference) {
+    return edcClient.getData(endpointDataReference);
   }
 }

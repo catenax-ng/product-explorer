@@ -38,6 +38,7 @@ public class EdcContractService {
       Thread.sleep(1000);
       response = edcClient.getContractAgrement(contractNegotiationId,
           consumerControlPlaneUrl + CONTRACT_NEGOTIATION_PATH);
+      log.info("Negotiation contract has status: {}", response.state());
     }
 
     if (isNull(response)) {//TODO should be ContractRejection?
