@@ -33,7 +33,7 @@ public class EdcAssetProvider implements ShellDescriptorProvider {
 
     edcTransferService.initializeHttpTransferProcess(contractAgreement.contractAgreementId(), query, consumerControlPlaneUrl, providerControlPlaneUrl);
 
-    while(!cache.containsKey(contractAgreement.contractAgreementId())) {
+    while (!cache.containsKey(contractAgreement.contractAgreementId())) {
       Thread.sleep(1000);
     }
 
