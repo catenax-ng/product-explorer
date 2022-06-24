@@ -1,0 +1,22 @@
+<div id="results" class="results-container" xmlns:th="http://www.thymeleaf.org">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Short Id</th>
+            <th scope="col">Identification</th>
+            <th scope="col">Additional Metadata</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item: ${results}">
+            <td th:text="${item.shortId}"/>
+            <td th:text="${item.identification}"/>
+            <td>
+                <th:block th:each="asset : ${item.specificAssetIds}">
+                    <div style="display: block;" th:text="${asset.key} + ': ' + ${asset.value}"></div>
+                </th:block>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
