@@ -26,6 +26,7 @@
                    hx-trigger="keyup changed delay:500ms"
                    hx-target="#search-results"
                    hx-indicator="#data-loading-indicator"
+                   hx-sync="this:replace"
                    placeholder="Search...">
             <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
         </div>
@@ -40,7 +41,7 @@
     </div>
 </div>
 
-<div id="data-loading-indicator" class="htmx-indicator container h-100 mt-3" style="display: none">
+<div id="data-loading-indicator" class="htmx-indicator container h-100 mt-3">
     <div class="d-flex justify-content-center align-items-center gap-2">
         <div class="spinner-border spinner-border-sm" role="status">
             <span class="visually-hidden">Loading...</span>

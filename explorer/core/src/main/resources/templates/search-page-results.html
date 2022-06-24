@@ -9,11 +9,11 @@
         </thead>
         <tbody>
         <tr th:each="item: ${results}">
-            <td th:text="${item.shortId}"/>
+            <td th:text="${item.idShort}"/>
             <td th:text="${item.identification}"/>
             <td>
                 <th:block th:each="asset : ${item.specificAssetIds}">
-                    <div style="display: block;" th:text="${asset.key} + ': ' + ${asset.value}"></div>
+                    <div style="display: block;" th:text="|${asset.key}: ${asset.value}|"></div>
                 </th:block>
             </td>
         </tr>
