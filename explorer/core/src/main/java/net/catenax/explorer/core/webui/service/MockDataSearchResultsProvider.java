@@ -1,35 +1,28 @@
-package net.catenax.explorer.core;
+package net.catenax.explorer.core.webui.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import lombok.SneakyThrows;
+import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse;
+import net.catenax.explorer.core.webui.dto.SearchResultDto;
 
-@RequestMapping("/")
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @RequiredArgsConstructor
-@Slf4j
-public class ExplorerWebController {
-
-    private final String explorerApplicationUrl;
+public class MockDataSearchResultsProvider implements SearchResultsProvider {
     private final ObjectMapper objectMapper;
 
-    @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("explorerApplicationUrl", explorerApplicationUrl);
-        return "index";
-    }
+    @Override
+    @SneakyThrows
+    public List<SearchResultDto> search(String query) {
+        List<SearchResultDto> results = new ArrayList<>();
 
-    @GetMapping("v1/assets/mockup/{query}")
-    public ResponseEntity<JsonNode> retrieve(@PathVariable final String query) throws JsonProcessingException {
-        log.info("Querying for Asset by: " + query);
         if ("test".equals(query)) {
-            return ResponseEntity.ok(objectMapper.readValue("""
+            final List<ShellDescriptorResponse> shellDescriptorResponses = objectMapper.readValue("""
                     [ { 
                        "items": [
                          {
@@ -85,8 +78,25 @@ public class ExplorerWebController {
                        ]
                      }
                     ]
-                    """, JsonNode.class));
+                    """, new TypeReference<List<ShellDescriptorResponse>>() {
+            });
+            for (ShellDescriptorResponse response : shellDescriptorResponses) {
+                response.getItems().forEach(item -> {
+
+                    Map<String, String> assetIdsMap = new HashMap<>();
+                    item.getSpecificAssetIds().forEach(assetId -> {
+                        assetIdsMap.put(assetId.getKey(), assetId.getValue());
+                    });
+
+                    SearchResultDto searchResultDto = SearchResultDto.builder()
+                            .shortId(item.getIdShort())
+                            .identification(item.getIdentification())
+                            .specificAssetIds(assetIdsMap)
+                            .build();
+                    results.add(searchResultDto);
+                });
+            }
         }
-        return ResponseEntity.ok(objectMapper.readValue("{\"items\": []}", JsonNode.class));
+        return results;
     }
 }

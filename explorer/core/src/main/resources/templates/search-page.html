@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product Explorer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+
+    <style>
+        .results-container {
+            margin: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="search-bar-container" class="container h-100 mt-3">
+    <div class="d-flex justify-content-center align-items-center gap-2">
+        <div class="searchbar">
+            <input class="search_input"
+                   id="search-input"
+                   type="text"
+                   name="query"
+                   th:attr="hx-post=@{/ui/search}"
+                   hx-trigger="keyup changed delay:500ms"
+                   hx-target="#search-results"
+                   hx-indicator="#data-loading-indicator"
+                   placeholder="Search...">
+            <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
+        </div>
+        <button type="button"
+                class="btn btn-primary btn-sm"
+                th:attr="hx-post=@{/ui/search}"
+                hx-trigger="click"
+                hx-include="#search-input"
+                hx-target="#search-results"
+                hx-indicator="#data-loading-indicator">Search
+        </button>
+    </div>
+</div>
+
+<div id="data-loading-indicator" class="htmx-indicator container h-100 mt-3" style="display: none">
+    <div class="d-flex justify-content-center align-items-center gap-2">
+        <div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow spinner-grow-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+
+<div id="search-results" class="results-container"></div>
+
+<script type="text/javascript" th:src="@{/webjars/htmx.org/dist/htmx.min.js}"></script>
+</body>
+</html>
