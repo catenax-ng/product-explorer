@@ -11,6 +11,7 @@ import net.catenax.explorer.core.edc.exception.ContractNegotiationException;
 import net.catenax.explorer.core.edc.model.ContractNegotiationRequestDto;
 import net.catenax.explorer.core.edc.model.TransferRequestDto;
 import net.catenax.explorer.core.exception.ResourceNotFoundException;
+import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse;
 import org.eclipse.dataspaceconnector.spi.types.domain.catalog.Catalog;
 import org.eclipse.dataspaceconnector.spi.types.domain.contract.offer.ContractOffer;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
@@ -87,12 +88,12 @@ public class EdcClient {
         .block(ofSeconds(5));
   }
 
-  public String getData(EndpointDataReference endpointDataReference) {
+  public ShellDescriptorResponse getData(EndpointDataReference endpointDataReference) {
     return webClient.get()
         .uri(endpointDataReference.getEndpoint())
         .header(endpointDataReference.getAuthKey(), endpointDataReference.getAuthCode())
         .retrieve()
-        .bodyToMono(String.class)
+        .bodyToMono(ShellDescriptorResponse.class)
         .block(ofSeconds(5));
   }
 

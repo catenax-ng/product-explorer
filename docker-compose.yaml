@@ -103,13 +103,23 @@ services:
       - ./explorer/edc-integration/config/opentelemetry.properties:/app/opentelemetry.properties
       - ./explorer/edc-integration/config/logging.properties:/app/logging.properties
 
-  self-description-hub:
-    container_name: self-description-hub
-    build:
-      context: self-description-hub-integration
+#  self-description-hub:
+#    container_name: self-description-hub
+#    build:
+#      context: self-description-hub-integration
+#    ports:
+#      - "8090:8090"
+
+  twin-registry:
+    image: "registry:latest"
+    container_name: twin-registry
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:h2:file:./semantics/persistence;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+      IDP_ISSUER_URI: ""
     ports:
-      - "8090:8090"
-  
+      - "4244:4243"
+
   edc-configuration:
     container_name: edc-configuration
     build:

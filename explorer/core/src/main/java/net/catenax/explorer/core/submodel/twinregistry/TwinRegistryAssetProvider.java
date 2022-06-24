@@ -12,12 +12,12 @@ public class TwinRegistryAssetProvider implements ShellDescriptorProvider {
   private final TwinRegistryClient client;
 
   @Override
-  public String search(String query, String endpointAddress) {
+  public ShellDescriptorResponse search(String query, String endpointAddress) {
     final List<String> matchedSubmodelsIds = client.lookup(query, endpointAddress);
     if (matchedSubmodelsIds.isEmpty()) {
       throw new ResourceNotFoundException(query);
     }
-    return client.fetchShellDescriptor(endpointAddress, matchedSubmodelsIds).toString();
+    return client.fetchShellDescriptor(endpointAddress, matchedSubmodelsIds);
   }
 
   @Override
