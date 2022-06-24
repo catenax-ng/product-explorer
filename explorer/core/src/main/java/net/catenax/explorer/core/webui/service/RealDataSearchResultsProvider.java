@@ -3,7 +3,7 @@ package net.catenax.explorer.core.webui.service;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.catenax.explorer.core.ExplorerService;
-import net.catenax.explorer.core.webui.dto.SearchResultDto;
+import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +14,11 @@ public class RealDataSearchResultsProvider implements SearchResultsProvider {
 
     @Override
     @SneakyThrows
-    public List<SearchResultDto> search(String query) {
-        List<SearchResultDto> results = new ArrayList<>();
+    public List<ShellDescriptorResponse.ShellDescriptor> search(String query) {
+        List<ShellDescriptorResponse.ShellDescriptor> results = new ArrayList<>();
 
         final List<String> searchResults = explorerService.search(query);
-        // TODO: map search results into SearchResultsDto
+        // TODO: map search results into ShellDescriptorResponse
         return results;
     }
 }

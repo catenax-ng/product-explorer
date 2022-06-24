@@ -5,12 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse;
-import net.catenax.explorer.core.webui.dto.SearchResultDto;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 public class MockDataSearchResultsProvider implements SearchResultsProvider {
@@ -18,8 +15,8 @@ public class MockDataSearchResultsProvider implements SearchResultsProvider {
 
     @Override
     @SneakyThrows
-    public List<SearchResultDto> search(String query) {
-        List<SearchResultDto> results = new ArrayList<>();
+    public List<ShellDescriptorResponse.ShellDescriptor> search(String query) {
+        List<ShellDescriptorResponse.ShellDescriptor> results = new ArrayList<>();
 
         if ("test".equals(query)) {
             final List<ShellDescriptorResponse> shellDescriptorResponses = objectMapper.readValue("""
@@ -82,18 +79,7 @@ public class MockDataSearchResultsProvider implements SearchResultsProvider {
             });
             for (ShellDescriptorResponse response : shellDescriptorResponses) {
                 response.getItems().forEach(item -> {
-
-                    Map<String, String> assetIdsMap = new HashMap<>();
-                    item.getSpecificAssetIds().forEach(assetId -> {
-                        assetIdsMap.put(assetId.getKey(), assetId.getValue());
-                    });
-
-                    SearchResultDto searchResultDto = SearchResultDto.builder()
-                            .shortId(item.getIdShort())
-                            .identification(item.getIdentification())
-                            .specificAssetIds(assetIdsMap)
-                            .build();
-                    results.add(searchResultDto);
+                    results.add(item);
                 });
             }
         }
