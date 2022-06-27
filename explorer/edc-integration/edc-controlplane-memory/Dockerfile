@@ -4,16 +4,19 @@ ENV OTEL_AGENT_LOCATION "https://github.com/open-telemetry/opentelemetry-java-in
 
 RUN wget ${OTEL_AGENT_LOCATION} -O /tmp/opentelemetry-javaagent.jar
 
+FROM azul/zulu-openjdk-debian:11 as build
+ADD ../edc .
+RUN ./gradlew clean build
+
 FROM gcr.io/distroless/java11-debian11
 
 ENV JAVA_TOOL_OPTIONS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8090
-ARG JAR
 ARG LIB
 
 WORKDIR /app
 
 COPY --from=otel /tmp/opentelemetry-javaagent.jar .
-COPY ${JAR} edc-controlplane.jar
+COPY --from=build build/libs/edc.jar edc-controlplane.jar
 COPY ${LIB} ./lib/
 
 CMD ["-javaagent:/app/opentelemetry-javaagent.jar", \
