@@ -1,7 +1,6 @@
 package net.catenax.explorer.core.webui;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.webui.service.SearchResultsProvider;
 import org.springframework.ui.Model;
@@ -21,11 +20,9 @@ public class ExplorerSearchController {
         return "search-page";
     }
 
-    @SneakyThrows
     @PostMapping("/ui/search")
     public String search(@RequestParam("query") String query, Model model) {
         model.addAttribute("results", searchResultsProvider.search(query));
-        Thread.sleep(3000);
         return "search-page-results";
     }
 }
