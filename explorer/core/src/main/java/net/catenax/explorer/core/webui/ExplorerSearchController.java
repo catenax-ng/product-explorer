@@ -1,9 +1,10 @@
 package net.catenax.explorer.core.webui;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import net.catenax.explorer.core.submodel.ShellDescriptorResponse;
 import net.catenax.explorer.core.webui.dto.SearchResultDto;
 import net.catenax.explorer.core.webui.service.SearchResultsProvider;
 import org.springframework.ui.Model;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/")
@@ -29,15 +29,16 @@ public class ExplorerSearchController {
 
     @PostMapping("/ui/search")
     public String search(@RequestParam("query") String query, Model model) {
-        List<SearchResultDto> searchResults = new ArrayList<>();
-        searchResultsProvider.search(query).forEach(descriptor -> {
-            try {
-                searchResults.add(new SearchResultDto(descriptor, objectMapper.writeValueAsString(descriptor)));
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        List<SearchResultDto> searchResults = searchResultsProvider.search(query)
+                .stream()
+                .map(this::mapToSearchResultDto)
+                .toList();
         model.addAttribute("results", searchResults);
         return "search-page-results";
+    }
+
+    @SneakyThrows
+    private SearchResultDto mapToSearchResultDto(ShellDescriptorResponse.ShellDescriptor shellDescriptor) {
+        return new SearchResultDto(shellDescriptor, objectMapper.writeValueAsString(shellDescriptor));
     }
 }
