@@ -1,6 +1,5 @@
 package net.catenax.explorer.core;
 
-import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
@@ -13,10 +12,13 @@ public class ExplorerService {
   private final EdcLocationProvider edcLocationProvider;
   private final ShellDescriptorProvider shellDescriptorProvider;
 
-  public List<ShellDescriptorResponse> search(final String query) {
-    return edcLocationProvider.getKnownEdcLocations().stream()
+  public ShellDescriptorResponse search(final String query) {
+    ShellDescriptorResponse response = new ShellDescriptorResponse();
+    response.setItems(edcLocationProvider.getKnownEdcLocations().stream()
         .map(selfDescription -> shellDescriptorProvider.search(query, selfDescription.getServiceProvider()))
         .filter(Objects::nonNull)
-        .toList();
+        .toList());
+
+    return response;
   }
 }

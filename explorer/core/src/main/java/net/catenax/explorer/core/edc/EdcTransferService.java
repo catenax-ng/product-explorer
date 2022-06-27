@@ -4,7 +4,7 @@ import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edc.model.TransferRequestDto;
-import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse;
+import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse.ShellDescriptor;
 import org.eclipse.dataspaceconnector.spi.types.domain.DataAddress;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferProcess;
@@ -52,7 +52,7 @@ public class EdcTransferService {
     return process;
   }
 
-  public ShellDescriptorResponse getData(EndpointDataReference endpointDataReference) {
+  public ShellDescriptor getData(EndpointDataReference endpointDataReference) {
     return edcClient.getData(endpointDataReference);
   }
 }

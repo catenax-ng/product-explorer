@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY src /app/src
 COPY pom.xml /app
+
 RUN mvn -f /app/pom.xml clean package
 
 FROM openjdk:18-slim as RUN

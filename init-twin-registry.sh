@@ -5,7 +5,7 @@ set -o errtrace
 set -o pipefail
 set -o nounset
 
-status_code=$(curl --location --request POST 'localhost:4244/registry/shell-descriptors' \
+curl --location --request POST 'localhost:4244/registry/shell-descriptors' \
 --header 'Content-Type: application/json' \
 --write-out %{http_code} --silent --output /dev/null \
 --data-raw '{
@@ -60,6 +60,3 @@ status_code=$(curl --location --request POST 'localhost:4244/registry/shell-desc
         }
     ]
 }'
-)
-
-echo $status_code

@@ -17,7 +17,7 @@ public class ShellDescriptorResponse {
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
-  static class ShellDescriptor {
+  public static class ShellDescriptor {
     List<Description> description;
     GlobalAssetId globalAssetId;
     String idShort;
