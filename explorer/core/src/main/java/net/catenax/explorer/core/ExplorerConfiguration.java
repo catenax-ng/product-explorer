@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
 import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
 import net.catenax.explorer.core.webui.ExplorerSearchController;
+import net.catenax.explorer.core.webui.service.DataSearchResultsProvider;
 import net.catenax.explorer.core.webui.service.MockDataSearchResultsProvider;
-import net.catenax.explorer.core.webui.service.RealDataSearchResultsProvider;
 import net.catenax.explorer.core.webui.service.SearchResultsProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +24,7 @@ public class ExplorerConfiguration {
 
   @Bean
   ExplorerSearchController explorerWebController(@Value("${app.use-mockup-data:false}") boolean useMockupData, ObjectMapper objectMapper, ExplorerService explorerService) {
-    SearchResultsProvider searchResultsProvider = useMockupData ? new MockDataSearchResultsProvider(objectMapper) : new RealDataSearchResultsProvider(explorerService);
+    SearchResultsProvider searchResultsProvider = useMockupData ? new MockDataSearchResultsProvider(objectMapper) : new DataSearchResultsProvider(explorerService);
     return new ExplorerSearchController(searchResultsProvider);
   }
 
