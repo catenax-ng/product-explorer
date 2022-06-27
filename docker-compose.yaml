@@ -113,7 +113,7 @@ services:
       - "8090:8090"
 
   twin-registry:
-    image: "ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1"
+    image: "registry:latest"
     container_name: twin-registry
     environment:
       SPRING_PROFILES_ACTIVE: local

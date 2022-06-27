@@ -1,6 +1,6 @@
 package net.catenax.explorer.core.submodel;
 
-import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse.ShellDescriptor;
+import net.catenax.explorer.core.submodel.ShellDescriptorResponse.ShellDescriptor;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 
 public interface ShellDescriptorProvider {

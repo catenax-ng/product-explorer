@@ -4,7 +4,7 @@ import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
 import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
-import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse;
+import net.catenax.explorer.core.submodel.ShellDescriptorResponse;
 
 @RequiredArgsConstructor
 public class ExplorerService {

@@ -1,4 +1,4 @@
-package net.catenax.explorer.core.submodel.twinregistry;
+package net.catenax.explorer.core.submodel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;

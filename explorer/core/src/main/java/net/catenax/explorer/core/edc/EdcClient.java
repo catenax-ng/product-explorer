@@ -11,7 +11,7 @@ import net.catenax.explorer.core.edc.exception.ContractNegotiationException;
 import net.catenax.explorer.core.edc.model.ContractNegotiationRequestDto;
 import net.catenax.explorer.core.edc.model.TransferRequestDto;
 import net.catenax.explorer.core.exception.ResourceNotFoundException;
-import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse.ShellDescriptor;
+import net.catenax.explorer.core.submodel.ShellDescriptorResponse.ShellDescriptor;
 import org.eclipse.dataspaceconnector.spi.types.domain.catalog.Catalog;
 import org.eclipse.dataspaceconnector.spi.types.domain.contract.offer.ContractOffer;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
