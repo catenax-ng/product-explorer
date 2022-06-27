@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edc.EdcClient.ContractAgreementWrapper;
 import net.catenax.explorer.core.exception.ResourceNotFoundException;
 import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
+import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse.ShellDescriptor;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class EdcAssetProvider implements ShellDescriptorProvider {
 
   @Override
   @SneakyThrows
-  public String search(String query, String providerControlPlaneUrl) {
+  public ShellDescriptor search(String query, String providerControlPlaneUrl) {
     ContractAgreementWrapper contractAgreement = edcContractService.negotiateContractForAssetId(query,
         consumerControlPlaneUrl, providerControlPlaneUrl);
 
@@ -33,7 +34,7 @@ public class EdcAssetProvider implements ShellDescriptorProvider {
 
     edcTransferService.initializeHttpTransferProcess(contractAgreement.contractAgreementId(), query, consumerControlPlaneUrl, providerControlPlaneUrl);
 
-    while(!cache.containsKey(contractAgreement.contractAgreementId())) {
+    while (!cache.containsKey(contractAgreement.contractAgreementId())) {
       Thread.sleep(1000);
     }
 

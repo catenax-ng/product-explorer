@@ -107,10 +107,17 @@ services:
     container_name: self-description-hub
     build:
       context: self-description-hub-integration
+      args:
+        JAR: target/self-description-hub-integration-0.0.1-SNAPSHOT.jar
     ports:
       - "8090:8090"
-  
-  edc-configuration:
-    container_name: edc-configuration
-    build:
-      context: explorer/edc-integration/config/init
+
+  twin-registry:
+    image: "ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1"
+    container_name: twin-registry
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:h2:file:./semantics/persistence;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+      IDP_ISSUER_URI: ""
+    ports:
+      - "4244:4243"

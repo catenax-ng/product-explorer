@@ -23,11 +23,14 @@ class ExplorerServiceTest {
 
   private ExplorerService sut;
 
-  @Mock private EdcLocationProvider provider;
+  @Mock
+  private EdcLocationProvider provider;
 
-  @Mock private AssetRetriever assetRetriever;
+  @Mock
+  private AssetRetriever assetRetriever;
 
-  @Mock private ShellDescriptorProvider shellDescriptorProvider;
+  @Mock
+  private ShellDescriptorProvider shellDescriptorProvider;
 
   @BeforeEach
   void init() {

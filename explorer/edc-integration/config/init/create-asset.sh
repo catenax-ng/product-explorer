@@ -19,7 +19,7 @@ status_code=$(curl --location --request POST 'http://localhost:8087/api/v1/data/
                 },
                 "dataAddress": {
                   "properties": {
-                    "endpoint": "https://catenaxintakssrv.germanywestcentral.cloudapp.azure.com/semantics/twin-registry/actuator/info",
+                    "endpoint": "http://twin-registry:4243/registry/shell-descriptors/urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002",
                     "type": "HttpData"
                   }
                 }

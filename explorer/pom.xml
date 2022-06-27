@@ -22,7 +22,6 @@
   <modules>
     <module>core</module>
     <module>edc-integration</module>
-    <module>../self-description-hub-integration</module>
   </modules>
 
   <dependencies>
