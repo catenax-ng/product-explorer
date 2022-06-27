@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edc.EdcClient.ContractAgreementWrapper;
 import net.catenax.explorer.core.exception.ResourceNotFoundException;
 import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
-import net.catenax.explorer.core.submodel.twinregistry.ShellDescriptorResponse.ShellDescriptor;
+import net.catenax.explorer.core.submodel.ShellDescriptorResponse.ShellDescriptor;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 
 @RequiredArgsConstructor

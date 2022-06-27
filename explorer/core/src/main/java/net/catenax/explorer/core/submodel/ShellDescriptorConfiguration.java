@@ -11,14 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ShellDescriptorConfiguration {
 
-//  @Bean
-//  @ConditionalOnProperty(value = "edc.shell-provider", havingValue = "twin-registry", matchIfMissing = true)
-//  ShellDescriptorProvider twinRegistryAssetProvider(WebClient webClient, ObjectMapper mapper) {
-//    return new TwinRegistryAssetProvider(
-//        new TwinRegistryClient(webClient, mapper)
-//    );
-//  }
-
   @Bean
   @ConditionalOnProperty(value = "edc.shell-provider", havingValue = "edc", matchIfMissing = true)
   ShellDescriptorProvider edcAssetProvider(EdcContractService edcContractService,
