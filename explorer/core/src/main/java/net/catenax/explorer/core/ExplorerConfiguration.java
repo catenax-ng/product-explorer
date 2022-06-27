@@ -23,7 +23,7 @@ public class ExplorerConfiguration {
   }
 
   @Bean
-  ExplorerSearchController explorerWebController(@Value("${app.use-mockup-data:'false'}") boolean useMockupData, ObjectMapper objectMapper, ExplorerService explorerService) {
+  ExplorerSearchController explorerWebController(@Value("${app.use-mockup-data:false}") boolean useMockupData, ObjectMapper objectMapper, ExplorerService explorerService) {
     SearchResultsProvider searchResultsProvider = useMockupData ? new MockDataSearchResultsProvider(objectMapper) : new RealDataSearchResultsProvider(explorerService);
     return new ExplorerSearchController(searchResultsProvider);
   }
