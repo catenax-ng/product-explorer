@@ -2,12 +2,11 @@ package net.catenax.explorer.core.webui.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.catenax.explorer.core.submodel.ShellDescriptorResponse;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 public class MockDataSearchResultsProvider implements SearchResultsProvider {
@@ -19,6 +18,7 @@ public class MockDataSearchResultsProvider implements SearchResultsProvider {
         List<ShellDescriptorResponse.ShellDescriptor> results = new ArrayList<>();
 
         if ("test".equals(query)) {
+            Thread.sleep(2000);
             final List<ShellDescriptorResponse> shellDescriptorResponses = objectMapper.readValue("""
                     [ { 
                        "items": [
