@@ -19,6 +19,7 @@ public class MockDataSearchResultsProvider implements SearchResultsProvider {
         List<ShellDescriptorResponse.ShellDescriptor> results = new ArrayList<>();
 
         if ("test".equals(query)) {
+            Thread.sleep(2000);
             final List<ShellDescriptorResponse> shellDescriptorResponses = objectMapper.readValue("""
                     [ { 
                        "items": [
