@@ -4,63 +4,65 @@
     <title>Product Explorer</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <style>
-        .results-container {
-            margin: 2rem;
-        }
-    </style>
 </head>
 
 <body>
-<div class="d-flex justify-content-center ">
-    <img src="./../static/public/logo.png" th:src="@{/public/logo.png}"/>
-</div>
-<div id="search-bar-container" class="container h-100 mt-3">
-    <div class="d-flex justify-content-center align-items-center gap-2">
-        <div class="searchbar">
-            <input class="search_input"
-                   id="search-input"
-                   type="text"
-                   name="query"
-                   th:attr="hx-post=@{/ui/search}"
-                   hx-trigger="keyup changed delay:500ms"
-                   hx-target="#search-results"
-                   hx-indicator="#data-loading-indicator"
-                   hx-sync="this:replace"
-                   placeholder="Search...">
-            <a href="#" class="search_icon"><i class="fas fa-search"></i></a>
-        </div>
+<div class="flex flex-col items-center gap-3">
+    <div class="flex flex-row items-center gap-3">
+        <img src="./../static/public/logo.png" th:src="@{/public/logo.png}"/>
+        <img class="w-32" src="./../static/public/zf.png" th:src="@{/public/zf.png}"/>
+    </div>
+    <div class="text-3xl mt-10">Explore decentralized registry</div>
+    <div id="search-bar" class="flex flex-row gap-5 justify-center items-center mt-14">
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+               id="search-input"
+               type="text"
+               name="query"
+               th:attr="hx-post=@{/ui/search}"
+               hx-trigger="keyup changed delay:500ms"
+               hx-target="#search-results"
+               hx-indicator="#data-loading-indicator"
+               hx-sync="this:replace"
+               placeholder="Search...">
+
         <button type="button"
-                class="btn btn-primary btn-sm"
-                th:attr="hx-post=@{/ui/search}"
+                class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                 hx-trigger="click"
                 hx-include="#search-input"
                 hx-target="#search-results"
-                hx-indicator="#data-loading-indicator">Search
+                hx-indicator="#data-loading-indicator"
+                th:attr="hx-post=@{/ui/search}">
+            <div class="flex flex-row items-center gap-3 h-6">
+                <svg class="h-8 w-8 text-white" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                     stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z"/>
+                    <circle cx="10" cy="10" r="7"/>
+                    <line x1="21" y1="21" x2="15" y2="15"/>
+                </svg>
+                Search
+            </div>
         </button>
     </div>
-</div>
 
-<div id="data-loading-indicator" class="htmx-indicator container h-100 mt-3">
-    <div class="d-flex justify-content-center align-items-center gap-2">
-        <div class="spinner-border spinner-border-sm" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <div class="spinner-grow spinner-grow-sm" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-        <div class="spinner-border spinner-border-sm" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
+    <div id="data-loading-indicator" class="htmx-indicator mt-10 flex flex-row gap-3 items-center">
+        <svg class="animate-spin h-8 w-8 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="2" x2="12" y2="6"/>
+            <line x1="12" y1="18" x2="12" y2="22"/>
+            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/>
+            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/>
+            <line x1="2" y1="12" x2="6" y2="12"/>
+            <line x1="18" y1="12" x2="22" y2="12"/>
+            <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/>
+            <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
+        </svg>
+        <div>Searching decentralized registry...</div>
     </div>
+
+    <div id="search-results" class="mt-10"></div>
 </div>
-
-<div id="search-results" class="results-container"></div>
-
 <script type="text/javascript" th:src="@{/webjars/htmx.org/dist/htmx.min.js}"></script>
 </body>
 </html>
