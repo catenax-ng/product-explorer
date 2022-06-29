@@ -23,8 +23,9 @@
         </tbody>
     </table>
 
-    <div x-show="open">
-        <pre class="m-11 text-xs text-gray-600" x-text="JSON.stringify(content, null, 2)">
+    <div x-show="open" class="ml-auto mr-auto p-4 overflow-auto shadow bg-gray-50 border rounded m-10"
+         style="width: 60%">
+        <pre class="text-xs text-gray-600" x-text="JSON.stringify(content, null, 2)">
             Content
         </pre>
     </div>
