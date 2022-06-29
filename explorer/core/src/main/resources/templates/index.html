@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html data-th-replace="~{layout :: layout(~{::head/content()}, 'discovery', ~{::div})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body id="discovery" class="container mx-auto">
+<div class="flex flex-row items-center p-4 pl-16">
+    <img class="h-12 w-34" src="./../static/public/logo.png" data-th-src="@{/public/logo.png}"/>
+    <img class="h-12" src="./../static/public/zf.png" data-th-src="@{/public/zf.png}"/>
+</div>
+<div class="relative self-center flex p-30 flex-col space-y-40 min-h-screen  overflow-hidden py-6 sm:py-12">
+    <nav class="text-lg flex flex-row space-x-6 pl-20 h-1/2">
+        <div>
+            <p class="border-2 p-1 text-center rounded-md border-gray-400 hover:bg-yellow-400">Status</p>
+        </div>
+    </nav>
+    <div class="flex justify-center h-1/2">
+        <div class="w-1/2 self-center">
+            <div class="flex flex-col space-y-12">
+                <div class="text-center font-medium text-4xl">Search Catena-X</div>
+                <div class="flex flex-row space-x-3">
+                    <div class="flex border-2 p-2 w-fit text-center space-x-4 items-center border-gray-600 rounded-md">
+                        <p >All</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                    <form class="flex flex-row w-full space-x-3" action="/discovery" method="get">
+                        <input class="border-2 p-2 w-5/6 border-gray-600 rounded-md" placeholder="What are you looking for?" name="query" /> <br/>
+                        <button class="shadow bg-yellow-500 hover:bg-yellow-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="submit">
+                            Go
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
