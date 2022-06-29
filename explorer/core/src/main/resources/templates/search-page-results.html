@@ -1,10 +1,10 @@
-<div id="results" class="results-container" xmlns:th="http://www.thymeleaf.org" x-data="{ open: false, content: '' }">
-    <table class="table">
-        <thead>
+<div id="results" xmlns:th="http://www.thymeleaf.org" x-data="{ open: false, content: '' }">
+    <table class="table-auto border mr-auto ml-auto">
+        <thead class="bg-gray-100">
         <tr>
-            <th scope="col">Short Id</th>
-            <th scope="col">Identification</th>
-            <th scope="col">Additional Metadata</th>
+            <th class="px-4 py-2 border">Short Id</th>
+            <th class="px-4 py-2 border">Identification</th>
+            <th class="px-4 py-2 border">Additional Metadata</th>
         </tr>
         </thead>
         <tbody>
@@ -12,9 +12,9 @@
             th:x-data="|{rowData: ${item.json} }|"
             @click="open = true, content=rowData"
             style="cursor: pointer">
-            <td th:text="${item.descriptor.idShort}"/>
-            <td th:text="${item.descriptor.identification}"/>
-            <td>
+            <td class="px-4 py-2 border" th:text="${item.descriptor.idShort}"/>
+            <td class="px-4 py-2 border" th:text="${item.descriptor.identification}"/>
+            <td class="px-4 py-2 border">
                 <th:block th:each="asset : ${item.descriptor.specificAssetIds}">
                     <div style="display: block;" th:text="|${asset.key}: ${asset.value}|"></div>
                 </th:block>
@@ -24,7 +24,7 @@
     </table>
 
     <div x-show="open">
-        <pre x-text="JSON.stringify(content, null, 2)">
+        <pre class="m-11 text-xs text-gray-600" x-text="JSON.stringify(content, null, 2)">
             Content
         </pre>
     </div>
