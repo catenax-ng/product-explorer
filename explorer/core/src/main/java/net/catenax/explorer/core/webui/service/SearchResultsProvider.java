@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface SearchResultsProvider {
     List<ShellDescriptorResponse.ShellDescriptor> search(String query);
+
+    String getSubmodelData(String url);
 }

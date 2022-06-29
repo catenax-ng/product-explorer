@@ -17,8 +17,6 @@ public class MockDataSearchResultsProvider implements SearchResultsProvider {
     @SneakyThrows
     public List<ShellDescriptorResponse.ShellDescriptor> search(String query) {
         List<ShellDescriptorResponse.ShellDescriptor> results = new ArrayList<>();
-
-        if ("test".equals(query)) {
             final List<ShellDescriptorResponse> shellDescriptorResponses = objectMapper.readValue("""
                     [ { 
                        "items": [
@@ -75,14 +73,34 @@ public class MockDataSearchResultsProvider implements SearchResultsProvider {
                        ]
                      }
                     ]
-                    """, new TypeReference<List<ShellDescriptorResponse>>() {
+                    """, new TypeReference<>() {
             });
             for (ShellDescriptorResponse response : shellDescriptorResponses) {
-                response.getItems().forEach(item -> {
-                    results.add(item);
-                });
+                results.addAll(response.getItems());
             }
-        }
         return results;
+    }
+
+    @Override
+    public String getSubmodelData(String url) {
+        return """
+            {
+                "performanceIndicator": {
+                "electricCapacityMin": 1.7976931348623155E308,
+                        "electricCapacityMax": 1.7976931348623155E308
+            },
+                "minimalStateOfHealth": {
+                "minimalStateOfHealthValue": 1.7976931348623155E308,
+                        "specificatorId": "eOMtThyhVNLWUZNRcBaQKxI",
+                        "minimalStateOfHealthPhase": "as specified by OEM"
+            },
+                "type": "HVB",
+                "currentStateOfHealth": [{
+                    "currentStateOfHealthPhase": "as specified by OEM",
+                        "currentStateOfHealthTimestamp": "2022-06-28T12:42:08.351Z",
+                        "currentStateOfHealthValue": 1.7976931348623155E308
+                 }]
+            }
+        """;
     }
 }
