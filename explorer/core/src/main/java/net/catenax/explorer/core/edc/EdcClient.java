@@ -35,7 +35,7 @@ public class EdcClient {
         .header(HEADER_X_API_KEY, API_PASSWORD)
         .retrieve()
         .bodyToMono(Catalog.class)
-        .block(ofSeconds(5));
+        .block(ofSeconds(10));
 
     log.info("Got Catalog with number of offers: " + catalog.getContractOffers().size());
 
@@ -58,7 +58,7 @@ public class EdcClient {
         .body(BodyInserters.fromValue(request))
         .retrieve()
         .bodyToMono(ContractIdWrapper.class)
-        .block(ofSeconds(5));
+        .block(ofSeconds(10));
 
     log.info("Got Contract Negotiation: " + contractNegotiation);
 
@@ -74,7 +74,7 @@ public class EdcClient {
         .header(HEADER_X_API_KEY, API_PASSWORD)
         .retrieve()
         .bodyToMono(ContractAgreementWrapper.class)
-        .block(ofSeconds(5));
+        .block(ofSeconds(10));
   }
 
   public TransferProcess initializeHttpTransferProcess(TransferRequestDto request, String endpointAddress) {
@@ -85,7 +85,7 @@ public class EdcClient {
         .body(BodyInserters.fromValue(request))
         .retrieve()
         .bodyToMono(TransferProcess.class)
-        .block(ofSeconds(5));
+        .block(ofSeconds(10));
   }
 
   public ShellDescriptor getData(EndpointDataReference endpointDataReference) {
@@ -94,7 +94,7 @@ public class EdcClient {
         .header(endpointDataReference.getAuthKey(), endpointDataReference.getAuthCode())
         .retrieve()
         .bodyToMono(ShellDescriptor.class)
-        .block(ofSeconds(5));
+        .block(ofSeconds(10));
   }
 
   record ContractIdWrapper(String id) {

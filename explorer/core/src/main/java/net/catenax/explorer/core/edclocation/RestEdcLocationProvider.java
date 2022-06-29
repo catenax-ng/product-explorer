@@ -30,6 +30,6 @@ public class RestEdcLocationProvider implements EdcLocationProvider {
             .build())
         .retrieve()
         .bodyToMono(LIST_SELF_DESCRIPTION_TYPE_REFERENCE)
-        .block(ofSeconds(5));
+        .block(ofSeconds(10));
   }
 }

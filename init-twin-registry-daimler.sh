@@ -5,14 +5,14 @@ set -o errtrace
 set -o pipefail
 set -o nounset
 
-curl --location --request POST 'localhost:4244/registry/shell-descriptors' \
+curl --location --request POST 'localhost:4245/registry/shell-descriptors' \
 --header 'Content-Type: application/json' \
 --write-out %{http_code} --silent --output /dev/null \
 --data-raw '{
     "description": [
         {
             "language": "en",
-            "text": "Polonez 520e Plugin-Hybrid"
+            "text": "Mercedes-Benz C200 Plugin-Hybrid"
         }
     ],
     "globalAssetId": {
@@ -20,7 +20,7 @@ curl --location --request POST 'localhost:4244/registry/shell-descriptors' \
             "urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002"
         ]
     },
-    "idShort": "Polonez 520e Plugin-Hybrid",
+    "idShort": "Mercedes-Benz C200 Plugin-Hybrid",
     "identification": "urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002",
     "specificAssetIds": [
         {
