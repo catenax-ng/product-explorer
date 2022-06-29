@@ -121,3 +121,12 @@ services:
       IDP_ISSUER_URI: ""
     ports:
       - "4244:4243"
+
+  backend-data-service:
+    container_name: backend-data-service
+    build:
+      context: backend-data-service
+      args:
+        JAR: target/backend-data-service-0.0.1.jar
+    ports:
+      - "8194:8194"
