@@ -27,15 +27,15 @@ public class ExplorerSearchController {
         return "search-page";
     }
 
-    @PostMapping("/ui/search")
-    public String search(@RequestParam("query") String query, Model model) {
-        List<SearchResultDto> searchResults = searchResultsProvider.search(query)
-                .stream()
-                .map(this::mapToSearchResultDto)
-                .toList();
-        model.addAttribute("results", searchResults);
-        return "search-page-results";
-    }
+//    @PostMapping("/ui/search")
+//    public String search(@RequestParam("query") String query, Model model) {
+//        List<SearchResultDto> searchResults = searchResultsProvider.search(query)
+//                .stream()
+//                .map(this::mapToSearchResultDto)
+//                .toList();
+//        model.addAttribute("results", searchResults);
+//        return "search-page-results";
+//    }
 
     @SneakyThrows
     private SearchResultDto mapToSearchResultDto(ShellDescriptorResponse.ShellDescriptor shellDescriptor) {
