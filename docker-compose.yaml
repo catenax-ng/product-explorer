@@ -214,7 +214,7 @@ services:
       - "8090:8090"
 
   twin-registry-bmw:
-    image: "registry:latest"
+    image: "ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1"
     container_name: twin-registry-bmw
     environment:
       SPRING_PROFILES_ACTIVE: local
@@ -224,7 +224,7 @@ services:
       - "4244:4243"
 
   twin-registry-daimler:
-    image: "registry:latest"
+    image: "ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1"
     container_name: twin-registry-daimler
     depends_on:
       - twin-registry-bmw
@@ -236,7 +236,7 @@ services:
       - "4245:4243"
 
   twin-registry-bosch:
-    image: "registry:latest"
+    image: "ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1"
     container_name: twin-registry-bosch
     depends_on:
       - twin-registry-daimler
