@@ -9,6 +9,8 @@ import net.catenax.explorer.core.webui.ExplorerSearchController;
 import net.catenax.explorer.core.webui.service.DataSearchResultsProvider;
 import net.catenax.explorer.core.webui.service.MockDataSearchResultsProvider;
 import net.catenax.explorer.core.webui.service.SearchResultsProvider;
+import org.springdoc.core.SpringDocConfigProperties;
+import org.springdoc.core.SpringDocConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,4 +34,5 @@ public class ExplorerConfiguration {
   ExplorerService explorerService(EdcLocationProvider provider, ShellDescriptorProvider shellDescriptorProvider) {
     return new ExplorerService(provider, shellDescriptorProvider);
   }
+
 }
