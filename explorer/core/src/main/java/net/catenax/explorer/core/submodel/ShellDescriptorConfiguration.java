@@ -1,12 +1,16 @@
 package net.catenax.explorer.core.submodel;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.catenax.explorer.core.edc.EdcAssetProvider;
 import net.catenax.explorer.core.edc.EdcContractService;
 import net.catenax.explorer.core.edc.EdcTransferService;
+import net.catenax.explorer.core.twinregistry.TwinRegistryAssetProvider;
+import net.catenax.explorer.core.twinregistry.TwinRegistryClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class ShellDescriptorConfiguration {
@@ -17,5 +21,13 @@ public class ShellDescriptorConfiguration {
       EdcTransferService edcTransferService,
       @Value("${consumer.control.plane}") String consumerControlPlaneUrl) {
     return new EdcAssetProvider(edcContractService, edcTransferService, consumerControlPlaneUrl);
+  }
+
+  @Bean
+  @ConditionalOnProperty(value = "edc.shell-provider", havingValue = "twin-registry", matchIfMissing = true)
+  TwinRegistryAssetProvider shellDescriptorProvider(WebClient webClient, ObjectMapper mapper) {
+    return new TwinRegistryAssetProvider(
+        new TwinRegistryClient(webClient, mapper)
+    );
   }
 }

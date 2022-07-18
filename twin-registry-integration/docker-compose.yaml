@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  twin-registry-only-bmw:
+    image: "registry:latest"
+    container_name: twin-registry-only-bmw
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:h2:file:./semantics/persistence;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+      IDP_ISSUER_URI: ""
+    ports:
+      - "4244:4243"
+
+  twin-registry-only-daimler:
+    image: "registry:latest"
+    container_name: twin-registry-only-daimler
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:h2:file:./semantics/persistence;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+      IDP_ISSUER_URI: ""
+    ports:
+      - "4246:4243"
+
+  self-description-hub-twin-registry:
+    container_name: self-description-hub-twin-registry
+    build:
+      context: ../self-description-hub-integration
+      args:
+        JAR: target/self-description-hub-integration-0.0.1-SNAPSHOT.jar
+    ports:
+      - "8090:8090"

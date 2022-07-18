@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @RequiredArgsConstructor
 public class ExplorerConfiguration {
+
   @Bean
   ExplorerController explorerController(ExplorerService service) {
     return new ExplorerController(service);

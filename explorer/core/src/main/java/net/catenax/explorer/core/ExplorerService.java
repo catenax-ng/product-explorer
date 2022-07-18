@@ -15,7 +15,7 @@ public class ExplorerService {
   private final EdcLocationProvider edcLocationProvider;
   private final ShellDescriptorProvider shellDescriptorProvider;
 
-  public Flux<ShellDescriptor> search(final String query) {
+  public Flux<ShellDescriptor> searchEdcs(final String query) {
     return Flux.fromIterable(edcLocationProvider.getKnownEdcLocations())
         .parallel()
         .runOn(Schedulers.boundedElastic())
