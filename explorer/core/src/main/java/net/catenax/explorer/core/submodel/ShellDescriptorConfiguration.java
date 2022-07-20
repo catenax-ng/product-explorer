@@ -1,6 +1,5 @@
 package net.catenax.explorer.core.submodel;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.catenax.explorer.core.edc.EdcAssetProvider;
 import net.catenax.explorer.core.edc.EdcContractService;
 import net.catenax.explorer.core.edc.EdcTransferService;
@@ -25,9 +24,9 @@ public class ShellDescriptorConfiguration {
 
   @Bean
   @ConditionalOnProperty(value = "edc.shell-provider", havingValue = "twin-registry", matchIfMissing = true)
-  TwinRegistryAssetProvider shellDescriptorProvider(WebClient webClient, ObjectMapper mapper) {
+  TwinRegistryAssetProvider shellDescriptorProvider(WebClient webClient) {
     return new TwinRegistryAssetProvider(
-        new TwinRegistryClient(webClient, mapper)
+        new TwinRegistryClient(webClient)
     );
   }
 }

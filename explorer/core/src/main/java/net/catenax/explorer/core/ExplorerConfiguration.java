@@ -3,8 +3,11 @@ package net.catenax.explorer.core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.catenax.explorer.core.aasregistry.controller.ExplorerAasApiDelegate;
+import net.catenax.explorer.core.api.ExplorerAasInterfaceApiDelegate;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
 import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
+import net.catenax.explorer.core.twinregistry.TwinRegistryService;
 import net.catenax.explorer.core.webui.ExplorerSearchController;
 import net.catenax.explorer.core.webui.service.DataSearchResultsProvider;
 import net.catenax.explorer.core.webui.service.SearchResultsProvider;
@@ -18,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
 public class ExplorerConfiguration {
 
   @Bean
-  ExplorerController explorerController(ExplorerService service) {
+  ExplorerController explorerController(ExplorerService service) { //todo delete
     return new ExplorerController(service);
   }
 
@@ -31,5 +34,10 @@ public class ExplorerConfiguration {
   @Bean
   ExplorerService explorerService(EdcLocationProvider provider, ShellDescriptorProvider shellDescriptorProvider) {
     return new ExplorerService(provider, shellDescriptorProvider);
+  }
+
+  @Bean
+  ExplorerAasInterfaceApiDelegate explorerAasInterfaceApiDelegate(TwinRegistryService twinRegistryService, ObjectMapper mapper) {
+    return new ExplorerAasApiDelegate(twinRegistryService, mapper);
   }
 }

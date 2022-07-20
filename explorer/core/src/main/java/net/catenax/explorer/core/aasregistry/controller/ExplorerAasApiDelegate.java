@@ -17,17 +17,34 @@
 package net.catenax.explorer.core.aasregistry.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.api.ExplorerAasInterfaceApiDelegate;
 import net.catenax.explorer.core.model.AasShellWithMetaDataResponse;
 import net.catenax.explorer.core.model.ShellLookup;
+import net.catenax.explorer.core.twinregistry.TwinRegistryService;
+import net.catenax.explorer.core.twinregistry.TwinRegistryService.SearchShellDescriptorResults;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-
+@RequiredArgsConstructor
+@Slf4j
 public class ExplorerAasApiDelegate implements ExplorerAasInterfaceApiDelegate {
 
-    @Override
-    public ResponseEntity<AasShellWithMetaDataResponse> postFetchAasDescriptorsWithMetaData(List<ShellLookup> shellLookup, String bpn) {
-        throw new UnsupportedOperationException("This API endpoint is not yet implemented");
-    }
+  final TwinRegistryService twinRegistryService;
+  final ObjectMapper mapper;
+
+  @Override
+  @SuppressWarnings("unchecked")
+  @SneakyThrows
+  public ResponseEntity<List<AasShellWithMetaDataResponse>> postFetchAasDescriptorsWithMetaData(List<ShellLookup> shellLookup, String bpn) {
+    log.info("Querying for Asset by: " + shellLookup.get(0).getQuery().getAssetIds().get(0).getValue());
+
+    final List<SearchShellDescriptorResults> searchShellDescriptorResults = twinRegistryService
+        .searchTwinRegistries(mapper.writeValueAsString(shellLookup.get(0).getQuery().getAssetIds().get(0)), bpn); //TODO ask Fethullah: 1. multiple query objects ? 2. How we want to retrieve by many query ?
+
+    return ResponseEntity.ok(mapper.convertValue(searchShellDescriptorResults, List.class));
+  }
 }

@@ -33,12 +33,12 @@ paths:
           schema:
             type: string
             description: The bpn to get the Aas Descriptors for
-#        - in: query
-#          name: tags
-#          required: false
-#          schema:
-#            type: array
-#            description: The page to return
+      #        - in: query
+      #          name: tags
+      #          required: false
+      #          schema:
+      #            type: array
+      #            description: The page to return
       requestBody:
         description: Aas objects with source meta information from multiple providers
         content:
@@ -55,7 +55,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AasShellWithMetaDataResponse'
+                type: array
+                items:
+                  type: object
+                  $ref: '#/components/schemas/AasShellWithMetaDataResponse'
               examples:
                 complete:
                   $ref: '#/components/examples/aas-shell-descriptor-search-result'
@@ -72,7 +75,7 @@ components:
           title: Items
           type: array
           items:
-            $ref: '#/components/schemas/AssetAdministrationShellDescriptorCollectionBase'
+            $ref: '#/components/schemas/AssetAdministrationShellDescriptor'
     Metadata:
       required:
         - digitalTwinRegistryUrl
@@ -311,7 +314,7 @@ components:
       value:
         [ {
           "metadata": {
-            "aasRegistryUrl": "https://example-aas-registry.com/",
+            "digitalTwinRegistryUrl": "https://example-aas-registry.com/",
             "bpn": "BPN102384028F",
             "edcUrl": "https://example-edc-url.com/"
           },

@@ -4,15 +4,16 @@ import static java.util.Objects.isNull;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
+import net.catenax.explorer.core.edclocation.model.SelfDescription;
 import net.catenax.explorer.core.retriever.AssetResponse;
 import net.catenax.explorer.core.retriever.AssetRetriever;
 import net.catenax.explorer.core.submodel.ShellDescriptorResponse;
 import net.catenax.explorer.core.submodel.ShellDescriptorResponse.ShellDescriptor;
+import reactor.core.publisher.Flux;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -20,7 +21,7 @@ public class TwinRegistryService {
 
   private final EdcLocationProvider edcLocationProvider;
   private final AssetRetriever assetRetriever;
-  private final TwinRegistryAssetProvider twinRegistryAssetProvider; //TODO see if could be ShellDescriptorprovider interface using flux
+  private final TwinRegistryAssetProvider twinRegistryAssetProvider;
 
   public List<SearchShellDescriptorResults> searchTwinRegistries(final String query, final String bpn) {
 
@@ -28,36 +29,43 @@ public class TwinRegistryService {
         .filter(edcLocation -> isNull(bpn) || bpn.equals(edcLocation.getBpn()))
         .map(edcLocation -> {
           final AssetResponse dtr = assetRetriever.retrieve(edcLocation.getServiceProvider());
-
-          final List<ShellDescriptor> shellDescriptors = dtr.getEndpoints().stream()
-              .map(endpointAddress -> twinRegistryAssetProvider.search(query, endpointAddress.getProtocolInformation().getEndpointAddress()))
-              .filter(Objects::nonNull)
-              .map(ShellDescriptorResponse::getItems)
-              .flatMap(Collection::stream)
-              .toList();
-
-          return SearchShellDescriptorResults.builder()
-              .metadata(ShellDescriptorMetaData.builder()
-                  .aasRegistryUrl(dtr.getEndpoints().get(0).getProtocolInformation()
-                      .getEndpointAddress()) //TODO See if assetRetriever can return a list of twin registry address, if yes, then the API need to be modified
-                  .bpn(edcLocation.getBpn())
-                  .edcUrl(edcLocation.getServiceProvider())
-                  .build())
-              .items(shellDescriptors)
-              .build();
-
+          final List<ShellDescriptor> shellDescriptors = searchShells(query, dtr);
+          return buildSearchResult(edcLocation, dtr, shellDescriptors);
         })
         .toList();
   }
 
-  record SearchShellDescriptorResults(ShellDescriptorMetaData metadata, List<ShellDescriptor> items) {
+  private SearchShellDescriptorResults buildSearchResult(SelfDescription edcLocation, AssetResponse dtr, List<ShellDescriptor> shellDescriptors) {
+    return SearchShellDescriptorResults.builder()
+        .metadata(ShellDescriptorMetaData.builder()
+            .digitalTwinRegistryUrl(dtr.getEndpoints().get(0).getProtocolInformation()
+                .getEndpointAddress()) //TODO See if assetRetriever can return a list of twin registry address, if yes, then the API need to be modified
+            .bpn(edcLocation.getBpn())
+            .edcUrl(edcLocation.getServiceProvider())
+            .build())
+        .items(shellDescriptors)
+        .build();
+  }
+
+  private List<ShellDescriptor> searchShells(String query, AssetResponse dtr) {
+    return dtr.getEndpoints().stream()
+        .map(endpointAddress -> {
+          final Flux<ShellDescriptorResponse> search = twinRegistryAssetProvider.search(query, endpointAddress.getProtocolInformation().getEndpointAddress());
+          return search.blockLast();
+        })
+        .map(ShellDescriptorResponse::getItems)
+        .flatMap(Collection::stream)
+        .toList();
+  }
+
+  public record SearchShellDescriptorResults(ShellDescriptorMetaData metadata, List<ShellDescriptor> items) {
 
     @Builder
-    SearchShellDescriptorResults {
+    public SearchShellDescriptorResults {
     }
   }
 
-  record ShellDescriptorMetaData(String aasRegistryUrl, String bpn, String edcUrl) {
+  record ShellDescriptorMetaData(String digitalTwinRegistryUrl, String bpn, String edcUrl) {
 
     @Builder
     ShellDescriptorMetaData {
