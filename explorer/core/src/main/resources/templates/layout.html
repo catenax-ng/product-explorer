@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html data-th-fragment="layout (heads, bodyId, content)" lang='en'>
+<html lang="en">
 <head>
+    <title>Product Explorer</title>
     <meta charset="UTF-8">
-    <title>Title</title>
     <script src="https://cdn.tailwindcss.com/3.0.24"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/1.7.0/htmx.min.js" integrity="sha512-etqA0KankuxrlSeZDYycQBY/D/KWZn0YZjlsjAo7kCEBTy1gg+DwmR6icxtOpqDBOzm2P00/lSIXEu7K+zvNsg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/1.7.0/htmx.min.js"
+            integrity="sha512-etqA0KankuxrlSeZDYycQBY/D/KWZn0YZjlsjAo7kCEBTy1gg+DwmR6icxtOpqDBOzm2P00/lSIXEu7K+zvNsg=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script defer src="https://unpkg.com/alpinejs@3.10.2/dist/cdn.min.js"></script>
-    <data-th-block data-th-replace="${heads}"></data-th-block>
 </head>
-<body class="container mx-auto" data-th-id="${bodyId}">
-
-<div id='main' data-th-replace="${content}">
-    <p>Content</p>
-</div>
+<body>
+<div data-layout-fragment="content">Content</div>
 </body>
 </html>

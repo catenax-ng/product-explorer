@@ -17,4 +17,9 @@ public class DataSearchResultsProvider implements SearchResultsProvider {
         final ShellDescriptorResponse response = explorerService.search(query);
         return response.getItems();
     }
+
+    @Override
+    public String getSubmodelData(String url) {
+        throw new UnsupportedOperationException("This operation is not supported yet.");
+    }
 }
