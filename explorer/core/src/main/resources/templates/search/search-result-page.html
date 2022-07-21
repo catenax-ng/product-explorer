@@ -24,6 +24,12 @@
                 <div>Searching decentralized registry...</div>
             </div>
         </div>
+
+        <div hx-ext="sse" data-th-attr='sse-connect=|/search/sse-test?query=${query}|' sse-swap="message">
+            Contents of this box will be updated in real time
+            with every SSE message received from the chatroom.
+        </div>
+
     </div>
 </div>
 </body>

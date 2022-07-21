@@ -7,12 +7,16 @@ import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.submodel.ShellDescriptorResponse;
 import net.catenax.explorer.core.webui.dto.SearchResultDto;
 import net.catenax.explorer.core.webui.service.SearchResultsProvider;
+import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import reactor.core.publisher.Flux;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.List;
 
 @RequestMapping("/search")
@@ -23,7 +27,8 @@ public class ExplorerSearchResultsController {
     private final ObjectMapper objectMapper;
 
     @GetMapping()
-    public String index(Model model) {
+    public String index(@RequestParam("query") String query, Model model) {
+        model.addAttribute("query", query);
         return "search/search-result-page";
     }
 
@@ -36,6 +41,21 @@ public class ExplorerSearchResultsController {
         model.addAttribute("results", searchResults);
         return "search/search-result-page-data";
     }
+
+    @GetMapping(path = "/sse-test", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> searchSse(@RequestParam("query") String query, Model model) {
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(sequence -> "<b>Flux</b> - " + LocalTime.now().toString());
+    }
+
+//    @GetMapping("/sse-test")
+//    public String searchSse(@RequestParam("query") String query, Model model) {
+//        final Flux<SearchResultDto> resultsStream = Flux.fromIterable(searchResultsProvider.search(query))
+//                .map(this::mapToSearchResultDto);
+//
+//        model.addAttribute("results", new ReactiveDataDriverContextVariable(resultsStream, 1000));
+//        return "search/search-result-page-data";
+//    }
 
     @GetMapping("/submodel")
     public String getSubmodelPage(Model model) {
