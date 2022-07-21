@@ -48,8 +48,4 @@ public class TwinRegistryClient {
         .bodyToFlux(SHELL_DESCRIPTOR_TYPE_REFERENCE)
         .doOnNext(result -> log.info("Got shell descriptor: " + result.toPrettyString()));
   }
-
-  record Wrapper(String key, String value) {
-
-  }
 }

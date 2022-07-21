@@ -16,10 +16,6 @@ public class TwinRegistryAssetProvider {
 
   public Flux<ShellDescriptorResponse> search(String query, String endpointAddress) {
     final Mono<List<String>> matchedSubmodelsIds = client.lookup(query, endpointAddress);
-//    if (matchedSubmodelsIds.) {
-//      throw new ResourceNotFoundException(query); //TODO ?
-//    }
-
     return matchedSubmodelsIds
         .flux()
         .parallel()
