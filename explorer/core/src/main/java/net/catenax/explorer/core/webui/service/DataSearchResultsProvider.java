@@ -18,4 +18,9 @@ public class DataSearchResultsProvider implements SearchResultsProvider {
     public Flux<ShellDescriptor> search(String query) {
         return explorerService.search(query);
     }
+
+    @Override
+    public String getSubmodelData(String url) {
+        throw new UnsupportedOperationException("This operation is not supported yet.");
+    }
 }

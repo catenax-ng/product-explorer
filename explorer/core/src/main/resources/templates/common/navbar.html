@@ -1,0 +1,18 @@
+<nav data-th-fragment="navbar (active)" class="flex flex-row items-center gap-3 justify-between p-2">
+    <div class="flex flex-row items-center gap-3">
+        <a data-th-href="@{/}">
+            <img style="height: 75px;" src="./../../static/public/logo.png" data-th-src="@{/public/logo.png}"/>
+        </a>
+        <a data-th-href="@{/}">
+            <img style="height: 60px;" src="./../../static/public/zf.png" data-th-src="@{/public/zf.png}"/>
+        </a>
+    </div>
+    <div class="flex flex-row items-center gap-3">
+        <div data-th-replace="${active} == 'SEARCH' ? ~{common/button :: button-active('Search', @{/})} : ~{common/button :: button('Search', @{/})}">
+            Button 1
+        </div>
+        <div data-th-replace="${active} == 'STATUS' ? ~{common/button :: button-active('Status', @{/status})} : ~{common/button :: button('Status', @{/status})}">
+            Button 2
+        </div>
+    </div>
+</nav>
