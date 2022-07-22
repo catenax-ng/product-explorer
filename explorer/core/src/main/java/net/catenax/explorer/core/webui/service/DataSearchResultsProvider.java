@@ -3,9 +3,6 @@ package net.catenax.explorer.core.webui.service;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.catenax.explorer.core.ExplorerService;
-import net.catenax.explorer.core.submodel.ShellDescriptorResponse;
-
-import java.util.List;
 import net.catenax.explorer.core.submodel.ShellDescriptorResponse.ShellDescriptor;
 import reactor.core.publisher.Flux;
 

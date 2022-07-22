@@ -15,6 +15,7 @@ import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 @Configuration
 @Slf4j
@@ -42,9 +43,12 @@ public class ExplorerConfiguration {
     }
 
     @Bean
-    ExplorerSearchResultsController explorerSearchResultsController(@Value("${app.use-mockup-data:false}") boolean useMockupData, ObjectMapper objectMapper, ExplorerService explorerService) {
+    ExplorerSearchResultsController explorerSearchResultsController(@Value("${app.use-mockup-data:false}") boolean useMockupData,
+                                                                    ObjectMapper objectMapper,
+                                                                    ExplorerService explorerService,
+                                                                    SpringTemplateEngine templateEngine) {
         SearchResultsProvider searchResultsProvider = useMockupData ? new MockDataSearchResultsProvider(objectMapper) : new DataSearchResultsProvider(explorerService);
-        return new ExplorerSearchResultsController(searchResultsProvider, objectMapper);
+        return new ExplorerSearchResultsController(searchResultsProvider, templateEngine);
     }
 
   @Bean
