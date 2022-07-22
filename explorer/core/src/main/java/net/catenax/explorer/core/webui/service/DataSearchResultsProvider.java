@@ -3,9 +3,8 @@ package net.catenax.explorer.core.webui.service;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.catenax.explorer.core.ExplorerService;
-import net.catenax.explorer.core.submodel.ShellDescriptorResponse;
-
-import java.util.List;
+import net.catenax.explorer.core.submodel.ShellDescriptorResponse.ShellDescriptor;
+import reactor.core.publisher.Flux;
 
 @RequiredArgsConstructor
 public class DataSearchResultsProvider implements SearchResultsProvider {
@@ -13,8 +12,12 @@ public class DataSearchResultsProvider implements SearchResultsProvider {
 
     @Override
     @SneakyThrows
-    public List<ShellDescriptorResponse.ShellDescriptor> search(String query) {
-        final ShellDescriptorResponse response = explorerService.search(query);
-        return response.getItems();
+    public Flux<ShellDescriptor> search(String query) {
+        return explorerService.search(query);
+    }
+
+    @Override
+    public String getSubmodelData(String url) {
+        throw new UnsupportedOperationException("This operation is not supported yet.");
     }
 }

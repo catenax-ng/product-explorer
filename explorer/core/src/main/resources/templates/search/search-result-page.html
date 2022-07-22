@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layout}">
+<head>
+    <title data-layout-title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Search results</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <nav data-th-replace="common/navbar :: navbar(active='SEARCH')"></nav>
+
+    <div class="flex flex-col" style="margin-top: 5rem;gap: 3rem;">
+        <div class="flex flex-row items-center gap-3 pl-4 pr-4">
+            <div class="text-xl">Search Catena-X</div>
+            <form action="#" data-th-action="@{/search}" method="get" class="inline-flex flex-1">
+                <input class="shadow appearance-none border rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline flex-1"
+                       id="search-input"
+                       type="text"
+                       name="query"
+                       data-th-attr="value=${query}"
+                       placeholder="Search..."/>
+                <input type="submit" hidden/>
+            </form>
+        </div>
+        <div class="flex flex-col items-center gap-3 overflow-x-auto ml-4 mr-4">
+            <div hx-ext="sse" data-th-attr='sse-connect=|/search/results-by-sse?query=${query}|'>
+                <table class="border" style="table-layout: fixed; width: 100%">
+                    <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 border">Short Id</th>
+                        <th class="px-4 py-2 border">Identification</th>
+                        <th class="px-4 py-2 border">Additional Metadata</th>
+                        <th class="px-4 py-2 border"></th>
+                    </tr>
+                    </thead>
+                </table>
+                <div sse-swap="data" hx-swap="beforeend"></div>
+                <div sse-swap="completed">
+                    <div class="mt-10 flex flex-row gap-3 items-center justify-center">
+                        <svg class="animate-spin h-8 w-8 text-gray-600" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor"
+                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="2" x2="12" y2="6"/>
+                            <line x1="12" y1="18" x2="12" y2="22"/>
+                            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/>
+                            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/>
+                            <line x1="2" y1="12" x2="6" y2="12"/>
+                            <line x1="18" y1="12" x2="22" y2="12"/>
+                            <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/>
+                            <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
+                        </svg>
+                        <div>Searching decentralized registry...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

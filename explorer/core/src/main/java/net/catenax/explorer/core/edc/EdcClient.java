@@ -18,6 +18,7 @@ import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferProcess;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -88,13 +89,12 @@ public class EdcClient {
         .block(ofSeconds(10));
   }
 
-  public ShellDescriptor getData(EndpointDataReference endpointDataReference) {
+  public Flux<ShellDescriptor> getData(EndpointDataReference endpointDataReference) {
     return webClient.get()
         .uri(endpointDataReference.getEndpoint())
         .header(endpointDataReference.getAuthKey(), endpointDataReference.getAuthCode())
         .retrieve()
-        .bodyToMono(ShellDescriptor.class)
-        .block(ofSeconds(10));
+        .bodyToFlux(ShellDescriptor.class);
   }
 
   record ContractIdWrapper(String id) {

@@ -2,11 +2,12 @@ package net.catenax.explorer.core;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.catenax.explorer.core.submodel.ShellDescriptorResponse;
-import org.springframework.http.ResponseEntity;
+import net.catenax.explorer.core.submodel.ShellDescriptorResponse.ShellDescriptor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import reactor.core.publisher.Flux;
 
 @RequestMapping("v1/assets/")
 @RequiredArgsConstructor
@@ -15,9 +16,9 @@ public class ExplorerController {
 
   final ExplorerService explorerService;
 
-  @GetMapping("{query}")
-  public ResponseEntity<ShellDescriptorResponse> retrieve(@PathVariable final String query) {
+  @GetMapping(path = "/stream/{query}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public Flux<ShellDescriptor> retrieveFlux(@PathVariable final String query) {
     log.info("Querying for Asset by: " + query);
-    return ResponseEntity.ok(explorerService.search(query));
+    return explorerService.search(query);
   }
 }

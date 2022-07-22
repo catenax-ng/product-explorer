@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layout}">
+<head>
+    <title data-layout-title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Status</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <nav data-th-replace="common/navbar :: navbar(active='STATUS')"></nav>
+
+    <div class="flex flex-col items-center gap-3" style="margin-top: 6%;">
+        <div class="text-3xl mt-10">Catena-X EDC Statuses</div>
+        <table class="table-auto border mr-auto ml-auto">
+            <thead class="bg-gray-100">
+            <tr>
+                <th class="px-4 py-2 border">EDC Name</th>
+                <th class="px-4 py-2 border">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="px-4 py-2 border">Local EDC</td>
+                <td class="px-4 py-2 border"><span class="text-green-500">Connected</span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

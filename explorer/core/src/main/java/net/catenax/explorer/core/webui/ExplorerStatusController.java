@@ -6,12 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping("/")
+@RequestMapping("/status")
 @RequiredArgsConstructor
 @Slf4j
-public class ExplorerSearchController {
+public class ExplorerStatusController {
     @GetMapping()
     public String index(Model model) {
-        return "search/search-page";
+        return "status/status-page";
     }
 }

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" data-layout-decorate="~{layout}">
+<head>
+    <title data-layout-title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Search</title>
+</head>
+<body>
+<div data-layout-fragment="content">
+    <nav data-th-replace="common/navbar :: navbar(active='SEARCH')"></nav>
+
+    <div class="flex flex-col items-center gap-3" style="margin-top: 6%;">
+        <div class="text-3xl mt-10">Search Catena-X</div>
+        <div class="flex flex-row gap-5 justify-center items-center mt-14" style="width: 100%;">
+            <form action="#" data-th-action="@{/search}" method="get" style="width: 80%;" class="flex flex-col">
+                <input class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                       id="search-input"
+                       type="text"
+                       name="query"
+                       placeholder="Search..."/>
+                <input type="submit" hidden/>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

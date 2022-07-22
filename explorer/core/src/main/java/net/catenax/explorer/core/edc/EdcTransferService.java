@@ -9,6 +9,7 @@ import org.eclipse.dataspaceconnector.spi.types.domain.DataAddress;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferProcess;
 import org.eclipse.dataspaceconnector.spi.types.domain.transfer.TransferType;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 public class EdcTransferService {
@@ -52,7 +53,7 @@ public class EdcTransferService {
     return process;
   }
 
-  public ShellDescriptor getData(EndpointDataReference endpointDataReference) {
+  public Flux<ShellDescriptor> getData(EndpointDataReference endpointDataReference) {
     return edcClient.getData(endpointDataReference);
   }
 }

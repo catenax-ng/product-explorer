@@ -10,6 +10,7 @@ import net.catenax.explorer.core.exception.ResourceNotFoundException;
 import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
 import net.catenax.explorer.core.submodel.ShellDescriptorResponse.ShellDescriptor;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
+import reactor.core.publisher.Flux;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -22,7 +23,7 @@ public class EdcAssetProvider implements ShellDescriptorProvider {
 
   @Override
   @SneakyThrows
-  public ShellDescriptor search(String query, String providerControlPlaneUrl) {
+  public Flux<ShellDescriptor> search(String query, String providerControlPlaneUrl) {
     ContractAgreementWrapper contractAgreement = edcContractService.negotiateContractForAssetId(query,
         consumerControlPlaneUrl, providerControlPlaneUrl);
 
