@@ -51,4 +51,5 @@ public class ExplorerConfiguration {
   ExplorerService explorerService(EdcLocationProvider provider, ShellDescriptorProvider shellDescriptorProvider) {
     return new ExplorerService(provider, shellDescriptorProvider);
   }
+
 }

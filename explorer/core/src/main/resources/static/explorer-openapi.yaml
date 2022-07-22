@@ -1,0 +1,356 @@
+# Copyright (c) 2022 Robert Bosch Manufacturing Solutions GmbH
+#
+# See the AUTHORS file(s) distributed with this work for additional
+# information regarding authorship.
+#
+# See the LICENSE file(s) distributed with this work for
+# additional information regarding license terms.
+#
+---
+openapi: 3.0.3
+info:
+  title: Catena-X Explorer
+  description: Catena-X Explorer
+  termsOfService: https://github.com/catenax-ng/product-explorer
+  contact:
+    name: product-explorer team
+  version: Draft
+
+servers:
+  - url: ./
+
+paths:
+  /api/shell-descriptors/query:
+    post:
+      tags:
+        - Explorer Aas Interface
+      summary: Returns shell descriptors for the given query.
+      operationId: PostFetchAasDescriptorsWithMetaData
+      parameters:
+        - in: query
+          name: bpn
+          required: false
+          schema:
+            type: string
+            description: The bpn to get the Aas Descriptors for
+#        - in: query
+#          name: tags
+#          required: false
+#          schema:
+#            type: array
+#            description: The page to return
+      requestBody:
+        description: Aas objects with source meta information from multiple providers
+        content:
+          application/json:
+            schema:
+              type: array
+              minLength: 1
+              items:
+                $ref: '#/components/schemas/ShellLookup'
+        required: true
+      responses:
+        "201":
+          description: Aas Objects with meta information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AasShellWithMetaDataResponse'
+              examples:
+                complete:
+                  $ref: '#/components/examples/aas-shell-descriptor-search-result'
+components:
+  schemas:
+    # The official spec does not support pagination right now. This is an addition.
+    AasShellWithMetaDataResponse:
+      title: AasShellWithMetaDataResponse
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+        items:
+          title: Items
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetAdministrationShellDescriptorCollectionBase'
+    Metadata:
+      required:
+        - digitalTwinRegistryUrl
+        - bpn
+        - edcUrl
+      type: object
+      properties:
+        digitalTwinRegistryUrl:
+          type: string
+          minLength: 1
+          maxLength: 512
+        bpn:
+          type: string
+          minLength: 1
+          maxLength: 50
+        edcUrl:
+          type: string
+          minLength: 1
+          maxLength: 512
+    AssetAdministrationShellDescriptorCollectionBase:
+      title: AssetAdministrationShellDescriptorCollectionBase
+      required:
+        - items
+      type: object
+      properties:
+        items:
+          title: Items
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetAdministrationShellDescriptor'
+    AssetAdministrationShellDescriptor:
+      required:
+        - identification
+        - idShort
+      type: object
+      properties:
+        description:
+          type: array
+          items:
+            $ref: '#/components/schemas/LangString'
+        globalAssetId:
+          $ref: '#/components/schemas/Reference'
+        idShort:
+          type: string
+          minLength: 1
+          maxLength: 100
+        identification:
+          $ref: '#/components/schemas/Identifier'
+        specificAssetIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdentifierKeyValuePair'
+        submodelDescriptors:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubmodelDescriptor'
+      allOf:
+        - $ref: '#/components/schemas/Descriptor'
+    Descriptor:
+      type: object
+      properties:
+        endpoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/Endpoint'
+    Endpoint:
+      required:
+        - interface
+        - protocolInformation
+      type: object
+      properties:
+        interface:
+          type: string
+        protocolInformation:
+          $ref: '#/components/schemas/ProtocolInformation'
+    ProtocolInformation:
+      required:
+        - endpointAddress
+      type: object
+      properties:
+        endpointAddress:
+          type: string
+          minLength: 1
+          maxLength: 512
+        endpointProtocol:
+          type: string
+          minLength: 1
+          maxLength: 50
+        endpointProtocolVersion:
+          type: string
+          minLength: 1
+          maxLength: 24
+        subprotocol:
+          type: string
+          minLength: 1
+          maxLength: 50
+        subprotocolBody:
+          type: string
+          minLength: 1
+          maxLength: 50
+        subprotocolBodyEncoding:
+          type: string
+          minLength: 1
+          maxLength: 50
+    AdministrativeInformation:
+      type: object
+      properties:
+        revision:
+          type: string
+        version:
+          type: string
+    LangString:
+      required:
+        - language
+        - text
+      type: object
+      properties:
+        language:
+          type: string
+          minLength: 1
+          maxLength: 10
+        text:
+          type: string
+          minLength: 1
+          maxLength: 500
+    Reference:
+      type: object
+      oneOf:
+        - $ref: '#/components/schemas/GlobalReference'
+    GlobalReference:
+      required:
+        - value
+      properties:
+        value:
+          type: array
+          minItems: 1
+          maxItems: 1
+          items:
+            $ref: '#/components/schemas/Identifier'
+    Identifier:
+      type: string
+      minLength: 1
+      maxLength: 200
+    ModelReference:
+      required:
+        - keys
+      properties:
+        keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/Key'
+    Key:
+      required:
+        - type
+        - value
+      type: object
+      properties:
+        value:
+          type: string
+    IdentifierKeyValuePair:
+      allOf:
+        - required:
+            - key
+            - value
+          properties:
+            key:
+              type: string
+              minLength: 1
+              maxLength: 200
+            value:
+              type: string
+              minLength: 1
+              maxLength: 200
+    SubmodelDescriptor:
+      required:
+        - endpoints
+        - identification
+        - semanticId
+      type: object
+      properties:
+        description:
+          type: array
+          items:
+            $ref: '#/components/schemas/LangString'
+        idShort:
+          type: string
+          minLength: 1
+          maxLength: 100
+        identification:
+          $ref: '#/components/schemas/Identifier'
+        semanticId:
+          $ref: '#/components/schemas/Reference'
+      allOf:
+        - $ref: '#/components/schemas/Descriptor'
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      required:
+        - details
+      properties:
+        message:
+          type: string
+          example: size must be between {min} and {max}
+          description: The detailed error message for the exception which occurred.
+          minLength: 1
+        path:
+          type: string
+          description: The requested path.
+          minLength: 1
+        details:
+          type: object
+          additionalProperties:
+            type: object
+          description: An object with key/value pairs containing additional information about the error.
+    ShellLookup:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: object
+          properties:
+            assetIds:
+              type: array
+              items:
+                $ref: '#/components/schemas/IdentifierKeyValuePair'
+
+  examples:
+    aas-shell-descriptor-search-result:
+      value:
+        [ {
+          "metadata": {
+            "aasRegistryUrl": "https://example-aas-registry.com/",
+            "bpn": "BPN102384028F",
+            "edcUrl": "https://example-edc-url.com/"
+          },
+          "items": [ {
+            "description": [ {
+              "language": "en",
+              "text": "The shell for a vehicle"
+            } ],
+            "globalAssetId": {
+              "value": [
+                  "urn:uuid:882fc530-b69b-4707-95f6-5dbc5e9baaa8"
+              ]
+            },
+            "idShort": "future concept x",
+            "identification": "882fc530-b69b-4707-95f6-5dbc5e9baaa8",
+            "specificAssetIds": [ {
+              "key": "PartInstanceID",
+              "value": "24975539203421"
+            } ],
+            "submodelDescriptors": [ {
+              "description": [ {
+                "language": "en",
+                "text": "Provides traceability information"
+              } ],
+              "idShort": "traceability-info",
+              "identification": "4a738a24-b7d8-4989-9cd6-387772f40565",
+              "semanticId": {
+                "value": [
+                    "urn:bamm:com.catenax:0.0.1#Traceability"
+                ]
+              },
+              "endpoints": [ {
+                "interface": "SUBMODEL-1.0RC02",
+                "protocolInformation": {
+                  "endpointAddress": "edc://provider.connector:9191/offer-windchill/shells/882fc530-b69b-4707-95f6-5dbc5e9baaa8/aas/4a738a24-b7d8-4989-9cd6-387772f40565/submodel",
+                  "endpointProtocol": "IDS/ECLIPSE DATASPACE CONNECTOR",
+                  "endpointProtocolVersion": "0.0.1"
+                }
+              } ]
+            } ]
+          } ]
+        } ]

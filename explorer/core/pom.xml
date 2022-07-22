@@ -8,8 +8,8 @@
         <artifactId>explorer</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+
     <artifactId>core</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <name>core</name>
     <description>Product explorer core</description>
 
@@ -19,12 +19,71 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <dependency>
-            <groupId>nz.net.ultraq.thymeleaf</groupId>
-            <artifactId>thymeleaf-layout-dialect</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+        </dependency>
+        <!-- EDC -->
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>contract-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>catalog-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.dataspaceconnector</groupId>
+            <artifactId>transfer-spi</artifactId>
+        </dependency>
+        <!-- OpenAPI -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>htmx.org</artifactId>
+            <version>1.7.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -32,5 +91,47 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-explorer-api-stubs</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/static/explorer-openapi.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <generateSupportingFiles>true</generateSupportingFiles>
+                            <packageName>net.catenax.explorer.core</packageName>
+                            <modelPackage>net.catenax.explorer.core.model</modelPackage>
+                            <apiPackage>net.catenax.explorer.core.api</apiPackage>
+
+                            <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+                            <configOptions>
+                                <oas3>true</oas3>
+                                <delegatePattern>true</delegatePattern>
+                                <packageName>net.catenax.explorer.core</packageName>
+                                <useBeanValidation>true</useBeanValidation>
+                                <useSpringfox>false</useSpringfox>
+                                <useTags>true</useTags>
+                            </configOptions>
+                            <invokerPackage>net.catenax.explorer.core</invokerPackage>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
