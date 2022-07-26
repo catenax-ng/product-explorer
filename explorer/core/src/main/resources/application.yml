@@ -40,3 +40,6 @@ springdoc:
     urls:
       - name: Explorer API
         url: /explorer-openapi.yaml
+
+app:
+  use-mockup-data: false
