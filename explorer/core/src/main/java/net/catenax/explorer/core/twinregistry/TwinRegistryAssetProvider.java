@@ -20,8 +20,8 @@ public class TwinRegistryAssetProvider {
         .flux()
         .parallel()
         .runOn(Schedulers.boundedElastic())
-        .sequential()
         .flatMap(n -> client.fetchShelDescriptor(endpointAddress, matchedSubmodelsIds))
+        .sequential()
         .doOnNext(n -> log.info(n.toString()));
   }
 }
