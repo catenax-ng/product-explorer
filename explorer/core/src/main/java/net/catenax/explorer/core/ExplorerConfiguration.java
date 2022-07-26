@@ -12,6 +12,7 @@ import net.catenax.explorer.core.webui.ExplorerSearchController;
 import net.catenax.explorer.core.webui.ExplorerSearchResultsController;
 import net.catenax.explorer.core.webui.ExplorerStatusController;
 import net.catenax.explorer.core.webui.service.DataSearchResultsProvider;
+import net.catenax.explorer.core.webui.service.MockDataSearchResultsProvider;
 import net.catenax.explorer.core.webui.service.SearchResultsProvider;
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,43 +26,33 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 public class ExplorerConfiguration {
 
   @Bean
-  ExplorerController explorerController(ExplorerService service) { //todo delete
+  public LayoutDialect layoutDialect() {
+    return new LayoutDialect();
+  }
+
+  @Bean
+  ExplorerController explorerController(ExplorerService service) {
     return new ExplorerController(service);
   }
 
-    @Bean
-    public LayoutDialect layoutDialect() {
-        return new LayoutDialect();
-    }
-
-    @Bean
-    ExplorerController explorerController(ExplorerService service) {
-        return new ExplorerController(service);
-    }
+  @Bean
+  ExplorerSearchController explorerSearchController() {
+    return new ExplorerSearchController();
+  }
 
   @Bean
-  ExplorerSearchController explorerWebController(@Value("${app.use-mockup-data:false}") boolean useMockupData, ObjectMapper objectMapper, ExplorerService explorerService) {
-    SearchResultsProvider searchResultsProvider = new DataSearchResultsProvider(explorerService);
-    return new ExplorerSearchController(searchResultsProvider, objectMapper);
+  ExplorerStatusController explorerStatusController() {
+    return new ExplorerStatusController();
   }
-    @Bean
-    ExplorerSearchController explorerSearchController() {
-        return new ExplorerSearchController();
-    }
 
-    @Bean
-    ExplorerStatusController explorerStatusController() {
-        return new ExplorerStatusController();
-    }
-
-    @Bean
-    ExplorerSearchResultsController explorerSearchResultsController(@Value("${app.use-mockup-data:false}") boolean useMockupData,
-                                                                    ObjectMapper objectMapper,
-                                                                    ExplorerService explorerService,
-                                                                    SpringTemplateEngine templateEngine) {
-        SearchResultsProvider searchResultsProvider = useMockupData ? new MockDataSearchResultsProvider(objectMapper) : new DataSearchResultsProvider(explorerService);
-        return new ExplorerSearchResultsController(searchResultsProvider, templateEngine);
-    }
+  @Bean
+  ExplorerSearchResultsController explorerSearchResultsController(@Value("${app.use-mockup-data:false}") boolean useMockupData,
+      ObjectMapper objectMapper,
+      ExplorerService explorerService,
+      SpringTemplateEngine templateEngine) {
+    SearchResultsProvider searchResultsProvider = useMockupData ? new MockDataSearchResultsProvider(objectMapper) : new DataSearchResultsProvider(explorerService);
+    return new ExplorerSearchResultsController(searchResultsProvider, templateEngine);
+  }
 
   @Bean
   ExplorerService explorerService(EdcLocationProvider provider, ShellDescriptorProvider shellDescriptorProvider) {
