@@ -44,8 +44,8 @@ public class ExplorerSearchResultsController {
           })
           .doOnComplete(() -> {
                 sink.next(ServerSentEvent.<String>builder()
-                    .event("completed")
-                    .data("<div class=\"mt-10 flex flex-row gap-3 items-center justify-center\"><div>Searching decentralized registry <b>completed</b></div></div>")
+                        .event("completed")
+                        .data(templateEngine.process("search/search-result-page-completed-msg", new Context()))
                     .build());
               }
           )
