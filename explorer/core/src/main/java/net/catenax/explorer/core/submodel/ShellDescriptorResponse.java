@@ -1,12 +1,13 @@
 package net.catenax.explorer.core.submodel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import java.util.Locale;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.Locale;
+import lombok.SneakyThrows;
 
 @Data
 @NoArgsConstructor
@@ -25,6 +26,7 @@ public class ShellDescriptorResponse {
     String identification;
     List<SpecificAssetIds> specificAssetIds;
     List<SubmodelDescriptor> submodelDescriptors;
+    //endponts //TODO fethullah
 
     @Data
     @NoArgsConstructor
@@ -85,5 +87,10 @@ public class ShellDescriptorResponse {
         }
       }
     }
+  }
+
+  @SneakyThrows
+  public String toPrettyString() {
+    return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(this);
   }
 }

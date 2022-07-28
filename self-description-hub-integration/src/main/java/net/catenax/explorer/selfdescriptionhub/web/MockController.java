@@ -17,12 +17,13 @@ public class MockController {
 
   @GetMapping
   public List<SelfDescription> retrieve() {
+
     return knownEdcs.stream()
         .map(knownEdc -> SelfDescription.builder()
-        .companyNumber(RandomStringUtils.randomNumeric(10))
-        .serviceProvider(knownEdc)
-        .bpn(RandomStringUtils.randomAlphabetic(8))
-        .build())
+            .companyNumber(RandomStringUtils.randomNumeric(10))
+            .serviceProvider(knownEdc)
+            .bpn(knownEdc.substring(knownEdc.lastIndexOf("-") + 1, knownEdc.lastIndexOf(":")))
+            .build())
         .collect(Collectors.toList());
   }
 }

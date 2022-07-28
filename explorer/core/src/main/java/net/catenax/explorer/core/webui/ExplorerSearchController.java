@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @Slf4j
 public class ExplorerSearchController {
-    @GetMapping()
+    @GetMapping
     public String index(Model model) {
         return "search/search-page";
     }

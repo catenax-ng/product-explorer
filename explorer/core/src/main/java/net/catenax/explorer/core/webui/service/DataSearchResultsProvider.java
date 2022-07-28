@@ -8,16 +8,17 @@ import reactor.core.publisher.Flux;
 
 @RequiredArgsConstructor
 public class DataSearchResultsProvider implements SearchResultsProvider {
-    private final ExplorerService explorerService;
 
-    @Override
-    @SneakyThrows
-    public Flux<ShellDescriptor> search(String query) {
-        return explorerService.search(query);
-    }
+  private final ExplorerService explorerService;
 
-    @Override
-    public String getSubmodelData(String url) {
-        throw new UnsupportedOperationException("This operation is not supported yet.");
-    }
+  @Override
+  @SneakyThrows
+  public Flux<ShellDescriptor> search(String query) {
+    return explorerService.searchEdcs(query);
+  }
+
+  @Override
+  public String getSubmodelData(String url) {
+    throw new UnsupportedOperationException("This operation is not supported yet.");
+  }
 }
