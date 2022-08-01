@@ -18,25 +18,24 @@ package net.catenax.explorer.core.aasregistry.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import net.catenax.explorer.core.api.ExplorerAasInterfaceApiDelegate;
-import net.catenax.explorer.core.model.AasShellWithMetaDataResponse;
-import net.catenax.explorer.core.model.ShellLookup;
+import net.catenax.explorer.core.aasregistry.model.AasShellWithMetaDataResponse;
+import net.catenax.explorer.core.aasregistry.model.ShellLookup;
 import net.catenax.explorer.core.twinregistry.TwinRegistryService;
 import net.catenax.explorer.core.twinregistry.TwinRegistryService.SearchShellDescriptorResults;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Slf4j
-public class ExplorerAasApiDelegate implements ExplorerAasInterfaceApiDelegate {
+public class ExplorerAasApiDelegateController {
 
   final TwinRegistryService twinRegistryService;
   final ObjectMapper mapper;
 
-  @Override
   @SuppressWarnings("unchecked")
   @SneakyThrows
   public ResponseEntity<List<AasShellWithMetaDataResponse>> postFetchAasDescriptorsWithMetaData(List<ShellLookup> shellLookup, String bpn) {
