@@ -31,15 +31,8 @@ consumer:
     plane: http://localhost:28195
 
 springdoc:
-  cache:
-    disabled: true
-  api-docs:
-    enabled: false
   swagger-ui:
     path: /swagger-ui
-    urls:
-      - name: Explorer API
-        url: /explorer-openapi.yaml
 
 app:
   use-mockup-data: false

@@ -26,11 +26,14 @@ import net.catenax.explorer.core.aasregistry.model.ShellLookup;
 import net.catenax.explorer.core.twinregistry.TwinRegistryService;
 import net.catenax.explorer.core.twinregistry.TwinRegistryService.SearchShellDescriptorResults;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api/shell-descriptors")
 public class ExplorerAasApiDelegateController {
 
   final TwinRegistryService twinRegistryService;
@@ -38,6 +41,7 @@ public class ExplorerAasApiDelegateController {
 
   @SuppressWarnings("unchecked")
   @SneakyThrows
+  @PostMapping("/query")
   public ResponseEntity<List<AasShellWithMetaDataResponse>> postFetchAasDescriptorsWithMetaData(List<ShellLookup> shellLookup, String bpn) {
     log.info("Querying for Asset by: " + shellLookup.get(0).getQuery().getAssetIds().get(0).getValue());
 
