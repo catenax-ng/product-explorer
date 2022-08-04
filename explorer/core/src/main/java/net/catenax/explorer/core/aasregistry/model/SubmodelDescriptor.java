@@ -1,5 +1,6 @@
 package net.catenax.explorer.core.aasregistry.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.Valid;
@@ -14,10 +15,12 @@ public class SubmodelDescriptor {
     private List<LangString> description = null;
 
     @Size(min = 1, max = 100)
+    @Schema(example = "traceability-info")
     private String idShort;
 
     @NotNull
     @Size(min = 1, max = 200)
+    @Schema(example = "4a738a24-b7d8-4989-9cd6-387772f40565")
     private String identification;
 
     @NotNull

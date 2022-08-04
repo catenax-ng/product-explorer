@@ -18,6 +18,10 @@ package net.catenax.explorer.core.aasregistry.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -36,18 +40,20 @@ import java.util.List;
 @RequestMapping("/api/shell-descriptors")
 public class ExplorerAasApiDelegateController {
 
-  final TwinRegistryService twinRegistryService;
-  final ObjectMapper mapper;
+    final TwinRegistryService twinRegistryService;
+    final ObjectMapper mapper;
 
-  @SuppressWarnings("unchecked")
-  @SneakyThrows
-  @PostMapping("/query")
-  public ResponseEntity<List<AasShellWithMetaDataResponse>> postFetchAasDescriptorsWithMetaData(List<ShellLookup> shellLookup, String bpn) {
-    log.info("Querying for Asset by: " + shellLookup.get(0).getQuery().getAssetIds().get(0).getValue());
+    @SuppressWarnings("unchecked")
+    @SneakyThrows
+    @PostMapping("/query")
+    @Operation(summary = "Returns shell descriptors for the given query.")
+    @ApiResponse(responseCode = "201", description = "Aas Objects with meta information")
+    public ResponseEntity<List<AasShellWithMetaDataResponse>> postFetchAasDescriptorsWithMetaData(@Parameter(description = "Aas objects with source meta information from multiple providers") List<ShellLookup> shellLookup, @Parameter(description = "The bpn to get the Aas Descriptors for") @Schema(example = "BPN102384028F") String bpn) {
+        log.info("Querying for Asset by: " + shellLookup.get(0).getQuery().getAssetIds().get(0).getValue());
 
-    final List<SearchShellDescriptorResults> searchShellDescriptorResults = twinRegistryService
-        .searchTwinRegistries(mapper.writeValueAsString(shellLookup.get(0).getQuery().getAssetIds().get(0)), bpn); //TODO ask Fethullah: 1. multiple query objects ? 2. How we want to retrieve by many query ?
+        final List<SearchShellDescriptorResults> searchShellDescriptorResults = twinRegistryService
+                .searchTwinRegistries(mapper.writeValueAsString(shellLookup.get(0).getQuery().getAssetIds().get(0)), bpn); //TODO ask Fethullah: 1. multiple query objects ? 2. How we want to retrieve by many query ?
 
-    return ResponseEntity.ok(mapper.convertValue(searchShellDescriptorResults, List.class));
-  }
+        return ResponseEntity.ok(mapper.convertValue(searchShellDescriptorResults, List.class));
+    }
 }

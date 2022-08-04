@@ -2,6 +2,7 @@ package net.catenax.explorer.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import net.catenax.explorer.core.aasregistry.controller.ExplorerAasApiDelegateController;
 import net.catenax.explorer.core.exception.handling.RootControllerAdvice;
@@ -48,6 +49,8 @@ public class RootConfiguration {
     return new OpenAPI()
             .info(new Info().title("Product Explorer")
                     .description("Product Explorer API service documentation. ")
-                    .version("v1.0"));
+                    .termsOfService("https://github.com/catenax-ng/product-explorer")
+                    .contact(new Contact().name("product-explorer team"))
+                    .version("draft"));
   }
 }
