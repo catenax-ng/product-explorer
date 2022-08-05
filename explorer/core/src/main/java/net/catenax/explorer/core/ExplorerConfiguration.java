@@ -3,8 +3,7 @@ package net.catenax.explorer.core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.catenax.explorer.core.aasregistry.controller.ExplorerAasApiDelegate;
-import net.catenax.explorer.core.api.ExplorerAasInterfaceApiDelegate;
+import net.catenax.explorer.core.aasregistry.controller.ExplorerAasApiDelegateController;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
 import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
 import net.catenax.explorer.core.twinregistry.TwinRegistryService;
@@ -60,7 +59,7 @@ public class ExplorerConfiguration {
   }
 
   @Bean
-  ExplorerAasInterfaceApiDelegate explorerAasInterfaceApiDelegate(TwinRegistryService twinRegistryService, ObjectMapper mapper) {
-    return new ExplorerAasApiDelegate(twinRegistryService, mapper);
+  ExplorerAasApiDelegateController explorerAasApiDelegateController(TwinRegistryService twinRegistryService, ObjectMapper mapper) {
+    return new ExplorerAasApiDelegateController(twinRegistryService, mapper);
   }
 }

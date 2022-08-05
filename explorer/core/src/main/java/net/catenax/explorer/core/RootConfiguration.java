@@ -1,7 +1,12 @@
 package net.catenax.explorer.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import net.catenax.explorer.core.aasregistry.controller.ExplorerAasApiDelegateController;
 import net.catenax.explorer.core.exception.handling.RootControllerAdvice;
+import org.springdoc.core.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -25,14 +30,27 @@ public class RootConfiguration {
     return WebClient.create()
         .mutate()
         .clientConnector(new ReactorClientHttpConnector(
-            HttpClient.create().followRedirect(true)
+                HttpClient.create().followRedirect(true)
         ))
-        .uriBuilderFactory(uriBuilderFactory)
-        .build();
+            .uriBuilderFactory(uriBuilderFactory)
+            .build();
   }
 
   @Bean
   public ObjectMapper objectMapper() {
     return new ObjectMapper().findAndRegisterModules();
+  }
+
+  @Bean
+  public OpenAPI springOpenAPI() {
+    SpringDocUtils.getConfig().addRestControllers(ExplorerAasApiDelegateController.class);
+    SpringDocUtils.getConfig().addRestControllers(ExplorerController.class);
+
+    return new OpenAPI()
+            .info(new Info().title("Product Explorer")
+                    .description("Product Explorer API service documentation. ")
+                    .termsOfService("https://github.com/catenax-ng/product-explorer")
+                    .contact(new Contact().name("product-explorer team"))
+                    .version("draft"));
   }
 }
