@@ -1,12 +1,14 @@
 package net.catenax.explorer.core.aasregistry.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Value;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Data
+@Value
+@NoArgsConstructor(force = true)
 public class ProtocolInformation {
 
     @NotNull
@@ -30,36 +32,4 @@ public class ProtocolInformation {
 
     @Size(min = 1, max = 50)
     private String subprotocolBodyEncoding;
-
-    public ProtocolInformation endpointAddress(String endpointAddress) {
-        this.endpointAddress = endpointAddress;
-        return this;
-    }
-
-
-    public ProtocolInformation endpointProtocol(String endpointProtocol) {
-        this.endpointProtocol = endpointProtocol;
-        return this;
-    }
-
-    public ProtocolInformation endpointProtocolVersion(String endpointProtocolVersion) {
-        this.endpointProtocolVersion = endpointProtocolVersion;
-        return this;
-    }
-
-
-    public ProtocolInformation subprotocol(String subprotocol) {
-        this.subprotocol = subprotocol;
-        return this;
-    }
-
-    public ProtocolInformation subprotocolBody(String subprotocolBody) {
-        this.subprotocolBody = subprotocolBody;
-        return this;
-    }
-
-    public ProtocolInformation subprotocolBodyEncoding(String subprotocolBodyEncoding) {
-        this.subprotocolBodyEncoding = subprotocolBodyEncoding;
-        return this;
-    }
 }

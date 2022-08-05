@@ -1,26 +1,14 @@
 package net.catenax.explorer.core.aasregistry.model;
 
-import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Value;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Value
+@NoArgsConstructor(force = true)
 public class ShellLookupQuery {
     @Valid
-    private List<IdentifierKeyValuePair> assetIds = null;
-
-    public ShellLookupQuery assetIds(List<IdentifierKeyValuePair> assetIds) {
-        this.assetIds = assetIds;
-        return this;
-    }
-
-    public ShellLookupQuery addAssetIdsItem(IdentifierKeyValuePair assetIdsItem) {
-        if (this.assetIds == null) {
-            this.assetIds = new ArrayList<>();
-        }
-        this.assetIds.add(assetIdsItem);
-        return this;
-    }
+    private List<IdentifierKeyValuePair> assetIds;
 }
