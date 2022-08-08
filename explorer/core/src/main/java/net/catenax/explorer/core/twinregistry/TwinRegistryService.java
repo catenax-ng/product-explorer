@@ -9,10 +9,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
 import net.catenax.explorer.core.edclocation.model.SelfDescription;
-import net.catenax.explorer.core.retriever.AssetResponse;
-import net.catenax.explorer.core.retriever.AssetRetriever;
-import net.catenax.explorer.core.submodel.ShellDescriptorResponse;
-import net.catenax.explorer.core.submodel.ShellDescriptorResponse.ShellDescriptor;
+import net.catenax.explorer.core.shell.ShellDescriptorResponse;
+import net.catenax.explorer.core.shell.ShellDescriptorResponse.ShellDescriptor;
+import net.catenax.explorer.core.twinregistry.retriever.AssetResponse;
+import net.catenax.explorer.core.twinregistry.retriever.AssetRetriever;
 import reactor.core.publisher.Flux;
 
 @RequiredArgsConstructor

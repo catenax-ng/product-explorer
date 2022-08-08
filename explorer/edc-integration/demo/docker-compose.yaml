@@ -246,3 +246,10 @@ services:
       IDP_ISSUER_URI: ""
     ports:
       - "4246:4243"
+
+  edc-extension:
+    image: "edc-controlplane-memory-with-extension:latest"
+    container_name: edc-extension
+    ports:
+      - "9000:9191"
+      - "8999:8999"

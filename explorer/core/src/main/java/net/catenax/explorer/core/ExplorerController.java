@@ -2,7 +2,7 @@ package net.catenax.explorer.core;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.catenax.explorer.core.submodel.ShellDescriptorResponse.ShellDescriptor;
+import net.catenax.explorer.core.shell.ShellDescriptorResponse.ShellDescriptor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

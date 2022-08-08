@@ -3,8 +3,9 @@ package net.catenax.explorer.core;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
-import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
-import net.catenax.explorer.core.submodel.ShellDescriptorResponse.ShellDescriptor;
+import net.catenax.explorer.core.extension.DataReferenceProvider;
+import net.catenax.explorer.core.shell.ShellDescriptorResponse.ShellDescriptor;
+import net.catenax.explorer.core.shell.ShellDescriptorRetriever;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
@@ -13,13 +14,15 @@ import reactor.core.scheduler.Schedulers;
 public class ExplorerService {
 
   private final EdcLocationProvider edcLocationProvider;
-  private final ShellDescriptorProvider shellDescriptorProvider;
+  private final DataReferenceProvider dataReferenceProvider;
+  private final ShellDescriptorRetriever shellDescriptorRetriever;
 
   public Flux<ShellDescriptor> searchEdcs(final String query) {
     return Flux.fromIterable(edcLocationProvider.getKnownEdcLocations())
         .parallel()
         .runOn(Schedulers.boundedElastic())
-        .flatMap(selfDescription -> shellDescriptorProvider.search(query, selfDescription.getServiceProvider()))
+        .map(location -> dataReferenceProvider.search(query, location.getServiceProvider()))
+        .flatMap(shellDescriptorRetriever::retrieve)
         .sequential()
         .doOnNext(shellDescriptor -> log.info("Got shell descriptor: " + shellDescriptor));
   }
