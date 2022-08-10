@@ -27,10 +27,7 @@ services:
 
   consumer-controlplane-zf:
     container_name: consumer-controlplane-zf
-    build:
-      context: ../edc-controlplane-memory
-      args:
-        JAR: build/libs/edc-with-extension.jar
+    image: "edc-controlplane-memory-with-extension:latest"
     ports:
       - "28182:8282" # ids
       - "28185:8185" # public
@@ -39,21 +36,16 @@ services:
       - "28195:9193" # data
       - "28199:9999" # control
       - "25007:8090" # debugging
-      - "8999:8999"
     environment:
       EDC_VAULT: /app/vault.properties
       EDC_KEYSTORE: /app/cert.pfx
       EDC_KEYSTORE_PASSWORD: 123456
       CONFIGURATION_PROPERTIES_FILE: /app/configuration.properties
-      LOGGING_PROPERTIES_FILE: /app/logging.properties
-      OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
 
     volumes:
       - ./../certs/cert.pfx:/app/cert.pfx
       - ./zf/vault.properties:/app/vault.properties
       - ./zf/consumer_cp_configuration.properties:/app/configuration.properties
-      - ./zf/opentelemetry.properties:/app/opentelemetry.properties
-      - ./zf/logging.properties:/app/logging.properties
 
   provider-controlplane-bosch:
     container_name: provider-controlplane-bosch
