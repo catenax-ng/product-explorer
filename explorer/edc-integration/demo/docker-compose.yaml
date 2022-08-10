@@ -30,15 +30,16 @@ services:
     build:
       context: ../edc-controlplane-memory
       args:
-        JAR: build/libs/edc.jar
+        JAR: build/libs/edc-with-extension.jar
     ports:
       - "28182:8282" # ids
       - "28185:8185" # public
-      - "28191:9191" # default
+      - "9000:9191" # default
       - "28192:9192" # validation
       - "28195:9193" # data
       - "28199:9999" # control
       - "25007:8090" # debugging
+      - "8999:8999"
     environment:
       EDC_VAULT: /app/vault.properties
       EDC_KEYSTORE: /app/cert.pfx
@@ -247,9 +248,9 @@ services:
     ports:
       - "4246:4243"
 
-  edc-extension:
-    image: "edc-controlplane-memory-with-extension:latest"
-    container_name: edc-extension
-    ports:
-      - "9000:9191"
-      - "8999:8999"
+#  edc-extension:
+#    image: "edc-controlplane-memory-with-extension:latest"
+#    container_name: edc-extension
+#    ports:
+#      - "9000:9191"
+#      - "8999:8999"
