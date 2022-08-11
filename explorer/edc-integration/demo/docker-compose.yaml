@@ -27,14 +27,11 @@ services:
 
   consumer-controlplane-zf:
     container_name: consumer-controlplane-zf
-    build:
-      context: ../edc-controlplane-memory
-      args:
-        JAR: build/libs/edc.jar
+    image: "edc-controlplane-memory-with-extension:latest"
     ports:
       - "28182:8282" # ids
       - "28185:8185" # public
-      - "28191:9191" # default
+      - "9000:9191" # default
       - "28192:9192" # validation
       - "28195:9193" # data
       - "28199:9999" # control
@@ -44,15 +41,11 @@ services:
       EDC_KEYSTORE: /app/cert.pfx
       EDC_KEYSTORE_PASSWORD: 123456
       CONFIGURATION_PROPERTIES_FILE: /app/configuration.properties
-      LOGGING_PROPERTIES_FILE: /app/logging.properties
-      OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
 
     volumes:
       - ./../certs/cert.pfx:/app/cert.pfx
       - ./zf/vault.properties:/app/vault.properties
       - ./zf/consumer_cp_configuration.properties:/app/configuration.properties
-      - ./zf/opentelemetry.properties:/app/opentelemetry.properties
-      - ./zf/logging.properties:/app/logging.properties
 
   provider-controlplane-bosch:
     container_name: provider-controlplane-bosch
@@ -215,6 +208,7 @@ services:
 
   twin-registry-bmw:
     image: "registry:latest"
+#    image: "ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1"
     container_name: twin-registry-bmw
     environment:
       SPRING_PROFILES_ACTIVE: local
@@ -225,6 +219,7 @@ services:
 
   twin-registry-daimler:
     image: "registry:latest"
+#    image: "ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1"
     container_name: twin-registry-daimler
     depends_on:
       - twin-registry-bmw
@@ -237,6 +232,7 @@ services:
 
   twin-registry-bosch:
     image: "registry:latest"
+#    image: "ghcr.io/catenax-ng/catenax-at-home/registry:0.0.1"
     container_name: twin-registry-bosch
     depends_on:
       - twin-registry-daimler
