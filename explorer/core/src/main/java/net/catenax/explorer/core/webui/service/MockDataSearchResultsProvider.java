@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import net.catenax.explorer.core.submodel.ShellDescriptorResponse.ShellDescriptor;
+import net.catenax.explorer.core.shell.ShellDescriptorResponse.ShellDescriptor;
 import reactor.core.publisher.Flux;
 
 @RequiredArgsConstructor

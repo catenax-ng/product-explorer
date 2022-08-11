@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
-import net.catenax.explorer.core.aasregistry.controller.ExplorerAasApiDelegateController;
 import net.catenax.explorer.core.exception.handling.RootControllerAdvice;
+import net.catenax.explorer.core.twinregistry.ExplorerFutureController;
 import org.springdoc.core.SpringDocUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +43,7 @@ public class RootConfiguration {
 
   @Bean
   public OpenAPI springOpenAPI() {
-    SpringDocUtils.getConfig().addRestControllers(ExplorerAasApiDelegateController.class);
+    SpringDocUtils.getConfig().addRestControllers(ExplorerFutureController.class);
     SpringDocUtils.getConfig().addRestControllers(ExplorerController.class);
 
     return new OpenAPI()

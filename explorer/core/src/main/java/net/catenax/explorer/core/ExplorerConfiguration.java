@@ -3,10 +3,9 @@ package net.catenax.explorer.core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.catenax.explorer.core.aasregistry.controller.ExplorerAasApiDelegateController;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
-import net.catenax.explorer.core.submodel.ShellDescriptorProvider;
-import net.catenax.explorer.core.twinregistry.TwinRegistryService;
+import net.catenax.explorer.core.extension.DataReferenceProvider;
+import net.catenax.explorer.core.shell.ShellDescriptorRetriever;
 import net.catenax.explorer.core.webui.ExplorerSearchController;
 import net.catenax.explorer.core.webui.ExplorerSearchResultsController;
 import net.catenax.explorer.core.webui.ExplorerStatusController;
@@ -35,6 +34,11 @@ public class ExplorerConfiguration {
   }
 
   @Bean
+  ExplorerService explorerService(EdcLocationProvider locationProvider, DataReferenceProvider dataReferenceProvider, ShellDescriptorRetriever shellDescriptorRetriever) {
+    return new ExplorerService(locationProvider, dataReferenceProvider, shellDescriptorRetriever);
+  }
+
+  @Bean
   ExplorerSearchController explorerSearchController() {
     return new ExplorerSearchController();
   }
@@ -51,15 +55,5 @@ public class ExplorerConfiguration {
       SpringTemplateEngine templateEngine) {
     SearchResultsProvider searchResultsProvider = useMockupData ? new MockDataSearchResultsProvider(objectMapper) : new DataSearchResultsProvider(explorerService);
     return new ExplorerSearchResultsController(searchResultsProvider, templateEngine);
-  }
-
-  @Bean
-  ExplorerService explorerService(EdcLocationProvider provider, ShellDescriptorProvider shellDescriptorProvider) {
-    return new ExplorerService(provider, shellDescriptorProvider);
-  }
-
-  @Bean
-  ExplorerAasApiDelegateController explorerAasApiDelegateController(TwinRegistryService twinRegistryService, ObjectMapper mapper) {
-    return new ExplorerAasApiDelegateController(twinRegistryService, mapper);
   }
 }

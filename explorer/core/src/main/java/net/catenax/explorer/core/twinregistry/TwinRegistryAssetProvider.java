@@ -3,7 +3,7 @@ package net.catenax.explorer.core.twinregistry;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.catenax.explorer.core.submodel.ShellDescriptorResponse;
+import net.catenax.explorer.core.shell.ShellDescriptorResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;

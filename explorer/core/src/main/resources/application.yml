@@ -21,6 +21,10 @@ registry:
   edc-location:
     provider: rest
 
+edc:
+  extension:
+    url: http://localhost:9000/api/adapter/asset/sync/
+
 self:
   description:
     hub:
