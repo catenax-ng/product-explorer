@@ -15,7 +15,6 @@ WORKDIR /app
 COPY --from=otel /tmp/opentelemetry-javaagent.jar .
 COPY ${JAR} edc-controlplane.jar
 COPY ${LIB} ./lib/
-COPY build/target /app
 
 CMD ["-javaagent:/app/opentelemetry-javaagent.jar", \
      "-Dedc.fs.config=/app/configuration.properties", \
