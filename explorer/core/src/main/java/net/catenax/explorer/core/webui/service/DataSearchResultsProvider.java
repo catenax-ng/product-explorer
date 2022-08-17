@@ -14,7 +14,7 @@ public class DataSearchResultsProvider implements SearchResultsProvider {
   @Override
   @SneakyThrows
   public Flux<ShellDescriptor> search(String query) {
-    return explorerService.searchEdcs(query);
+    return explorerService.search(query);
   }
 
   @Override

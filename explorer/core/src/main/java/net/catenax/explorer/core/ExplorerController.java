@@ -19,6 +19,6 @@ public class ExplorerController {
   @GetMapping(path = "/stream/{query}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
   public Flux<ShellDescriptor> retrieveFlux(@PathVariable final String query) {
     log.info("Querying for Asset by: " + query);
-    return explorerService.searchEdcs(query);
+    return explorerService.search(query);
   }
 }
