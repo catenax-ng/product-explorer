@@ -6,7 +6,6 @@ set -o pipefail
 set -o nounset
 
 cd self-description-hub
-#docker build image
 mvn clean package -DskipTests
 docker image build -t self-description-hub .
 
