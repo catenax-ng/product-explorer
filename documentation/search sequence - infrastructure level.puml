@@ -1,0 +1,62 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+title Sequence diagram of Explorer search
+actor User as user
+
+participant "Explorer" as explorer
+database "Self Description Hub" as sdh
+participant "ZF EDC DP Consumer" as zfEdcDpConsumer
+participant "ZF EDC CP Consumer" as zfEdcCpConsumer
+participant "Daimler EDC Provider" as daimlerEDCProvider
+participant "Bosch EDC Provider" as boschEDCProvider
+database "Daimler Twin registry" as daimlerTwinRegistry
+database "Bosch Twin registry" as boschTwinRegistry
+
+autonumber
+
+user -> explorer:search request
+activate explorer
+explorer -> sdh
+activate sdh
+explorer <- sdh: returns list of EDCs
+deactivate sdh
+
+explorer -> zfEdcCpConsumer : for each known edc send query with assetId
+activate zfEdcCpConsumer
+zfEdcCpConsumer -> daimlerEDCProvider
+activate daimlerEDCProvider
+zfEdcCpConsumer -> boschEDCProvider
+activate boschEDCProvider
+zfEdcCpConsumer <- daimlerEDCProvider : returns Daimler EndpointDataReference
+deactivate daimlerEDCProvider
+explorer <- zfEdcCpConsumer: returns Daimler EndpointDataReference
+zfEdcCpConsumer <- boschEDCProvider : returns Bosch EndpointDataReference
+deactivate boschEDCProvider
+explorer <- zfEdcCpConsumer: returns Bosch EndpointDataReference
+deactivate zfEdcCpConsumer
+
+explorer -> zfEdcDpConsumer: for each EndpointDataReference
+activate zfEdcDpConsumer
+
+zfEdcDpConsumer -> daimlerEDCProvider
+activate daimlerEDCProvider
+zfEdcDpConsumer -> boschEDCProvider
+activate boschEDCProvider
+daimlerEDCProvider -> daimlerTwinRegistry
+activate daimlerTwinRegistry
+boschEDCProvider -> boschTwinRegistry
+activate boschTwinRegistry
+daimlerEDCProvider <- daimlerTwinRegistry
+deactivate daimlerTwinRegistry
+zfEdcDpConsumer <- daimlerEDCProvider:ts
+deactivate daimlerEDCProvider
+boschEDCProvider <- boschTwinRegistry
+deactivate boschTwinRegistry
+zfEdcDpConsumer <- boschEDCProvider
+deactivate boschEDCProvider
+explorer <- zfEdcDpConsumer
+deactivate zfEdcDpConsumer
+user <- explorer: aggregated results
+deactivate explorer
+@enduml
