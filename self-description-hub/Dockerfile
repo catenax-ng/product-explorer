@@ -9,6 +9,6 @@ RUN mvn -f /app/pom.xml clean package
 
 FROM openjdk:18-slim as RUN
 
-COPY --from=build /app/target/**.jar /app/self-description-hub-integration.jar
+COPY --from=build /app/target/**.jar /app/self-description-hub.jar
 EXPOSE 8090
-ENTRYPOINT ["java","-jar","/app/self-description-hub-integration.jar"]
+ENTRYPOINT ["java","-jar","/app/self-description-hub.jar"]
