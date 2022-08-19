@@ -4,7 +4,7 @@ services:
   consumer-dataplane-zf:
     container_name: consumer-dataplane-zf
     build:
-      context: ../edc-dataplane
+      context: explorer/edc-integration/edc-dataplane
       args:
         JAR: build/libs/edc.jar
     ports:
@@ -19,11 +19,11 @@ services:
       LOGGING_PROPERTIES_FILE: /app/logging.properties
       OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
     volumes:
-      - ./../certs/cert.pfx:/app/cert.pfx
-      - ./zf/vault.properties:/app/vault.properties
-      - ./zf/consumer_dp_configuration.properties:/app/configuration.properties
-      - ./zf/opentelemetry.properties:/app/opentelemetry.properties
-      - ./zf/logging.properties:/app/logging.properties
+      - ./explorer/edc-integration/certs/cert.pfx:/app/cert.pfx
+      - ./config/zf/vault.properties:/app/vault.properties
+      - ./config/zf/consumer_dp_configuration.properties:/app/configuration.properties
+      - ./config/zf/opentelemetry.properties:/app/opentelemetry.properties
+      - ./config/zf/logging.properties:/app/logging.properties
 
   consumer-controlplane-zf:
     container_name: consumer-controlplane-zf
@@ -43,14 +43,14 @@ services:
       CONFIGURATION_PROPERTIES_FILE: /app/configuration.properties
 
     volumes:
-      - ./../certs/cert.pfx:/app/cert.pfx
-      - ./zf/vault.properties:/app/vault.properties
-      - ./zf/consumer_cp_configuration.properties:/app/configuration.properties
+      - ./explorer/edc-integration/certs/cert.pfx:/app/cert.pfx
+      - ./config/zf/vault.properties:/app/vault.properties
+      - ./config/zf/consumer_cp_configuration.properties:/app/configuration.properties
 
   provider-controlplane-bosch:
     container_name: provider-controlplane-bosch
     build:
-      context: ../edc-controlplane-memory
+      context: explorer/edc-integration/edc-controlplane-memory
       args:
         JAR: build/libs/edc.jar
     ports:
@@ -67,16 +67,16 @@ services:
       LOGGING_PROPERTIES_FILE: /app/logging.properties
       OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
     volumes:
-      - ./../certs/cert.pfx:/app/cert.pfx
-      - ./bosch/vault.properties:/app/vault.properties
-      - ./bosch/provider_cp_configuration.properties:/app/configuration.properties
-      - ./bosch/opentelemetry.properties:/app/opentelemetry.properties
-      - ./bosch/logging.properties:/app/logging.properties
+      - ./explorer/edc-integration/certs/cert.pfx:/app/cert.pfx
+      - ./config/bosch/vault.properties:/app/vault.properties
+      - ./config/bosch/provider_cp_configuration.properties:/app/configuration.properties
+      - ./config/bosch/opentelemetry.properties:/app/opentelemetry.properties
+      - ./config/bosch/logging.properties:/app/logging.properties
 
   provider-dataplane-bosch:
     container_name: provider-dataplane-bosch
     build:
-      context: ../edc-dataplane
+      context: explorer/edc-integration/edc-dataplane
       args:
         JAR: build/libs/edc.jar
     ports:
@@ -91,16 +91,16 @@ services:
       LOGGING_PROPERTIES_FILE: /app/logging.properties
       OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
     volumes:
-      - ./../certs/cert.pfx:/app/cert.pfx
-      - ./bosch/vault.properties:/app/vault.properties
-      - ./bosch/provider_dp_configuration.properties:/app/configuration.properties
-      - ./bosch/opentelemetry.properties:/app/opentelemetry.properties
-      - ./bosch/logging.properties:/app/logging.properties
+      - ./explorer/edc-integration/certs/cert.pfx:/app/cert.pfx
+      - ./config/bosch/vault.properties:/app/vault.properties
+      - ./config/bosch/provider_dp_configuration.properties:/app/configuration.properties
+      - ./config/bosch/opentelemetry.properties:/app/opentelemetry.properties
+      - ./config/bosch/logging.properties:/app/logging.properties
 
   provider-controlplane-bmw:
     container_name: provider-controlplane-bmw
     build:
-      context: ../edc-controlplane-memory
+      context: explorer/edc-integration/edc-controlplane-memory
       args:
         JAR: build/libs/edc.jar
     ports:
@@ -117,16 +117,16 @@ services:
       LOGGING_PROPERTIES_FILE: /app/logging.properties
       OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
     volumes:
-      - ./../certs/cert.pfx:/app/cert.pfx
-      - ./bmw/vault.properties:/app/vault.properties
-      - ./bmw/provider_cp_configuration.properties:/app/configuration.properties
-      - ./bmw/opentelemetry.properties:/app/opentelemetry.properties
-      - ./bmw/logging.properties:/app/logging.properties
+      - ./explorer/edc-integration/certs/cert.pfx:/app/cert.pfx
+      - ./config/bmw/vault.properties:/app/vault.properties
+      - ./config/bmw/provider_cp_configuration.properties:/app/configuration.properties
+      - ./config/bmw/opentelemetry.properties:/app/opentelemetry.properties
+      - ./config/bmw/logging.properties:/app/logging.properties
 
   provider-dataplane-bmw:
     container_name: provider-dataplane-bmw
     build:
-      context: ../edc-dataplane
+      context: explorer/edc-integration/edc-dataplane
       args:
         JAR: build/libs/edc.jar
     ports:
@@ -141,16 +141,16 @@ services:
       LOGGING_PROPERTIES_FILE: /app/logging.properties
       OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
     volumes:
-      - ./../certs/cert.pfx:/app/cert.pfx
-      - ./bmw/vault.properties:/app/vault.properties
-      - ./bmw/provider_dp_configuration.properties:/app/configuration.properties
-      - ./bmw/opentelemetry.properties:/app/opentelemetry.properties
-      - ./bmw/logging.properties:/app/logging.properties
+      - ./explorer/edc-integration/certs/cert.pfx:/app/cert.pfx
+      - ./config/bmw/vault.properties:/app/vault.properties
+      - ./config/bmw/provider_dp_configuration.properties:/app/configuration.properties
+      - ./config/bmw/opentelemetry.properties:/app/opentelemetry.properties
+      - ./config/bmw/logging.properties:/app/logging.properties
 
   provider-controlplane-daimler:
     container_name: provider-controlplane-daimler
     build:
-      context: ../edc-controlplane-memory
+      context: explorer/edc-integration/edc-controlplane-memory
       args:
         JAR: build/libs/edc.jar
     ports:
@@ -167,16 +167,16 @@ services:
       LOGGING_PROPERTIES_FILE: /app/logging.properties
       OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
     volumes:
-      - ./../certs/cert.pfx:/app/cert.pfx
-      - ./daimler/vault.properties:/app/vault.properties
-      - ./daimler/provider_cp_configuration.properties:/app/configuration.properties
-      - ./daimler/opentelemetry.properties:/app/opentelemetry.properties
-      - ./daimler/logging.properties:/app/logging.properties
+      - ./explorer/edc-integration/certs/cert.pfx:/app/cert.pfx
+      - ./config/daimler/vault.properties:/app/vault.properties
+      - ./config/daimler/provider_cp_configuration.properties:/app/configuration.properties
+      - ./config/daimler/opentelemetry.properties:/app/opentelemetry.properties
+      - ./config/daimler/logging.properties:/app/logging.properties
 
   provider-dataplane-daimler:
     container_name: provider-dataplane-daimler
     build:
-      context: ../edc-dataplane
+      context: explorer/edc-integration/edc-dataplane
       args:
         JAR: build/libs/edc.jar
     ports:
@@ -191,18 +191,15 @@ services:
       LOGGING_PROPERTIES_FILE: /app/logging.properties
       OPENTELEMETRY_PROPERTIES_FILE: /app/opentelemetry.properties
     volumes:
-      - ./../certs/cert.pfx:/app/cert.pfx
-      - ./daimler/vault.properties:/app/vault.properties
-      - ./daimler/provider_dp_configuration.properties:/app/configuration.properties
-      - ./daimler/opentelemetry.properties:/app/opentelemetry.properties
-      - ./daimler/logging.properties:/app/logging.properties
+      - ./explorer/edc-integration/certs/cert.pfx:/app/cert.pfx
+      - ./config/daimler/vault.properties:/app/vault.properties
+      - ./config/daimler/provider_dp_configuration.properties:/app/configuration.properties
+      - ./config/daimler/opentelemetry.properties:/app/opentelemetry.properties
+      - ./config/daimler/logging.properties:/app/logging.properties
 
   self-description-hub:
     container_name: self-description-hub
-    build:
-      context: ../../../self-description-hub-integration
-      args:
-        JAR: target/self-description-hub-integration-0.0.1-SNAPSHOT.jar
+    image: self-description-hub:latest
     ports:
       - "8090:8090"
 

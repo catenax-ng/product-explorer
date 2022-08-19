@@ -15,9 +15,9 @@
   </parent>
 
   <groupId>net.catenax</groupId>
-  <artifactId>self-description-hub-integration</artifactId>
+  <artifactId>self-description-hub</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>self-description-hub-integration</name>
+  <name>self-description-hub</name>
   <description>Integration module for SDH</description>
 
   <dependencies>
