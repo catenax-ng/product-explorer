@@ -1,0 +1,16 @@
+[
+  {
+    "company_number": "companyNumber1",
+    "headquarter_country": "headquarterCountry1",
+    "bpn": "bpn1",
+    "service_provider": "serviceProvider1",
+    "type": "type1"
+  },
+  {
+    "company_number": "companyNumber2",
+    "headquarter_country": "headquarterCountry2",
+    "bpn": "bpn2",
+    "service_provider": "serviceProvider2",
+    "type": "type2"
+  }
+]
