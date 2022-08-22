@@ -1,0 +1,96 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+title Sequence diagram of Explorer search
+actor User as user
+
+participant "Explorer" as explorer
+database "Self Description Hub" as sdh
+participant "ZF EDC DP Consumer" as zfEdcDpConsumer
+participant "ZF EDC CP Consumer" as zfEdcCpConsumer
+participant "Daimler EDC Provider" as daimlerEDCProvider
+participant "Bosch EDC Provider" as boschEDCProvider
+database "Daimler Twin registry" as daimlerTwinRegistry
+database "Bosch Twin registry" as boschTwinRegistry
+
+autonumber
+
+user -> explorer:search request
+activate explorer
+group Gathering assetIds
+explorer -> sdh
+activate sdh
+explorer <- sdh: returns list of EDCs
+deactivate sdh
+
+
+explorer -> zfEdcCpConsumer : for each known edc retrieve DataReference of registry
+activate zfEdcCpConsumer
+zfEdcCpConsumer -> daimlerEDCProvider
+activate daimlerEDCProvider
+zfEdcCpConsumer -> boschEDCProvider
+activate boschEDCProvider
+daimlerEDCProvider -> zfEdcCpConsumer
+deactivate daimlerEDCProvider
+boschEDCProvider -> zfEdcCpConsumer
+deactivate boschEDCProvider
+explorer <- zfEdcCpConsumer : returns DataReference of known registries
+deactivate zfEdcCpConsumer
+explorer -> zfEdcDpConsumer : search for matching submodels to given query as key:value
+activate zfEdcDpConsumer
+zfEdcDpConsumer -> daimlerEDCProvider
+activate daimlerEDCProvider
+daimlerEDCProvider -> daimlerTwinRegistry : GET /lookup with query as key:value
+activate daimlerTwinRegistry
+daimlerTwinRegistry -> daimlerEDCProvider : returns array of matching submodel assetIds
+deactivate daimlerTwinRegistry
+daimlerEDCProvider -> zfEdcDpConsumer
+deactivate daimlerEDCProvider
+zfEdcDpConsumer -> explorer : returns array of matching submodel assetIds
+zfEdcDpConsumer -> boschTwinRegistry : Same flow as for daimler above
+activate boschTwinRegistry
+boschTwinRegistry -> zfEdcDpConsumer : Same flow and response as for daimler above
+deactivate boschTwinRegistry
+deactivate zfEdcDpConsumer
+end
+
+group Getting wanted submodels by assetId
+explorer -> zfEdcCpConsumer : for each known edc retieve EndpointDataReference by assetsIds (if assetIds exists for given edc)
+activate zfEdcCpConsumer
+zfEdcCpConsumer -> daimlerEDCProvider
+activate daimlerEDCProvider
+zfEdcCpConsumer -> boschEDCProvider
+activate boschEDCProvider
+zfEdcCpConsumer <- daimlerEDCProvider : returns Daimler EndpointDataReference
+deactivate daimlerEDCProvider
+explorer <- zfEdcCpConsumer: returns Daimler EndpointDataReference
+zfEdcCpConsumer <- boschEDCProvider : returns Bosch EndpointDataReference
+deactivate boschEDCProvider
+explorer <- zfEdcCpConsumer: returns Bosch EndpointDataReference
+deactivate zfEdcCpConsumer
+
+explorer -> zfEdcDpConsumer: for each EndpointDataReference
+activate zfEdcDpConsumer
+
+zfEdcDpConsumer -> daimlerEDCProvider
+activate daimlerEDCProvider
+zfEdcDpConsumer -> boschEDCProvider
+activate boschEDCProvider
+daimlerEDCProvider -> daimlerTwinRegistry
+activate daimlerTwinRegistry
+boschEDCProvider -> boschTwinRegistry
+activate boschTwinRegistry
+daimlerEDCProvider <- daimlerTwinRegistry
+deactivate daimlerTwinRegistry
+zfEdcDpConsumer <- daimlerEDCProvider
+deactivate daimlerEDCProvider
+boschEDCProvider <- boschTwinRegistry
+deactivate boschTwinRegistry
+zfEdcDpConsumer <- boschEDCProvider
+deactivate boschEDCProvider
+explorer <- zfEdcDpConsumer
+deactivate zfEdcDpConsumer
+end
+user <- explorer: aggregated results
+deactivate explorer
+@enduml
