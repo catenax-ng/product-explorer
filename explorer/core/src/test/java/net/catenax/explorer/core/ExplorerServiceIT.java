@@ -15,7 +15,10 @@ import org.springframework.test.context.DynamicPropertySource;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -115,6 +118,33 @@ public class ExplorerServiceIT {
         StepVerifier
                 .create(descriptorFlux)
                 .expectNextMatches(descriptor -> descriptor.getIdShort().equals("Polonez 520e Plugin-Hybrid V2"))
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    void shouldNotFindAnything() {
+        wireMockServer.stubFor(
+                get(urlMatching("/self-desc-hub/*"))
+                        .willReturn(aResponse()
+                                .withStatus(HttpStatus.OK.value())
+                                .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                .withBodyFile("edc-locations.json")));
+
+        wireMockServer.stubFor(
+                get(urlEqualTo("/extension/1?providerUrl=serviceProvider1/api/v1/ids/data"))
+                        .willReturn(aResponse()
+                                .withStatus(HttpStatus.NO_CONTENT.value())));
+
+        wireMockServer.stubFor(
+                get(urlEqualTo("/extension/1?providerUrl=serviceProvider2/api/v1/ids/data"))
+                        .willReturn(aResponse()
+                                .withStatus(HttpStatus.NO_CONTENT.value())));
+
+        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search("1");
+
+        StepVerifier
+                .create(descriptorFlux)
                 .expectComplete()
                 .verify();
     }
