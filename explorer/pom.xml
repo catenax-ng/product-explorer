@@ -50,7 +50,7 @@
       <dependency>
         <groupId>org.eclipse.dataspaceconnector</groupId>
         <artifactId>contract-spi</artifactId>
-        <version>0.0.1-milestone-4</version>
+        <version>0.0.1-milestone-5.1</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.dataspaceconnector</groupId>
