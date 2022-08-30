@@ -60,7 +60,7 @@
       <dependency>
         <groupId>org.eclipse.dataspaceconnector</groupId>
         <artifactId>transfer-spi</artifactId>
-        <version>0.0.1-milestone-4</version>
+        <version>0.0.1-milestone-6</version>
       </dependency>
       <!-- Open API -->
       <dependency>
