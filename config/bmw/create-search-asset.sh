@@ -5,25 +5,27 @@ set -o errtrace
 set -o pipefail
 set -o nounset
 
-status_code=$(curl --location --request POST 'http://localhost:18087/api/v1/data/assets' \
+status_code=$(curl --location --request POST 'http://localhost:8087/api/v1/data/assets' \
               --header 'X-Api-Key: apipassword' \
               --header 'Content-Type: application/json' \
               --data-raw '{
                 "asset": {
                   "properties": {
-                    "asset:prop:id": "urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002",
-                    "asset:prop:name": "product description",
+                    "asset:prop:id": "search",
+                    "asset:prop:name": "search endpoint",
                     "asset:prop:contenttype": "application/json",
                     "asset:prop:policy-id": "use-eu"
                   }
                 },
                 "dataAddress": {
                   "properties": {
-                    "endpoint": "http://twin-registry-daimler:4243/registry/shell-descriptors/urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002",
-                    "type": "HttpData"
+                    "endpoint": "http://twin-registry-bmw:4243/lookup/shells",
+                    "type": "HttpData",
+                    "proxyQueryParams": "true"
                   }
                 }
               }'
 )
+
 
 echo $status_code

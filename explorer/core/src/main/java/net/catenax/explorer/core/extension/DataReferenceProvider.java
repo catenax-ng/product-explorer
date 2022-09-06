@@ -1,10 +1,9 @@
 package net.catenax.explorer.core.extension;
 
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
-
-import java.util.Optional;
+import reactor.core.publisher.Mono;
 
 public interface DataReferenceProvider {
 
-  Optional<EndpointDataReference> search(String query, String providerControlPlaneUrl);
+  Mono<EndpointDataReference> search(String query, String providerControlPlaneUrl);
 }

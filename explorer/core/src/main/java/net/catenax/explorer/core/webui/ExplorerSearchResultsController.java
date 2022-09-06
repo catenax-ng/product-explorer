@@ -1,6 +1,7 @@
 package net.catenax.explorer.core.webui;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.exception.ResourceNotFoundException;
 import net.catenax.explorer.core.webui.service.SearchResultsProvider;
@@ -14,6 +15,8 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import reactor.core.publisher.Flux;
 
+import java.net.URLEncoder;
+
 @RequestMapping("/search")
 @RequiredArgsConstructor
 @Slf4j
@@ -23,8 +26,11 @@ public class ExplorerSearchResultsController {
     private final SpringTemplateEngine templateEngine;
 
     @GetMapping
+    @SneakyThrows
     public String index(@RequestParam("query") String query, Model model) {
+        final String encodedQuery = URLEncoder.encode(query, "UTF-8").replaceAll("\\+", "%20");
         model.addAttribute("query", query);
+        model.addAttribute("encodedQuery", encodedQuery);
         return "search/search-result-page";
     }
 

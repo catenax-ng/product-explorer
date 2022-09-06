@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import reactor.core.publisher.Flux;
 
 @RequestMapping("v1/assets/")
@@ -17,8 +18,8 @@ public class ExplorerController {
   final ExplorerService explorerService;
 
   @GetMapping(path = "/stream/{query}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public Flux<ShellDescriptor> retrieveFlux(@PathVariable final String query) {
-    log.info("Querying for Asset by: " + query);
+  public @ResponseBody Flux<ShellDescriptor> searchById(@PathVariable final String query) {
+    log.info("Querying for Asset by query: " + query);
     return explorerService.search(query);
   }
 }
