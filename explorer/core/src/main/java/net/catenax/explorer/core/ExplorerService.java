@@ -26,6 +26,8 @@ public class ExplorerService {
 
   private final ObjectMapper objectMapper;
 
+  private final String searchAssetName;
+
   public Flux<ShellDescriptor> search(final String query) {
     if(query.startsWith("urn:uuid:")) {
       return searchById(query);
@@ -51,7 +53,7 @@ public class ExplorerService {
     return edcLocationProvider.getKnownEdcLocationsStream()
             .parallel()
             .runOn(Schedulers.boundedElastic())
-            .map(location -> dataReferenceProvider.search("search", location.getServiceProvider())) // TODO: configurable search param
+            .map(location -> dataReferenceProvider.search(searchAssetName, location.getServiceProvider()))
             .flatMap(endpointDataReference -> shellDescriptorLookupRetriever.lookupIds(endpointDataReference, buildLookupQuery(query)))
             .sequential()
             .flatMap(jsonAssetResponse -> {
