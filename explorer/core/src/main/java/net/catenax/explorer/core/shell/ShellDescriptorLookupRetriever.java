@@ -23,12 +23,12 @@ public class ShellDescriptorLookupRetriever {
 
     private final WebClient client;
 
-    public Flux<String> lookupIds(Mono<EndpointDataReference> maybeEndpointDataReference, String query) {
-        if(query.equals("")) {
+    public Flux<String> lookupIds(Mono<EndpointDataReference> potentialEndpointDataReference, String query) {
+        if(query.isBlank()) {
             return Flux.empty();
         }
 
-        return maybeEndpointDataReference.flatMapMany(endpointDataReference -> {
+        return potentialEndpointDataReference.flatMapMany(endpointDataReference -> {
             log.info("Retrieving shell from {}", endpointDataReference.getEndpoint());
             try {
                 final String encodedQuery = URLEncoder.encode(query, "UTF-8").replaceAll("\\+", "%20");

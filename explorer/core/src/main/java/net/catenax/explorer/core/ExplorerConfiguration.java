@@ -35,7 +35,7 @@ public class ExplorerConfiguration {
     }
 
     @Bean
-    ExplorerService explorerService(@Value("${app.search-asset-name:search}") String searchAssetName, EdcLocationProvider locationProvider, DataReferenceProvider dataReferenceProvider, ShellDescriptorRetriever shellDescriptorRetriever, ShellDescriptorLookupRetriever shellDescriptorLookupRetriever, ObjectMapper objectMapper) {
+    ExplorerService explorerService(@Value("${app.lookup-asset-name:lookup}") String searchAssetName, EdcLocationProvider locationProvider, DataReferenceProvider dataReferenceProvider, ShellDescriptorRetriever shellDescriptorRetriever, ShellDescriptorLookupRetriever shellDescriptorLookupRetriever, ObjectMapper objectMapper) {
         return new ExplorerService(locationProvider, dataReferenceProvider, shellDescriptorRetriever, shellDescriptorLookupRetriever, objectMapper, searchAssetName);
     }
 

@@ -9,10 +9,13 @@ import net.catenax.explorer.core.extension.DataReferenceProvider;
 import net.catenax.explorer.core.shell.ShellDescriptorLookupRetriever;
 import net.catenax.explorer.core.shell.ShellDescriptorResponse.ShellDescriptor;
 import net.catenax.explorer.core.shell.ShellDescriptorRetriever;
+import org.jetbrains.annotations.NotNull;
+import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.Arrays;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -56,18 +59,23 @@ public class ExplorerService {
             .map(location -> dataReferenceProvider.search(searchAssetName, location.getServiceProvider()))
             .flatMap(endpointDataReference -> shellDescriptorLookupRetriever.lookupIds(endpointDataReference, buildLookupQuery(query)))
             .sequential()
-            .flatMap(jsonAssetResponse -> {
-              try {
-                return Flux.fromArray(objectMapper.readValue(jsonAssetResponse, String[].class));
-              } catch (JsonProcessingException e) {
-                log.error("Cannot parse lookup response", e);
-                return Flux.empty();
-              }
-            })
+            .flatMap(parseToSeparateValues())
             .doOnNext(assetId -> log.info("Got assetId: " + assetId));
   }
 
-  private String buildLookupQuery(String query) {
+    @NotNull
+    private Function<String, Publisher<? extends String>> parseToSeparateValues() {
+        return jsonAssetResponse -> {
+            try {
+                return Flux.fromArray(objectMapper.readValue(jsonAssetResponse, String[].class));
+            } catch (JsonProcessingException e) {
+                log.error("Cannot parse lookup response", e);
+                return Flux.empty();
+            }
+        };
+    }
+
+    private String buildLookupQuery(String query) {
     try {
       if (query.startsWith("assetIds=[")) {
         return query;
@@ -79,7 +87,7 @@ public class ExplorerService {
                 return "\"key\": \"%s\", \"value\": \"%s\"" .formatted(values[0].trim(), values[1].trim());
               })
               .collect(Collectors.joining("},{"));
-      return "assetIds=[{%s}]" .formatted(filterBody);
+      return "assetIds=[{%s}]".formatted(filterBody);
     } catch (Exception e) {
        return "";
     }
