@@ -14,7 +14,7 @@ import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-import java.util.Arrays;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -22,46 +22,44 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ExplorerService {
 
-  private final EdcLocationProvider edcLocationProvider;
-  private final DataReferenceProvider dataReferenceProvider;
-  private final ShellDescriptorRetriever shellDescriptorRetriever;
-  private final ShellDescriptorLookupRetriever shellDescriptorLookupRetriever;
+    private final EdcLocationProvider edcLocationProvider;
+    private final DataReferenceProvider dataReferenceProvider;
+    private final ShellDescriptorRetriever shellDescriptorRetriever;
+    private final ShellDescriptorLookupRetriever shellDescriptorLookupRetriever;
 
-  private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-  private final String searchAssetName;
+    private final String searchAssetName;
+    public Flux<ShellDescriptor> search(final Map<String, String> params) {
+        if (params.get("ID") != null) {
+            return searchById(params.get("ID"));
+        }
 
-  public Flux<ShellDescriptor> search(final String query) {
-    if(query.startsWith("urn:uuid:")) {
-      return searchById(query);
+        return searchAssetIdByQuery(buildLookupQuery(params))
+                .distinct()
+                .flatMap(this::searchById);
     }
 
-    return searchAssetIdByQuery(query)
-            .distinct()
-            .flatMap(this::searchById);
-  }
+    private Flux<ShellDescriptor> searchById(final String assetId) {
+        return edcLocationProvider.getKnownEdcLocationsStream()
+                .parallel()
+                .runOn(Schedulers.boundedElastic())
+                .map(location -> dataReferenceProvider.search(assetId, location.getServiceProvider()))
+                .flatMap(shellDescriptorRetriever::retrieve)
+                .sequential()
+                .doOnNext(shellDescriptor -> log.info("Got shell descriptor: " + shellDescriptor));
+    }
 
-  private Flux<ShellDescriptor> searchById(final String assetId) {
-    return edcLocationProvider.getKnownEdcLocationsStream()
-        .parallel()
-        .runOn(Schedulers.boundedElastic())
-        .map(location -> dataReferenceProvider.search(assetId, location.getServiceProvider()))
-        .flatMap(shellDescriptorRetriever::retrieve)
-        .sequential()
-        .doOnNext(shellDescriptor -> log.info("Got shell descriptor: " + shellDescriptor));
-  }
-
-  private Flux<String> searchAssetIdByQuery(final String query) {
-
-    return edcLocationProvider.getKnownEdcLocationsStream()
-            .parallel()
-            .runOn(Schedulers.boundedElastic())
-            .map(location -> dataReferenceProvider.search(searchAssetName, location.getServiceProvider()))
-            .flatMap(endpointDataReference -> shellDescriptorLookupRetriever.lookupIds(endpointDataReference, buildLookupQuery(query)))
-            .sequential()
-            .flatMap(parseToSeparateValues())
-            .doOnNext(assetId -> log.info("Got assetId: " + assetId));
-  }
+    private Flux<String> searchAssetIdByQuery(final String query) {
+        return edcLocationProvider.getKnownEdcLocationsStream()
+                .parallel()
+                .runOn(Schedulers.boundedElastic())
+                .map(location -> dataReferenceProvider.search(searchAssetName, location.getServiceProvider()))
+                .flatMap(endpointDataReference -> shellDescriptorLookupRetriever.lookupIds(endpointDataReference, query))
+                .sequential()
+                .flatMap(parseToSeparateValues())
+                .doOnNext(assetId -> log.info("Got assetId: " + assetId));
+    }
 
     @NotNull
     private Function<String, Publisher<? extends String>> parseToSeparateValues() {
@@ -75,21 +73,12 @@ public class ExplorerService {
         };
     }
 
-    private String buildLookupQuery(String query) {
-    try {
-      if (query.startsWith("assetIds=[")) {
-        return query;
-      }
-      final String filterBody = Arrays.stream(query.split(","))
-              .distinct()
-              .map(filter -> {
-                final String[] values = filter.split(":");
-                return "\"key\": \"%s\", \"value\": \"%s\"" .formatted(values[0].trim(), values[1].trim());
-              })
-              .collect(Collectors.joining("},{"));
-      return "assetIds=[{%s}]".formatted(filterBody);
-    } catch (Exception e) {
-       return "";
+    private String buildLookupQuery(final Map<String, String> params) {
+        final String filterBody = params
+                .entrySet()
+                .stream()
+                .map(entry -> "\"key\": \"%s\", \"value\": \"%s\"" .formatted(entry.getKey().trim(), entry.getValue().trim()))
+                .collect(Collectors.joining("},{"));
+        return "assetIds=[{%s}]" .formatted(filterBody);
     }
-  }
 }

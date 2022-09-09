@@ -10,9 +10,6 @@ import net.catenax.explorer.core.shell.ShellDescriptorRetriever;
 import net.catenax.explorer.core.webui.ExplorerSearchController;
 import net.catenax.explorer.core.webui.ExplorerSearchResultsController;
 import net.catenax.explorer.core.webui.ExplorerStatusController;
-import net.catenax.explorer.core.webui.service.DataSearchResultsProvider;
-import net.catenax.explorer.core.webui.service.MockDataSearchResultsProvider;
-import net.catenax.explorer.core.webui.service.SearchResultsProvider;
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -50,11 +47,8 @@ public class ExplorerConfiguration {
     }
 
     @Bean
-    ExplorerSearchResultsController explorerSearchResultsController(@Value("${app.use-mockup-data:false}") boolean useMockupData,
-                                                                    ObjectMapper objectMapper,
-                                                                    ExplorerService explorerService,
+    ExplorerSearchResultsController explorerSearchResultsController(ExplorerService explorerService,
                                                                     SpringTemplateEngine templateEngine) {
-        SearchResultsProvider searchResultsProvider = useMockupData ? new MockDataSearchResultsProvider(objectMapper) : new DataSearchResultsProvider(explorerService);
-        return new ExplorerSearchResultsController(searchResultsProvider, templateEngine);
+        return new ExplorerSearchResultsController(explorerService, templateEngine);
     }
 }

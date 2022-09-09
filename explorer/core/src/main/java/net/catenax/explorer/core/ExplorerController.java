@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.shell.ShellDescriptorResponse.ShellDescriptor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import reactor.core.publisher.Flux;
+
+import java.util.Map;
 
 @RequestMapping("v1/assets/")
 @RequiredArgsConstructor
@@ -17,8 +19,8 @@ public class ExplorerController {
 
   final ExplorerService explorerService;
 
-  @GetMapping(path = "/stream/{query}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public @ResponseBody Flux<ShellDescriptor> searchById(@PathVariable final String query) {
+  @PostMapping(path = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public @ResponseBody Flux<ShellDescriptor> search(@RequestParam final Map<String, String> query) {
     log.info("Querying for Asset by query: " + query);
     return explorerService.search(query);
   }
