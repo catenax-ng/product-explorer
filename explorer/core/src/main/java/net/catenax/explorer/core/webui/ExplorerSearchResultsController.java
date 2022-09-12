@@ -1,9 +1,10 @@
 package net.catenax.explorer.core.webui;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import net.catenax.explorer.core.ExplorerService;
 import net.catenax.explorer.core.exception.ResourceNotFoundException;
-import net.catenax.explorer.core.webui.service.SearchResultsProvider;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,25 +15,35 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import reactor.core.publisher.Flux;
 
+import java.net.URLEncoder;
+import java.util.Map;
+
 @RequestMapping("/search")
 @RequiredArgsConstructor
 @Slf4j
 public class ExplorerSearchResultsController {
 
-    private final SearchResultsProvider searchResultsProvider;
+    private final ExplorerService explorerService;
     private final SpringTemplateEngine templateEngine;
 
     @GetMapping
-    public String index(@RequestParam("query") String query, Model model) {
+    @SneakyThrows
+    public String index(@RequestParam("key") String key, @RequestParam("query") String query, Model model) {
+        final String encodedQuery = URLEncoder.encode(query, "UTF-8").replaceAll("\\+", "%20");
+        final String encodedKey = URLEncoder.encode(key, "UTF-8").replaceAll("\\+", "%20");
         model.addAttribute("query", query);
+        model.addAttribute("key", key);
+        model.addAttribute("encodedQuery", encodedQuery);
+        model.addAttribute("encodedKey", encodedKey);
+
         return "search/search-result-page";
     }
 
     @GetMapping(path = "/results-by-sse")
-    public Flux<ServerSentEvent<String>> searchBySSE(@RequestParam("query") String query, Model model) {
+    public Flux<ServerSentEvent<String>> searchBySSE(@RequestParam("key") String key, @RequestParam("query") String query, Model model) {
         final String completedMessage = templateEngine.process("search/search-result-page-completed-msg", new Context()).replaceAll("\n", "");
         return Flux.create(sink -> {
-            searchResultsProvider.search(query)
+            explorerService.search(Map.of(key, query))
                     .map(shellDescriptor -> {
                         Context context = new Context();
                         context.setVariable("shellDescriptor", shellDescriptor);
@@ -65,8 +76,6 @@ public class ExplorerSearchResultsController {
 
     @PostMapping("/submodel")
     public String getSubmodelData(Model model, @RequestParam("url") String url) {
-        String submodelData = searchResultsProvider.getSubmodelData(url);
-        model.addAttribute("submodelData", submodelData);
-        return "search/submodel-page-data";
+        throw new UnsupportedOperationException();
     }
 }

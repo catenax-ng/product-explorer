@@ -11,7 +11,7 @@ status_code=$(curl --location --request POST 'http://localhost:8087/api/v1/data/
               --data-raw '{
                 "asset": {
                   "properties": {
-                    "asset:prop:id": "urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002-urn:uuid:61125dc3-5e6f-4f4b-838d-447432b97918",
+                    "asset:prop:id": "urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002",
                     "asset:prop:name": "product description",
                     "asset:prop:contenttype": "application/json",
                     "asset:prop:policy-id": "use-eu"

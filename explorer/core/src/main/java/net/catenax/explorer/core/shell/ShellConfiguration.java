@@ -11,4 +11,9 @@ public class ShellConfiguration {
   ShellDescriptorRetriever shellDescriptorRetriever(WebClient client) {
     return new ShellDescriptorRetriever(client);
   }
+
+  @Bean
+  ShellDescriptorLookupRetriever shellDescriptorLookupRetriever(WebClient client) {
+    return new ShellDescriptorLookupRetriever(client);
+  }
 }
