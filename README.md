@@ -68,7 +68,7 @@ docker-compose up --build
 
 ## Initialize services with needed data
 
-Run `./populate-edcs.sh` and `./populate-twin-registries.sh` in order to populate services with needed test data.
+Run `./populate.sh` in order to populate services with needed test data.
 
 After everything was booted and initialized, the UI can be accessed with this url:
 <http://localhost:8080> and search for given submodel: `urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002-urn:uuid:61125dc3-5e6f-4f4b-838d-447432b97918`
