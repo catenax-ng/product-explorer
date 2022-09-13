@@ -25,7 +25,6 @@ public class ExplorerService {
     private final DataReferenceProvider dataReferenceProvider;
     private final ShellDescriptorRetriever shellDescriptorRetriever;
     private final ShellDescriptorLookupRetriever shellDescriptorLookupRetriever;
-
     private final ObjectMapper objectMapper;
     private final String searchAssetName;
 
