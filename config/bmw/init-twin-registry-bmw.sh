@@ -17,11 +17,11 @@ curl --location --request POST 'localhost:4244/registry/shell-descriptors' \
     ],
     "globalAssetId": {
         "value": [
-            "urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002"
+            "urn:uuid:a0e5ec34-1e31-4de1-86b1-5e79d7e8164f"
         ]
     },
     "idShort": "BMW 520e Plugin-Hybrid",
-    "identification": "urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002",
+    "identification": "urn:uuid:a0e5ec34-1e31-4de1-86b1-5e79d7e8164f",
     "specificAssetIds": [
         {
             "key": "PartNumber",
@@ -29,7 +29,7 @@ curl --location --request POST 'localhost:4244/registry/shell-descriptors' \
         },
         {
             "key": "VAN",
-            "value": "7e97f714-0785-3f9d-ac37-b31989097be3"
+            "value": "85696fe3-00f5-41e2-aca9-3955928fc5ab"
         }
     ],
     "submodelDescriptors": [

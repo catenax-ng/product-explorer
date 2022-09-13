@@ -2,6 +2,9 @@ package net.catenax.explorer.core;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
@@ -14,10 +17,6 @@ import org.reactivestreams.Publisher;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 @RequiredArgsConstructor
 @Slf4j
 public class ExplorerService {
@@ -28,8 +27,8 @@ public class ExplorerService {
     private final ShellDescriptorLookupRetriever shellDescriptorLookupRetriever;
 
     private final ObjectMapper objectMapper;
-
     private final String searchAssetName;
+
     public Flux<ShellDescriptor> search(final Map<String, String> params) {
         if (params.get("ID") != null) {
             return searchById(params.get("ID"));

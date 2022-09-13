@@ -17,7 +17,7 @@ autonumber
 
 user -> explorer:search request
 activate explorer
-group Gathering assetIds
+group Gathering DTR references
 explorer -> sdh
 activate sdh
 explorer <- sdh: returns list of EDCs
@@ -36,7 +36,10 @@ boschEDCProvider -> zfEdcCpConsumer
 deactivate boschEDCProvider
 explorer <- zfEdcCpConsumer : returns DataReference of known registries
 deactivate zfEdcCpConsumer
-explorer -> zfEdcDpConsumer : search for matching submodels to given query as key:value
+end
+
+group Gathering assetIds
+explorer -> zfEdcDpConsumer : search for matching assets to given query as key:value
 activate zfEdcDpConsumer
 zfEdcDpConsumer -> daimlerEDCProvider
 activate daimlerEDCProvider
@@ -46,7 +49,7 @@ daimlerTwinRegistry -> daimlerEDCProvider : returns array of matching submodel a
 deactivate daimlerTwinRegistry
 daimlerEDCProvider -> zfEdcDpConsumer
 deactivate daimlerEDCProvider
-zfEdcDpConsumer -> explorer : returns array of matching submodel assetIds
+zfEdcDpConsumer -> explorer : returns array of matching assetIds
 zfEdcDpConsumer -> boschTwinRegistry : Same flow as for daimler above
 activate boschTwinRegistry
 boschTwinRegistry -> zfEdcDpConsumer : Same flow and response as for daimler above
@@ -54,7 +57,7 @@ deactivate boschTwinRegistry
 deactivate zfEdcDpConsumer
 end
 
-group Getting wanted shell descriptors by assetId
+group Gathering shell descriptors by assetId
 explorer -> zfEdcCpConsumer : for each known edc retieve EndpointDataReference by assetsIds (if assetIds exists for given edc)
 activate zfEdcCpConsumer
 zfEdcCpConsumer -> daimlerEDCProvider
@@ -90,9 +93,9 @@ deactivate boschEDCProvider
 explorer <- zfEdcDpConsumer
 deactivate zfEdcDpConsumer
 end
-user <- explorer: (optional) aggregated results
+user <- explorer: aggregated results
 
-group Get real submodel (example for one provider only)
+group Get submodel (example for one provider only)
 explorer -> zfEdcCpConsumer: Get submodel EndpointDataReference via endpoint in ShellDescriptor
 activate zfEdcCpConsumer
 zfEdcCpConsumer -> daimlerEDCProvider
@@ -103,15 +106,11 @@ zfEdcCpConsumer -> explorer: Returns EndpointDataReference of the submodel
 
 explorer -> zfEdcDpConsumer: for each EndpointDataReference
 activate zfEdcDpConsumer
-zfEdcDpConsumer -> daimlerEDCProvider: Get real submodel
+zfEdcDpConsumer -> daimlerEDCProvider: Get submodel
 activate daimlerEDCProvider
-daimlerEDCProvider -> daimlerTwinRegistry
-activate daimlerTwinRegistry
-daimlerEDCProvider <- daimlerTwinRegistry
-deactivate daimlerTwinRegistry
 zfEdcDpConsumer <- daimlerEDCProvider
 deactivate daimlerEDCProvider
-explorer <- zfEdcDpConsumer: Returns real submodel
+explorer <- zfEdcDpConsumer: Returns submodel
 deactivate zfEdcDpConsumer
 end
 deactivate explorer

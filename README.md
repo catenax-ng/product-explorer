@@ -52,7 +52,7 @@ https://github.com/marcingajek-zf/product-edc-cp-adapter.git
 ```shell
 cd edc-controlplane/edc-controlplane-memory
 mvn clean package -DSkipTests
-docker image buil -t edc-controlplane-memory-with-extension .
+docker image build -t edc-controlplane-memory-with-extension .
 ```
 
 ### Build SDH - Self description hub

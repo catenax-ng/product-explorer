@@ -12,7 +12,7 @@ status_code=$(curl --location --request POST 'http://localhost:8087/api/v1/data/
                 "uid": "231802-bb34-11ec-8422-0242ac120002",
                 "permissions": [
                   {
-                    "target": "urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002-urn:uuid:61125dc3-5e6f-4f4b-838d-447432b97918",
+                    "target": "urn:uuid:a0e5ec34-1e31-4de1-86b1-5e79d7e8164f-urn:uuid:61125dc3-5e6f-4f4b-838d-447432b97918",
                     "action": {
                       "type": "USE"
                     },

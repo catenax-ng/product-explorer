@@ -11,7 +11,7 @@ status_code=$(curl --location --request POST 'http://localhost:8087/api/v1/data/
               --data-raw '{
                 "asset": {
                   "properties": {
-                    "asset:prop:id": "urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002",
+                    "asset:prop:id": "urn:uuid:a0e5ec34-1e31-4de1-86b1-5e79d7e8164f",
                     "asset:prop:name": "product description",
                     "asset:prop:contenttype": "application/json",
                     "asset:prop:policy-id": "use-eu"
@@ -19,7 +19,7 @@ status_code=$(curl --location --request POST 'http://localhost:8087/api/v1/data/
                 },
                 "dataAddress": {
                   "properties": {
-                    "endpoint": "http://twin-registry-bmw:4243/registry/shell-descriptors/urn:uuid:365e6fbe-bb34-11ec-8422-0242ac120002",
+                    "endpoint": "http://twin-registry-bmw:4243/registry/shell-descriptors/urn:uuid:a0e5ec34-1e31-4de1-86b1-5e79d7e8164f",
                     "type": "HttpData"
                   }
                 }
