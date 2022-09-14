@@ -18,7 +18,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -42,7 +41,7 @@ public class ExplorerService {
 
     @NotNull
     private Flux<ShellDescriptor> searchByParameters(QueryCommand queryCommand) {
-        return searchAssetIdByQuery(queryCommand.toStringParam(objectMapper))
+        return searchAssetIdByQuery(queryCommand.toStringParams(objectMapper))
                 .distinct()
                 .flatMap(this::searchById);
     }
@@ -83,20 +82,35 @@ public class ExplorerService {
     @Value
     @AllArgsConstructor
     public static class QueryCommand {
-        List<Map<String, String>> queryParams;
+        List<QueryCommandParam> queryParams;
+
+        public static QueryCommand create(String key, String value) {
+            return new QueryCommand(List.of(new QueryCommandParam(key, value)));
+        }
 
         @JsonIgnore
         public Optional<String> getIdValue() {
             if(queryParams.size() != 1) return Optional.empty();
-            final Map<String, String> queryMap = queryParams.get(0);
-            return Optional.ofNullable(
-                    Optional.ofNullable(queryMap.get("ID")).orElseGet(() -> queryMap.get("id"))
-            );
+            final QueryCommandParam param = queryParams.get(0);
+            if(param.getKey().equals("ID")){
+                return Optional.ofNullable(param.getValue());
+            }
+            if(param.getKey().equals("id")){
+                return Optional.ofNullable(param.getValue());
+            }
+            return Optional.empty();
         }
 
         @SneakyThrows
-        public String toStringParam(ObjectMapper objectMapper) {
+        public String toStringParams(ObjectMapper objectMapper) {
             return  objectMapper.writeValueAsString(queryParams);
         }
+    }
+
+    @Value
+    @AllArgsConstructor
+    public static class QueryCommandParam {
+        String key;
+        String value;
     }
 }

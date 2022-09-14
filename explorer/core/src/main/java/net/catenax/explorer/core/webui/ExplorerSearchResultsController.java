@@ -16,8 +16,6 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import reactor.core.publisher.Flux;
 
 import java.net.URLEncoder;
-import java.util.List;
-import java.util.Map;
 
 @RequestMapping("/search")
 @RequiredArgsConstructor
@@ -44,7 +42,7 @@ public class ExplorerSearchResultsController {
     public Flux<ServerSentEvent<String>> searchBySSE(@RequestParam("key") String key, @RequestParam("query") String query, Model model) {
         final String completedMessage = templateEngine.process("search/search-result-page-completed-msg", new Context()).replaceAll("\n", "");
         return Flux.create(sink -> {
-            explorerService.search(new ExplorerService.QueryCommand(List.of(Map.of(key, query))))
+            explorerService.search(ExplorerService.QueryCommand.create(key, query))
                     .map(shellDescriptor -> {
                         Context context = new Context();
                         context.setVariable("shellDescriptor", shellDescriptor);

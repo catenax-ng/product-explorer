@@ -15,9 +15,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-import java.util.List;
-import java.util.Map;
-
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -75,7 +72,7 @@ public class ExplorerServiceIT {
                                 .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                 .withBodyFile("data2.json")));
 
-        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search(new ExplorerService.QueryCommand(List.of(Map.of("ID", "1"))));
+        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search(ExplorerService.QueryCommand.create("ID", "1"));
 
         StepVerifier
                 .create(descriptorFlux)
@@ -113,7 +110,7 @@ public class ExplorerServiceIT {
                                 .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                 .withBodyFile("data2.json")));
 
-        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search(new ExplorerService.QueryCommand(List.of(Map.of("ID", "1"))));
+        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search((ExplorerService.QueryCommand.create("ID", "1")));
 
         StepVerifier
                 .create(descriptorFlux)
@@ -141,7 +138,7 @@ public class ExplorerServiceIT {
                         .willReturn(aResponse()
                                 .withStatus(HttpStatus.NO_CONTENT.value())));
 
-        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search(new ExplorerService.QueryCommand(List.of(Map.of("ID", "1"))));
+        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search((ExplorerService.QueryCommand.create("ID", "1")));
 
         StepVerifier
                 .create(descriptorFlux)
