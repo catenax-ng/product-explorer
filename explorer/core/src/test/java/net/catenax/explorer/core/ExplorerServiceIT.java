@@ -72,7 +72,7 @@ public class ExplorerServiceIT {
                                 .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                 .withBodyFile("data2.json")));
 
-        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search(ExplorerService.QueryCommand.create("ID", "1"));
+        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search(QueryCommand.create("ID", "1"));
 
         StepVerifier
                 .create(descriptorFlux)
@@ -110,7 +110,7 @@ public class ExplorerServiceIT {
                                 .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                 .withBodyFile("data2.json")));
 
-        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search((ExplorerService.QueryCommand.create("ID", "1")));
+        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search((QueryCommand.create("ID", "1")));
 
         StepVerifier
                 .create(descriptorFlux)
@@ -138,7 +138,7 @@ public class ExplorerServiceIT {
                         .willReturn(aResponse()
                                 .withStatus(HttpStatus.NO_CONTENT.value())));
 
-        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search((ExplorerService.QueryCommand.create("ID", "1")));
+        final Flux<ShellDescriptorResponse.ShellDescriptor> descriptorFlux = explorerService.search((QueryCommand.create("ID", "1")));
 
         StepVerifier
                 .create(descriptorFlux)

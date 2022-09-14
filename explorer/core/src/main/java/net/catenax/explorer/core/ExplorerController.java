@@ -18,7 +18,7 @@ public class ExplorerController {
   final ExplorerService explorerService;
 
   @PostMapping(path = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public @ResponseBody Flux<ShellDescriptor> search(@RequestParam final ExplorerService.QueryCommand command) {
+  public @ResponseBody Flux<ShellDescriptor> search(@RequestParam final QueryCommand command) {
     log.info("Querying for Asset by query: " + command);
     return explorerService.search(command);
   }
