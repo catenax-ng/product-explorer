@@ -10,6 +10,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.Duration;
 
 import static java.util.Objects.isNull;
@@ -21,17 +23,38 @@ public class ShellDescriptorRetriever {
 
     private final WebClient client;
 
-    public Flux<ShellDescriptor> retrieve(Mono<EndpointDataReference> maybeEndpointDataReference) {
-        return maybeEndpointDataReference.flatMapMany(endpointDataReference -> {
-            log.info("Retrieving shell from {}", endpointDataReference.getEndpoint());
-            return client.get()
-                    .uri(endpointDataReference.getEndpoint())
-                    .header(resolveHeader(endpointDataReference), endpointDataReference.getAuthCode())
-                    .retrieve()
-                    .bodyToFlux(ShellDescriptor.class)
-                    .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(1)))
-                    .onErrorResume(throwable -> Flux.empty());
+    public Flux<String> lookupIds(Mono<EndpointDataReference> potentialEndpointDataReference, String query) {
+        if (query.isBlank()) {
+            return Flux.empty();
+        }
+
+        return potentialEndpointDataReference.flatMapMany(endpointDataReference -> {
+            try {
+                final String url = endpointDataReference.getEndpoint() + "?assetIds=" + URLEncoder.encode(query, "UTF-8").replaceAll("\\+", "%20");
+                log.info("Retrieving shell from {}", url);
+                return retrieve(endpointDataReference, url, String.class);
+            } catch (UnsupportedEncodingException e) {
+                log.error("Encoding query param error", e);
+                return Flux.empty();
+            }
         });
+    }
+
+    public Flux<ShellDescriptor> retrieve(Mono<EndpointDataReference> potentialEndpointDataReference) {
+        return potentialEndpointDataReference.flatMapMany(endpointDataReference ->
+                retrieve(endpointDataReference, endpointDataReference.getEndpoint(), ShellDescriptor.class)
+        );
+    }
+
+    private <T> Flux<T> retrieve(EndpointDataReference endpointDataReference, String url, Class<T> clazz) {
+        log.info("Retrieving shell from {}", url);
+        return client.get()
+                .uri(url)
+                .header(resolveHeader(endpointDataReference), endpointDataReference.getAuthCode())
+                .retrieve()
+                .bodyToFlux(clazz)
+                .retryWhen(Retry.fixedDelay(5, Duration.ofSeconds(1)))
+                .onErrorResume(throwable -> Flux.empty());
     }
 
     private String resolveHeader(EndpointDataReference endpointDataReference) {
