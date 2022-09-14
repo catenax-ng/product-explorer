@@ -1,17 +1,18 @@
 package net.catenax.explorer.core.shell;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.catenax.explorer.core.QueryCommand;
 import net.catenax.explorer.core.shell.ShellDescriptorResponse.ShellDescriptor;
 import org.eclipse.dataspaceconnector.spi.types.domain.edr.EndpointDataReference;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.time.Duration;
 
 import static java.util.Objects.isNull;
@@ -22,21 +23,19 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public class ShellDescriptorRetriever {
 
     private final WebClient client;
+    private final ObjectMapper objectMapper;
 
-    public Flux<String> lookupIds(Mono<EndpointDataReference> potentialEndpointDataReference, String query) {
-        if (query.isBlank()) {
-            return Flux.empty();
-        }
+    public Flux<String> lookupIds(Mono<EndpointDataReference> potentialEndpointDataReference, final QueryCommand queryCommand) {
+        final String queryParams = queryCommand.toStringParams(objectMapper);
 
         return potentialEndpointDataReference.flatMapMany(endpointDataReference -> {
-            try {
-                final String url = endpointDataReference.getEndpoint() + "?assetIds=" + URLEncoder.encode(query, "UTF-8").replaceAll("\\+", "%20");
-                log.info("Retrieving shell from {}", url);
-                return retrieve(endpointDataReference, url, String.class);
-            } catch (UnsupportedEncodingException e) {
-                log.error("Encoding query param error", e);
-                return Flux.empty();
-            }
+            String url = UriComponentsBuilder.fromHttpUrl(endpointDataReference.getEndpoint())
+                    .queryParam("assetIds", queryParams)
+                    .build()
+                    .encode()
+                    .toUriString();
+            log.info("Retrieving shell from {}", url);
+            return retrieve(endpointDataReference, url, String.class);
         });
     }
 

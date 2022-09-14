@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.Value;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,15 +24,10 @@ public class QueryCommand {
 
     @JsonIgnore
     public Optional<String> getIdValue() {
-        if (queryParams.size() != 1) return Optional.empty();
-        final QueryCommandParam param = queryParams.get(0);
-        if (param.getKey().equals("ID")) {
-            return Optional.ofNullable(param.getValue());
-        }
-        if (param.getKey().equals("id")) {
-            return Optional.ofNullable(param.getValue());
-        }
-        return Optional.empty();
+        return Optional.ofNullable(queryParams).orElse(Collections.emptyList()).stream()
+                .filter(queryCommandParam -> "id".equalsIgnoreCase(queryCommandParam.getKey()))
+                .map(QueryCommandParam::getValue)
+                .findFirst();
     }
 
     @SneakyThrows

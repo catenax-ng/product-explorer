@@ -35,7 +35,7 @@ public class ExplorerService {
 
     @NotNull
     private Flux<ShellDescriptor> searchByParameters(QueryCommand queryCommand) {
-        return searchAssetIdByQuery(queryCommand.toStringParams(objectMapper))
+        return searchAssetIdByQuery(queryCommand)
                 .distinct()
                 .flatMap(this::searchById);
     }
@@ -50,12 +50,12 @@ public class ExplorerService {
                 .doOnNext(shellDescriptor -> log.info("Got shell descriptor: " + shellDescriptor));
     }
 
-    private Flux<String> searchAssetIdByQuery(final String query) {
+    private Flux<String> searchAssetIdByQuery(final QueryCommand queryCommand) {
         return edcLocationProvider.getKnownEdcLocationsStream()
                 .parallel()
                 .runOn(Schedulers.boundedElastic())
                 .map(location -> dataReferenceProvider.search(searchAssetName, location.getServiceProvider()))
-                .flatMap(endpointDataReference -> shellDescriptorRetriever.lookupIds(endpointDataReference, query))
+                .flatMap(endpointDataReference -> shellDescriptorRetriever.lookupIds(endpointDataReference, queryCommand))
                 .sequential()
                 .flatMap(parseToSeparateValues())
                 .doOnNext(assetId -> log.info("Got assetId: " + assetId));
