@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.edclocation.EdcLocationProvider;
 import net.catenax.explorer.core.extension.DataReferenceProvider;
-import net.catenax.explorer.core.shell.ShellDescriptorLookupRetriever;
 import net.catenax.explorer.core.shell.ShellDescriptorRetriever;
 import net.catenax.explorer.core.webui.ExplorerSearchController;
 import net.catenax.explorer.core.webui.ExplorerSearchResultsController;
@@ -32,8 +31,8 @@ public class ExplorerConfiguration {
     }
 
     @Bean
-    ExplorerService explorerService(@Value("${app.lookup-asset-name:lookup}") String searchAssetName, EdcLocationProvider locationProvider, DataReferenceProvider dataReferenceProvider, ShellDescriptorRetriever shellDescriptorRetriever, ShellDescriptorLookupRetriever shellDescriptorLookupRetriever, ObjectMapper objectMapper) {
-        return new ExplorerService(locationProvider, dataReferenceProvider, shellDescriptorRetriever, shellDescriptorLookupRetriever, objectMapper, searchAssetName);
+    ExplorerService explorerService(@Value("${app.lookup-asset-name:lookup}") String searchAssetName, EdcLocationProvider locationProvider, DataReferenceProvider dataReferenceProvider, ShellDescriptorRetriever shellDescriptorRetriever, ObjectMapper objectMapper) {
+        return new ExplorerService(locationProvider, dataReferenceProvider, shellDescriptorRetriever, objectMapper, searchAssetName);
     }
 
     @Bean
