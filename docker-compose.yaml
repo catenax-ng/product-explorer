@@ -27,7 +27,7 @@ services:
 
   consumer-controlplane-zf:
     container_name: consumer-controlplane-zf
-    image: "edc-controlplane-memory-with-extension:latest"
+    image: "zfdos.azurecr.io/edc-controlplane-memory-apiwrapper-extension:v1"
     ports:
       - "28182:8282" # ids
       - "28185:8185" # public
