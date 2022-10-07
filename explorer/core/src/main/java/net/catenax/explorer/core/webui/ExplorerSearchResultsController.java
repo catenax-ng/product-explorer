@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.catenax.explorer.core.ExplorerService;
+import net.catenax.explorer.core.QueryCommand;
 import net.catenax.explorer.core.exception.ResourceNotFoundException;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.ui.Model;
@@ -16,7 +17,6 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import reactor.core.publisher.Flux;
 
 import java.net.URLEncoder;
-import java.util.Map;
 
 @RequestMapping("/search")
 @RequiredArgsConstructor
@@ -43,7 +43,7 @@ public class ExplorerSearchResultsController {
     public Flux<ServerSentEvent<String>> searchBySSE(@RequestParam("key") String key, @RequestParam("query") String query, Model model) {
         final String completedMessage = templateEngine.process("search/search-result-page-completed-msg", new Context()).replaceAll("\n", "");
         return Flux.create(sink -> {
-            explorerService.search(Map.of(key, query))
+            explorerService.search(QueryCommand.create(key, query))
                     .map(shellDescriptor -> {
                         Context context = new Context();
                         context.setVariable("shellDescriptor", shellDescriptor);
